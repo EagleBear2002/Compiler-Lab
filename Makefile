@@ -40,7 +40,8 @@ clean:
 
 submit: clean
 	git gc
-	bash -c "$$(curl -s $(DOMAINNAME)/scripts/submit-v2.sh)"
+	#bash -c "$$(curl -s $(DOMAINNAME)/scripts/submit-v2.sh)"
+	bash submit.sh
 
 
 .PHONY: compile antlr test run clean submit
