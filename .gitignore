@@ -1,0 +1,11 @@
+/src/*
+!/src/*.java
+!/src/*.g4
+/src/CmmLexer.java
+/src/CmmParser.java 
+/src/CmmParserBaseListener.java
+/src/CmmParserBaseVisitor.java
+/src/CmmParserListener.java
+/src/CmmParserVisitor.java
+/classes
+.DS_Store
