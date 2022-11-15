@@ -12,19 +12,19 @@ public class Main {
 		}
 		String sourcePath = args[0];
 		CharStream input = CharStreams.fromFileName(sourcePath);
-//		SysYLexerLexer sysYLexer = new SysYLexerLexer(input);
-//		
-//		MyErrorListener myErrorListener = new MyErrorListener();
-//		sysYLexer.removeErrorListeners();
-//		sysYLexer.addErrorListener(myErrorListener);
-//		List<? extends Token> tokens = sysYLexer.getAllTokens();
-//		
-//		if (!myErrorListener.listenError()) {
-//			return;
-//		}
-//		
-//		for (Token token : tokens) {
-//
-//		}
+		SysYLexer sysYLexer = new SysYLexer(input);
+
+		MyErrorListener myErrorListener = new MyErrorListener();
+		sysYLexer.removeErrorListeners();
+		sysYLexer.addErrorListener(myErrorListener);
+		List<? extends Token> tokens = sysYLexer.getAllTokens();
+
+		if (!myErrorListener.listenError()) {
+			return;
+		}
+
+		for (Token token : tokens) {
+
+		}
 	}
 }
