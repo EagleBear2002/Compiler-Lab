@@ -1,4 +1,6 @@
-grammar SysYLexer;
+lexer grammar SysYLexer;
+
+//expr: expr ('*' | '/') expr | expr ('+' | '-') expr | IDENT | INT;
 
 CONST : 'const';
 INT : 'int';
@@ -33,15 +35,15 @@ R_BRACKT : ']';
 COMMA : ',';
 SEMICOLON : ';';
 
-WS: [ \t\r\n]+ -> skip;
-IDENT: (LETTER | '_') (LETTER | DIGIT | '_')*;
+IDENT: ([a-zA-Z] | '_') ([a-zA-Z] | [0-9] | '_')* ;
 INTEGR_CONST: OCTAL | HEXADECIMAL | DECIMAL;
-DECIMAL: DIGIT+;
+DECIMAL: [0-9]+;
 OCTAL: '0' [0-7]+;
-HEXADECIMAL: ('0x' | '0X') (DIGIT | [a-fA-F])+;
+HEXADECIMAL: ('0x' | '0X') ([0-9] | [a-fA-F])+ ;
 
+WS: [ \t\r\n]+ -> skip;
 SL_COMMENT: '//' .*? '\n' -> skip;
 ML_COMMENT: '/*' .*? '*/' -> skip;
 
-fragment LETTER: [a-zA-Z];
-fragment DIGIT: [0-9];
+//fragment LETTER: [a-zA-Z];
+//fragment DIGIT: [0-9];
