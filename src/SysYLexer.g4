@@ -1,6 +1,6 @@
-lexer grammar SysYLexer;
+grammar SysYLexer;
 
-//expr: expr ('*' | '/') expr | expr ('+' | '-') expr | IDENT | INT;
+expr: expr ('*' | '/') expr | expr ('+' | '-') expr | IDENT | INT;
 
 CONST : 'const';
 INT : 'int';
