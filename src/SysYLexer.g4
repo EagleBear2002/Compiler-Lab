@@ -1,4 +1,4 @@
-grammar SimpleExpr;
+grammar SysYLexer;
 
 // *: 0 or more
 prog: stat* EOF;
