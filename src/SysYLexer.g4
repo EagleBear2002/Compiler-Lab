@@ -36,9 +36,9 @@ SEMICOLON : ';';
 WS: [ \t\r\n]+ -> skip;
 IDENT: (LETTER | '_') (LETTER | DIGIT | '_')*;
 INTEGR_CONST: OCTAL | HEXADECIMAL | DECIMAL;
-OCTAL: '0' DIGIT*;
-HEXADECIMAL: ('0x' | '0X') DIGIT*;
 DECIMAL: DIGIT+;
+OCTAL: '0' [0-7]+;
+HEXADECIMAL: ('0x' | '0X') (DIGIT | [a-fA-F])+;
 
 SL_COMMENT: '//' .*? '\n' -> skip;
 ML_COMMENT: '/*' .*? '*/' -> skip;
