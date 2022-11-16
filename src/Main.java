@@ -16,8 +16,6 @@ public class Main {
 		CharStream input = CharStreams.fromFileName(sourcePath);
 		SysYLexer sysYLexer = new SysYLexer(input);
 		
-		System.err.println(sourcePath);
-
 		MyErrorListener myErrorListener = new MyErrorListener();
 		sysYLexer.removeErrorListeners();
 		sysYLexer.addErrorListener(myErrorListener);
@@ -28,7 +26,7 @@ public class Main {
 		}
 
 		for (Token token : tokens) {
-
+			System.err.println(token);
 		}
 	}
 }
