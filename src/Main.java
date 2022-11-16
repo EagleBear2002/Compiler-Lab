@@ -22,19 +22,15 @@ public class Main {
 		List<? extends Token> tokens = sysYLexer.getAllTokens();
 		
 		if (myErrorListener.listenError()) {
-//			System.err.println("Error listened");
 			return;
 		}
 		
 		String[] ruleNames = sysYLexer.getRuleNames();
 		for (Token token : tokens) {
-//			System.err.println(token);
 			String tokenText = token.getText();
 			int ruleNum = token.getType();
 			int lineNum = token.getLine();
 			if (ruleNum == 34) { // HEXADECIMAL
-				System.err.println("INTEGR_CONST");
-				
 				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
 					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
 				} else if (tokenText.startsWith("0")) {
