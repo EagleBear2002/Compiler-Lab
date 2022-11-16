@@ -15,6 +15,8 @@ public class Main {
 		String sourcePath = args[0];
 		CharStream input = CharStreams.fromFileName(sourcePath);
 		SysYLexer sysYLexer = new SysYLexer(input);
+		
+		System.err.println(sourcePath);
 
 		MyErrorListener myErrorListener = new MyErrorListener();
 		sysYLexer.removeErrorListeners();
