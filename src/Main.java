@@ -30,7 +30,7 @@ public class Main {
 			String tokenText = token.getText();
 			int ruleNum = token.getType();
 			int lineNum = token.getLine();
-			if (ruleNum == 34) { // HEXADECIMAL
+			if (ruleNum == 34) {
 				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
 					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
 				} else if (tokenText.startsWith("0")) {
