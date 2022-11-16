@@ -26,8 +26,16 @@ public class Main {
 			return;
 		}
 		
+		String[] ruleNames = sysYLexer.getRuleNames();
 		for (Token token : tokens) {
 			System.err.println(token);
+			String tokenText = token.getText();
+			int ruleNum = token.getType();
+			if (ruleNum == 34) { // HEXADECIMAL
+				System.err.println("HEXADECIMAL");
+			} else if (ruleNum == 33) { // OCTAL
+				System.err.println("OCTAL");
+			}
 		}
 	}
 }
