@@ -1,5 +1,7 @@
 lexer grammar SysYLexer;
 
+//expr: expr ('*' | '/') expr | expr ('+' | '-') expr | IDENT | INT;
+
 CONST : 'const';
 INT : 'int';
 VOID : 'void';
