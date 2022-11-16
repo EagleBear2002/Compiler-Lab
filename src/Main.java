@@ -28,7 +28,7 @@ public class Main {
 		
 		String[] ruleNames = sysYLexer.getRuleNames();
 		for (Token token : tokens) {
-			System.err.println(token);
+//			System.err.println(token);
 			String tokenText = token.getText();
 			int ruleNum = token.getType();
 			int lineNum = token.getLine();
