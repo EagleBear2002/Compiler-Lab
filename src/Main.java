@@ -31,11 +31,20 @@ public class Main {
 			System.err.println(token);
 			String tokenText = token.getText();
 			int ruleNum = token.getType();
+			int lineNum = token.getLine();
 			if (ruleNum == 34) { // HEXADECIMAL
-				System.err.println("HEXADECIMAL");
-			} else if (ruleNum == 33) { // OCTAL
-				System.err.println("OCTAL");
+				System.err.println("INTEGR_CONST");
+				if (tokenText.startsWith("0")) {
+					tokenText = String.valueOf(Integer.parseInt(tokenText));
+				}
+//				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
+//					tokenText = String.valueOf(Integer.parseInt(tokenText));
+//				} else if (tokenText.startsWith("0")) {
+//					tokenText = String.valueOf(Integer.parseInt(tokenText));
+//				}
 			}
+			
+			System.err.printf("%s %s an Line %d\n", ruleNames[ruleNum], tokenText, lineNum);
 		}
 	}
 }
