@@ -34,17 +34,15 @@ public class Main {
 			int lineNum = token.getLine();
 			if (ruleNum == 34) { // HEXADECIMAL
 				System.err.println("INTEGR_CONST");
-				if (tokenText.startsWith("0")) {
-					tokenText = String.valueOf(Integer.parseInt(tokenText));
+				
+				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
+					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
+				} else if (tokenText.startsWith("0")) {
+					tokenText = String.valueOf(Integer.parseInt(tokenText, 8));
 				}
-//				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
-//					tokenText = String.valueOf(Integer.parseInt(tokenText));
-//				} else if (tokenText.startsWith("0")) {
-//					tokenText = String.valueOf(Integer.parseInt(tokenText));
-//				}
 			}
 			
-			System.err.printf("%s %s an Line %d\n", ruleNames[ruleNum], tokenText, lineNum);
+			System.err.printf("%s %s at Line %d\n", ruleNames[ruleNum], tokenText, lineNum);
 		}
 	}
 }
