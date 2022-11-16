@@ -12,6 +12,7 @@ PFILE = $(shell find . -name "SysYParser.g4")
 LFILE = $(shell find . -name "SysYLexer.g4")
 JAVAFILE = $(shell find . -name "*.java")
 ANTLRPATH = $(shell find /usr/local/lib -name "antlr-*-complete.jar")
+FILEPATH = "tests/test1.sysy"
 
 compile: antlr
 	$(call git_commit,"make")
@@ -21,6 +22,7 @@ compile: antlr
 run: compile
 	java -classpath ./classes:$(ANTLRPATH) Main $(FILEPATH)
 
+test: 
 
 antlr: $(LFILE) $(PFILE) 
 	$(ANTLR) $(PFILE) $(LFILE)
