@@ -42,7 +42,7 @@ public class Main {
 				}
 			}
 			
-			System.err.printf("%s %s at Line %d\n", ruleNames[ruleNum], tokenText, lineNum);
+			System.err.printf("%s %s at Line %d\n", ruleNames[ruleNum-1], tokenText, lineNum);
 		}
 	}
 }
