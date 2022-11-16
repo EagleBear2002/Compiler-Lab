@@ -20,11 +20,13 @@ public class Main {
 		sysYLexer.removeErrorListeners();
 		sysYLexer.addErrorListener(myErrorListener);
 		List<? extends Token> tokens = sysYLexer.getAllTokens();
-
+		
 		if (!myErrorListener.listenError()) {
+			System.err.println(1);
 			return;
 		}
-
+		System.err.println(2);
+		
 		for (Token token : tokens) {
 			System.err.println(token);
 		}
