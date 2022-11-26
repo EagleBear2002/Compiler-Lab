@@ -22,14 +22,14 @@ public class Main {
 		MyErrorListener myErrorListener = new MyErrorListener();
 		sysYLexer.removeErrorListeners();
 		sysYLexer.addErrorListener(myErrorListener);
-		List<? extends Token> tokens = sysYLexer.getAllTokens();
+		List<? extends Token> tokenList = sysYLexer.getAllTokens();
 		
 		if (myErrorListener.listenError()) {
 			return;
 		}
 		
 		String[] ruleNames = sysYLexer.getRuleNames();
-		for (Token token : tokens) {
+		for (Token token : tokenList) {
 			String tokenText = token.getText();
 			int ruleNum = token.getType();
 			int lineNum = token.getLine();
