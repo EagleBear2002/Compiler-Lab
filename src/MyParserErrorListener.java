@@ -1,10 +1,13 @@
-import org.antlr.v4.runtime.*;
+import org.antlr.v4.runtime.BaseErrorListener;
+import org.antlr.v4.runtime.Parser;
+import org.antlr.v4.runtime.RecognitionException;
+import org.antlr.v4.runtime.Recognizer;
 import org.antlr.v4.runtime.atn.ATNConfigSet;
 import org.antlr.v4.runtime.dfa.DFA;
 
 import java.util.BitSet;
 
-public class MyErrorListener implements ANTLRErrorListener {
+public class MyParserErrorListener extends BaseErrorListener {
 	private boolean isError = false;
 	public boolean listenError() {
 		return isError;
@@ -14,7 +17,7 @@ public class MyErrorListener implements ANTLRErrorListener {
 	@Override
 	public void syntaxError(Recognizer<?, ?> recognizer, Object o, int lineNum, int posInLine, String msg, RecognitionException e) {
 		isError = true;
-		System.err.printf("Error type A at Line %d: %s\n", lineNum, msg);
+		System.err.printf("Error type B at Line %d: %s\n", lineNum, msg);
 	}
 	
 	@Override

@@ -13,20 +13,21 @@ public class Main {
 			return;
 		}
 		
+// Lexer
 		String sourcePath = args[0];
 		CharStream input = CharStreams.fromFileName(sourcePath);
 		
 		SysYLexer sysYLexer = new SysYLexer(input);
 		
-		MyErrorListener myErrorListener = new MyErrorListener();
+		MyLexerErrorListener myLexerErrorListener = new MyLexerErrorListener();
 		sysYLexer.removeErrorListeners();
-		sysYLexer.addErrorListener(myErrorListener);
-		List<? extends Token> tokenList = sysYLexer.getAllTokens();
+		sysYLexer.addErrorListener(myLexerErrorListener);
 		
-		if (myErrorListener.listenError()) {
+		if (myLexerErrorListener.listenError()) {
 			return;
 		}
 		
+		List<? extends Token> tokenList = sysYLexer.getAllTokens();
 		String[] ruleNames = sysYLexer.getRuleNames();
 		for (Token token : tokenList) {
 			String tokenText = token.getText();
@@ -41,11 +42,18 @@ public class Main {
 			}
 			
 			System.err.printf("%s %s at Line %d.\n", ruleNames[ruleNum - 1], tokenText, lineNum);
-			
 		}
 		
+// Parser
 		CommonTokenStream tokens = new CommonTokenStream(sysYLexer);
 		SysYParser sysYParser = new SysYParser(tokens);
+		MyParserErrorListener myParserErrorListener = new MyParserErrorListener();
+		sysYParser.removeErrorListeners();
+		sysYParser.addErrorListener(myParserErrorListener);
+		
+		if (myParserErrorListener.listenError()) {
+			return;
+		}
 		
 	}
 }

@@ -237,16 +237,6 @@ public interface SysYParserListener extends ParseTreeListener {
 	 */
 	void exitUnaryOp(SysYParser.UnaryOpContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SysYParser#constExp}.
-	 * @param ctx the parse tree
-	 */
-	void enterConstExp(SysYParser.ConstExpContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SysYParser#constExp}.
-	 * @param ctx the parse tree
-	 */
-	void exitConstExp(SysYParser.ConstExpContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link SysYParser#funcRParams}.
 	 * @param ctx the parse tree
 	 */
@@ -266,4 +256,14 @@ public interface SysYParserListener extends ParseTreeListener {
 	 * @param ctx the parse tree
 	 */
 	void exitParam(SysYParser.ParamContext ctx);
+	/**
+	 * Enter a parse tree produced by {@link SysYParser#constExp}.
+	 * @param ctx the parse tree
+	 */
+	void enterConstExp(SysYParser.ConstExpContext ctx);
+	/**
+	 * Exit a parse tree produced by {@link SysYParser#constExp}.
+	 * @param ctx the parse tree
+	 */
+	void exitConstExp(SysYParser.ConstExpContext ctx);
 }

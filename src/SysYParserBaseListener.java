@@ -291,18 +291,6 @@ public class SysYParserBaseListener implements SysYParserListener {
 	 *
 	 * <p>The default implementation does nothing.</p>
 	 */
-	@Override public void enterConstExp(SysYParser.ConstExpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
-	@Override public void exitConstExp(SysYParser.ConstExpContext ctx) { }
-	/**
-	 * {@inheritDoc}
-	 *
-	 * <p>The default implementation does nothing.</p>
-	 */
 	@Override public void enterFuncRParams(SysYParser.FuncRParamsContext ctx) { }
 	/**
 	 * {@inheritDoc}
@@ -322,6 +310,18 @@ public class SysYParserBaseListener implements SysYParserListener {
 	 * <p>The default implementation does nothing.</p>
 	 */
 	@Override public void exitParam(SysYParser.ParamContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void enterConstExp(SysYParser.ConstExpContext ctx) { }
+	/**
+	 * {@inheritDoc}
+	 *
+	 * <p>The default implementation does nothing.</p>
+	 */
+	@Override public void exitConstExp(SysYParser.ConstExpContext ctx) { }
 
 	/**
 	 * {@inheritDoc}
