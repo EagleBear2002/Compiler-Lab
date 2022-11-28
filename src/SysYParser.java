@@ -20,8 +20,7 @@ public class SysYParser extends Parser {
 		PLUS=10, MINUS=11, MUL=12, DIV=13, MOD=14, ASSIGN=15, EQ=16, NEQ=17, LT=18, 
 		GT=19, LE=20, GE=21, NOT=22, AND=23, OR=24, L_PAREN=25, R_PAREN=26, L_BRACE=27, 
 		R_BRACE=28, L_BRACKT=29, R_BRACKT=30, COMMA=31, SEMICOLON=32, IDENT=33, 
-		INTEGR_CONST=34, DECIMAL=35, OCTAL=36, HEXADECIMAL=37, WS=38, SL_COMMENT=39, 
-		ML_COMMENT=40;
+		INTEGR_CONST=34, WS=35, SL_COMMENT=36, ML_COMMENT=37;
 	public static final int
 		RULE_program = 0, RULE_compUnit = 1, RULE_decl = 2, RULE_constDecl = 3, 
 		RULE_bType = 4, RULE_constDef = 5, RULE_constInitVal = 6, RULE_varDecl = 7, 
@@ -55,7 +54,7 @@ public class SysYParser extends Parser {
 			"RETURN", "PLUS", "MINUS", "MUL", "DIV", "MOD", "ASSIGN", "EQ", "NEQ", 
 			"LT", "GT", "LE", "GE", "NOT", "AND", "OR", "L_PAREN", "R_PAREN", "L_BRACE", 
 			"R_BRACE", "L_BRACKT", "R_BRACKT", "COMMA", "SEMICOLON", "IDENT", "INTEGR_CONST", 
-			"DECIMAL", "OCTAL", "HEXADECIMAL", "WS", "SL_COMMENT", "ML_COMMENT"
+			"WS", "SL_COMMENT", "ML_COMMENT"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -2265,7 +2264,7 @@ public class SysYParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3*\u013e\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\'\u013e\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
