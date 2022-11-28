@@ -8,7 +8,9 @@ public class Visitor extends SysYParserBaseVisitor<Void>{
 		RuleContext ctx = node.getRuleContext();
 		int id = ctx.getRuleIndex();
 		String ruleName = SysYParser.ruleNames[id];
-		System.err.printf("visitChildren(%s)\n", ruleName);
+		String realName = ruleName.substring(0, 1).toUpperCase() + ruleName.substring(1);
+		System.err.printf("visitChildren(%s)\n", realName);
+		
 		return super.visitChildren(node);
 	}
 	
