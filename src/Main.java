@@ -1,4 +1,3 @@
-import org.antlr.runtime.tree.TreeWizard;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
@@ -11,7 +10,6 @@ import java.util.List;
 public class Main {
 	public static SysYLexer lexer(String sourcePath) throws IOException {
 		CharStream input = CharStreams.fromFileName(sourcePath);
-		
 		SysYLexer sysYLexer = new SysYLexer(input);
 		
 		MyLexerErrorListener myLexerErrorListener = new MyLexerErrorListener();
@@ -53,10 +51,10 @@ public class Main {
 			return sysYParser;
 		}
 		
-		ParseTree tree = sysYParser.program();
-		//Visitor extends SysYParserBaseVisitor<Void>
-		Visitor visitor = new Visitor();
-		visitor.visit(tree);
+//		ParseTree tree = sysYParser.program();
+//		// Visitor extends SysYParserBaseVisitor<Void>
+//		Visitor visitor = new Visitor();
+//		visitor.visit(tree);
 		
 		return sysYParser;
 	}
@@ -68,7 +66,6 @@ public class Main {
 		}
 		
 		SysYLexer sysYLexer = lexer(args[0]);
-
 		SysYParser sysYParser = parser(sysYLexer);
 	}
 }
