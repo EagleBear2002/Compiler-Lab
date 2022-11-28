@@ -27,7 +27,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		Token token = node.getSymbol();
 		int tokenIndex = token.getTokenIndex();
 		String ruleName = SysYParser.ruleNames[tokenIndex];
-		System.err.println("idex = " + tokenIndex + ", terminal: " + ruleName);
+		System.err.println("index = " + tokenIndex + ", terminal: " + ruleName);
 		
 		return super.visitTerminal(node);
 	}
