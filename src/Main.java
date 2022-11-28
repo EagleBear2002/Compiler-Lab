@@ -17,12 +17,12 @@ public class Main {
 		MyLexerErrorListener myLexerErrorListener = new MyLexerErrorListener();
 		sysYLexer.removeErrorListeners();
 		sysYLexer.addErrorListener(myLexerErrorListener);
+		List<? extends Token> tokenList = sysYLexer.getAllTokens();
 		
 		if (myLexerErrorListener.listenError()) {
 			return sysYLexer;
 		}
 
-		List<? extends Token> tokenList = sysYLexer.getAllTokens();
 		String[] ruleNames = sysYLexer.getRuleNames();
 		for (Token token : tokenList) {
 			String tokenText = token.getText();
@@ -36,7 +36,7 @@ public class Main {
 				}
 			}
 
-			System.err.printf("%s %s at Line %d.\n", ruleNames[ruleNum - 1], tokenText, lineNum);
+//			System.err.printf("%s %s at Line %d.\n", ruleNames[ruleNum - 1], tokenText, lineNum);
 		}
 		
 		return sysYLexer;
