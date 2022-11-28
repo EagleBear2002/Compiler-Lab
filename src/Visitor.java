@@ -26,6 +26,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	public Void visitTerminal(TerminalNode node) {
 		Token token = node.getSymbol();
 		int tokenIndex = token.getTokenIndex();
+		System.err.println("text = " + token.getText());
 		String ruleName = SysYLexer.ruleNames[tokenIndex];
 		System.err.println("index = " + tokenIndex + ", terminal: " + ruleName);
 		
