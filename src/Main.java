@@ -52,9 +52,11 @@ public class Main {
 		Visitor visitor = new Visitor();
 		visitor.visit(tree);
 		
+		System.err.println("Parser Checking");
 		if (myParserErrorListener.listenError()) {
 			return sysYParser;
 		}
+		System.err.println("Successful Checking");
 		
 		
 		return sysYParser;
