@@ -39,7 +39,7 @@ initVal : exp | L_BRACE (initVal (COMMA initVal)*)? R_BRACE;
 funcDef : funcType IDENT L_PAREN (funcFParams)* R_PAREN block;
 
 // 函数类型
-funcType : VOID | INT;
+funcType : INT;
 
 // 函数形参表
 funcFParams : funcFParam (COMMA funcFParam)*;
