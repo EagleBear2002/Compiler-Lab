@@ -148,12 +148,6 @@ public interface SysYParserVisitor<T> extends ParseTreeVisitor<T> {
 	 */
 	T visitUnaryOp(SysYParser.UnaryOpContext ctx);
 	/**
-	 * Visit a parse tree produced by {@link SysYParser#constExp}.
-	 * @param ctx the parse tree
-	 * @return the visitor result
-	 */
-	T visitConstExp(SysYParser.ConstExpContext ctx);
-	/**
 	 * Visit a parse tree produced by {@link SysYParser#funcRParams}.
 	 * @param ctx the parse tree
 	 * @return the visitor result
@@ -165,4 +159,10 @@ public interface SysYParserVisitor<T> extends ParseTreeVisitor<T> {
 	 * @return the visitor result
 	 */
 	T visitParam(SysYParser.ParamContext ctx);
+	/**
+	 * Visit a parse tree produced by {@link SysYParser#constExp}.
+	 * @param ctx the parse tree
+	 * @return the visitor result
+	 */
+	T visitConstExp(SysYParser.ConstExpContext ctx);
 }
