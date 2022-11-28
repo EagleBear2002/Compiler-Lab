@@ -12,10 +12,6 @@ PFILE = $(shell find . -name "SysYParser.g4")
 LFILE = $(shell find . -name "SysYLexer.g4")
 JAVAFILE = $(shell find . -name "*.java")
 ANTLRPATH = $(shell find /usr/local/lib -name "antlr-*-complete.jar")
-LEXER_TEST1_PATH = "tests/lexer-test1.sysy"
-LEXER_TEST2_PATH = "tests/lexer-test2.sysy"
-PARSER_TEST1_PATH = "tests/parser-test1.sysy"
-PARSER_TEST2_PATH = "tests/parser-test2.sysy"
 
 compile: antlr
 	$(call git_commit,"make")
@@ -38,8 +34,6 @@ parser-test2: compile
 	$(call git_commit, "parser-test2")
 	java -classpath ./classes:$(ANTLRPATH) Main tests/parser-test2.sysy
 
-test: 
-
 antlr: $(LFILE) $(PFILE) 
 	$(ANTLR) $(PFILE) $(LFILE)
 
@@ -52,7 +46,6 @@ clean:
 	rm -f src/*.interp
 	rm -f src/SysYLexer.java src/SysYParser.java src/SysYParserBaseListener.java src/SysYParserBaseVisitor.java src/SysYParserListener.java src/SysYParserVisitor.java
 	rm -rf classes
-
 
 submit: clean
 	git gc
