@@ -1,7 +1,9 @@
+import org.antlr.runtime.tree.TreeWizard;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 
 import java.io.*;
 import java.util.List;
@@ -51,7 +53,9 @@ public class Main {
 			return sysYParser;
 		}
 		
-		
+		ParseTree tree = sysYParser.program();
+		SysYParserBaseVisitor visitor = new SysYParserBaseVisitor();
+		visitor.visit(tree);
 		
 		return sysYParser;
 	}
