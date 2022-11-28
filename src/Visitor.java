@@ -8,8 +8,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	@Override
 	public Void visitChildren(RuleNode node) {
 		RuleContext ctx = node.getRuleContext();
-		int id = ctx.getRuleIndex();
-		String ruleName = SysYParser.ruleNames[id];
+		int ruleIndex = ctx.getRuleIndex();
+		String ruleName = SysYParser.ruleNames[ruleIndex];
 		String realName = ruleName.substring(0, 1).toUpperCase() + ruleName.substring(1);
 		
 		for (int i = 0; i < depth; ++i)
@@ -25,8 +25,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	@Override
 	public Void visitTerminal(TerminalNode node) {
 		Token token = node.getSymbol();
-		int ruleNum = token.getType();
-		String ruleName = SysYParser.ruleNames[ruleNum];
+		int tokenIndex = token.getTokenIndex();
+		String ruleName = SysYParser.ruleNames[tokenIndex];
 		System.err.println("terminal: " + ruleName);
 		return super.visitTerminal(node);
 	}
