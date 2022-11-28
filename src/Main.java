@@ -47,11 +47,12 @@ public class Main {
 		sysYParser.removeErrorListeners();
 		sysYParser.addErrorListener(myParserErrorListener);
 		
+		ParseTree tree = sysYParser.program();
+		
 		if (myParserErrorListener.listenError()) {
 			return sysYParser;
 		}
 		
-//		ParseTree tree = sysYParser.program();
 //		// Visitor extends SysYParserBaseVisitor<Void>
 //		Visitor visitor = new Visitor();
 //		visitor.visit(tree);
