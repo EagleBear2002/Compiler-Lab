@@ -10,6 +10,7 @@ WHILE : 'while';
 BREAK : 'break';
 CONTINUE : 'continue';
 RETURN : 'return';
+
 PLUS : '+';
 MINUS : '-';
 MUL : '*';
@@ -25,6 +26,7 @@ GE : '>=';
 NOT : '!';
 AND : '&&';
 OR : '||';
+
 L_PAREN : '(';
 R_PAREN : ')';
 L_BRACE : '{';
@@ -33,7 +35,9 @@ L_BRACKT : '[';
 R_BRACKT : ']';
 COMMA : ',';
 SEMICOLON : ';';
+
 IDENT: (LETTER | '_') (LETTER | DIGIT | '_')* ;
+
 INTEGR_CONST: OCTAL | HEXADECIMAL | DECIMAL;
 fragment DECIMAL: '0' | [1-9] [0-9]*;
 fragment OCTAL: '0' [0-7]+;
