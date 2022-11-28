@@ -15,7 +15,7 @@ compUnit : (funcDef | decl)+ EOF;
 decl : constDecl | varDecl;
 
 // 常量声明
-constDecl : CONST bType constDef (COMMA constDef )* SEMICOLON;
+constDecl : CONST bType constDef (COMMA constDef)* SEMICOLON;
 
 // 基本类型
 bType : INT;
@@ -55,7 +55,7 @@ blockItem : decl | stmt;
 
 // 语句
 stmt : lVal ASSIGN exp SEMICOLON
-    | exp SEMICOLON
+    | (exp)? SEMICOLON
     | block
     | IF L_PAREN cond R_PAREN stmt (ELSE stmt)?
     | WHILE L_PAREN cond R_PAREN stmt
