@@ -7,7 +7,7 @@ options {
 program : compUnit;
    
 // 编译单元
-compUnit : (funcDef | decl)+ EOF;
+compUnit : (funcDef | decl)+;
 
 // 下面是其他的语法单元定义
 
