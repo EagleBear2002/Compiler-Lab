@@ -51,7 +51,7 @@ public class Main {
 			return sysYParser;
 		}
 		
-		ParseTree tree = sysYParser.program();
+//		ParseTree tree = sysYParser.program();
 //		// Visitor extends SysYParserBaseVisitor<Void>
 //		Visitor visitor = new Visitor();
 //		visitor.visit(tree);
