@@ -12,19 +12,27 @@ PFILE = $(shell find . -name "SysYParser.g4")
 LFILE = $(shell find . -name "SysYLexer.g4")
 JAVAFILE = $(shell find . -name "*.java")
 ANTLRPATH = $(shell find /usr/local/lib -name "antlr-*-complete.jar")
-LEXERTEST1PATH = "tests/lexer-test1.sysy"
-LEXERTEST2PATH = "tests/lexer-test2.sysy"
+LEXER_TEST1_PATH = "tests/lexer-test1.sysy"
+LEXER_TEST2_PATH = "tests/lexer-test2.sysy"
+PARSER_TEST1_PATH = "tests/parser-test1.sysy"
+PARSER_TEST2_PATH = "tests/parser-test2.sysy"
 
 compile: antlr
 	$(call git_commit,"make")
 	mkdir -p classes
 	$(JAVAC) -classpath $(ANTLRPATH) $(JAVAFILE) -d classes
 
-test1: compile
-	java -classpath ./classes:$(ANTLRPATH) Main $(LEXERTEST1PATH)
+lexer-test1: compile
+	java -classpath ./classes:$(ANTLRPATH) Main $(LEXER_TEST1_PATH)
 
-test2: compile
-	java -classpath ./classes:$(ANTLRPATH) Main $(LEXERTEST2PATH)
+lexer-test2: compile
+	java -classpath ./classes:$(ANTLRPATH) Main $(LEXER_TEST2_PATH)
+
+parser-test1: compile
+	java -classpath ./classes:$(ANTLRPATH) Main $(PARSER_TEST1_PATH)
+
+parser-test2: compile
+	java -classpath ./classes:$(ANTLRPATH) Main $(PARSER_TEST2_PATH)
 
 test: 
 
