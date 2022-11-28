@@ -1,4 +1,5 @@
 import org.antlr.v4.runtime.RuleContext;
+import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -13,7 +14,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		for (int i = 0; i < depth; ++i)
 			System.err.print("  ");
-		System.err.printf("visitChildren(%s)\n", realName);
+		System.err.println(realName);
 		
 		depth++;
 		Void ret = super.visitChildren(node);
@@ -23,6 +24,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitTerminal(TerminalNode node) {
+		Token token = node.getSymbol();
+		int ruleNum = token.getType();
+		String ruleName = SysYParser.ruleNames[ruleNum];
+		System.err.println("terminal: " + ruleName);
 		return super.visitTerminal(node);
 	}
 }
