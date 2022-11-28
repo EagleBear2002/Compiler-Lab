@@ -92,29 +92,34 @@ primaryExp : L_PAREN exp R_PAREN | lVal | number;
 number : INTEGR_CONST;
    
 // 一元表达式
-unaryOp : PLUS | MINUS | NOT;
+unaryExp : primaryExp | IDENT '(' (funcRParams)? ')' | unaryOp unaryExp;
    
 // 单目运算符
+unaryOp : PLUS | MINUS | NOT;
 
-// 函数实参表
-
-// from TA
+// 函数实参表， from TA
 funcRParams : param (COMMA param)*;
 
 // from TA
 param : exp;
 
 // 乘除模表达式
+mulExp : unaryOp | mulExp ('*' | '/' | '%') unaryExp;
 
 // 加减表达式
+addExp : mulExp | addExp ('+' | '-') mulExp;
 
 // 关系表达式
+relExp : addExp | relExp ('<' | '>' | '<=' | '>=') addExp;
 
 // 相等性表达式
+eqExp : relExp | eqExp ('==' | '!=') relExp;
 
 // 逻辑与表达式
+lAndExp : eqExp | lAndExp '&&' eqExp;
 
 // 逻辑或表达式
+lOrExp : lAndExp | lOrExp '||' lAndExp;
 
 // 常量表达式
 constExp : exp;
