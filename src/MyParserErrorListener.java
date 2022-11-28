@@ -22,16 +22,13 @@ public class MyParserErrorListener extends BaseErrorListener {
 	
 	@Override
 	public void reportAmbiguity(Parser parser, DFA dfa, int i, int i1, boolean b, BitSet bitSet, ATNConfigSet atnConfigSet) {
-		System.err.printf("Error type B\n");
 	}
 	
 	@Override
 	public void reportAttemptingFullContext(Parser parser, DFA dfa, int i, int i1, BitSet bitSet, ATNConfigSet atnConfigSet) {
-		System.err.printf("Error type B\n");
 	}
 	
 	@Override
 	public void reportContextSensitivity(Parser parser, DFA dfa, int i, int i1, int i2, ATNConfigSet atnConfigSet) {
-		System.err.printf("Error type B\n");
 	}
 }
