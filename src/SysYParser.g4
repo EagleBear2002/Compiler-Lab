@@ -39,7 +39,7 @@ initVal : exp | L_BRACE (initVal (COMMA initVal)*)? R_BRACE;
 funcDef : funcType IDENT L_PAREN (funcFParams)* R_PAREN block;
 
 // 函数类型
-funcType : 'void' | 'int';
+funcType : VOID | INT;
 
 // 函数形参表
 funcFParams : funcFParam (COMMA funcFParam)*;
@@ -123,4 +123,3 @@ lOrExp : lAndExp | lOrExp '||' lAndExp;
 
 // 常量表达式
 constExp : exp;
-
