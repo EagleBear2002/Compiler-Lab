@@ -28,21 +28,21 @@ public class Main {
 		}
 		
 		List<? extends Token> tokenList = sysYLexer.getAllTokens();
-		String[] ruleNames = sysYLexer.getRuleNames();
-		for (Token token : tokenList) {
-			String tokenText = token.getText();
-			int ruleNum = token.getType();
-			int lineNum = token.getLine();
-			if (ruleNum == 34) {
-				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
-					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
-				} else if (tokenText.startsWith("0")) {
-					tokenText = String.valueOf(Integer.parseInt(tokenText, 8));
-				}
-			}
-			
-			System.err.printf("%s %s at Line %d.\n", ruleNames[ruleNum - 1], tokenText, lineNum);
-		}
+//		String[] ruleNames = sysYLexer.getRuleNames();
+//		for (Token token : tokenList) {
+//			String tokenText = token.getText();
+//			int ruleNum = token.getType();
+//			int lineNum = token.getLine();
+//			if (ruleNum == 34) {
+//				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
+//					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
+//				} else if (tokenText.startsWith("0")) {
+//					tokenText = String.valueOf(Integer.parseInt(tokenText, 8));
+//				}
+//			}
+//			
+//			System.err.printf("%s %s at Line %d.\n", ruleNames[ruleNum - 1], tokenText, lineNum);
+//		}
 		
 // Parser
 		CommonTokenStream tokens = new CommonTokenStream(sysYLexer);
