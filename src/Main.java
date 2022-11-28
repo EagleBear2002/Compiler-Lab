@@ -18,26 +18,26 @@ public class Main {
 		sysYLexer.removeErrorListeners();
 		sysYLexer.addErrorListener(myLexerErrorListener);
 		
-//		if (myLexerErrorListener.listenError()) {
-//			return sysYLexer;
-//		}
-//		
-//		List<? extends Token> tokenList = sysYLexer.getAllTokens();
-//		String[] ruleNames = sysYLexer.getRuleNames();
-//		for (Token token : tokenList) {
-//			String tokenText = token.getText();
-//			int ruleNum = token.getType();
-//			int lineNum = token.getLine();
-//			if (ruleNum == 34) {
-//				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
-//					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
-//				} else if (tokenText.startsWith("0")) {
-//					tokenText = String.valueOf(Integer.parseInt(tokenText, 8));
-//				}
-//			}
-//			
-//			System.err.printf("%s %s at Line %d.\n", ruleNames[ruleNum - 1], tokenText, lineNum);
-//		}
+		if (myLexerErrorListener.listenError()) {
+			return sysYLexer;
+		}
+
+		List<? extends Token> tokenList = sysYLexer.getAllTokens();
+		String[] ruleNames = sysYLexer.getRuleNames();
+		for (Token token : tokenList) {
+			String tokenText = token.getText();
+			int ruleNum = token.getType();
+			int lineNum = token.getLine();
+			if (ruleNum == 34) {
+				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
+					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
+				} else if (tokenText.startsWith("0")) {
+					tokenText = String.valueOf(Integer.parseInt(tokenText, 8));
+				}
+			}
+
+			System.err.printf("%s %s at Line %d.\n", ruleNames[ruleNum - 1], tokenText, lineNum);
+		}
 		
 		return sysYLexer;
 	}
@@ -54,7 +54,8 @@ public class Main {
 		}
 		
 		ParseTree tree = sysYParser.program();
-		SysYParserBaseVisitor visitor = new SysYParserBaseVisitor();
+		//Visitor extends SysYParserBaseVisitor<Void>
+		Visitor visitor = new Visitor();
 		visitor.visit(tree);
 		
 		return sysYParser;
