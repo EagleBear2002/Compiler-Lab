@@ -24,19 +24,19 @@ compile: antlr
 
 lexer-test1: compile
 	$(call git_commit, "lexer-test1")
-	nohup java -classpath ./classes:$(ANTLRPATH) Main tests/lexer-test1.sysy
+	java -classpath ./classes:$(ANTLRPATH) Main tests/lexer-test1.sysy
 
 lexer-test2: compile
 	$(call git_commit, "lexer-test2")
-	nohup java -classpath ./classes:$(ANTLRPATH) Main tests/lexer-test2.sysy
+	java -classpath ./classes:$(ANTLRPATH) Main tests/lexer-test2.sysy
 
 parser-test1: compile
 	$(call git_commit, "parser-test1")
-	nohup java -classpath ./classes:$(ANTLRPATH) Main tests/parser-test1.sysy
+	java -classpath ./classes:$(ANTLRPATH) Main tests/parser-test1.sysy
 
 parser-test2: compile
 	$(call git_commit, "parser-test2")
-	nohup java -classpath ./classes:$(ANTLRPATH) Main tests/parser-test2.sysy
+	java -classpath ./classes:$(ANTLRPATH) Main tests/parser-test2.sysy
 
 test: 
 
