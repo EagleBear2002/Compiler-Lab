@@ -52,9 +52,9 @@ public class Main {
 		}
 		
 		ParseTree tree = sysYParser.program();
-		// Visitor extends SysYParserBaseVisitor<Void>
-		Visitor visitor = new Visitor();
-		visitor.visit(tree);
+//		// Visitor extends SysYParserBaseVisitor<Void>
+//		Visitor visitor = new Visitor();
+//		visitor.visit(tree);
 		
 		return sysYParser;
 	}
