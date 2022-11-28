@@ -36,7 +36,7 @@ varDef : IDENT (L_BRACKT constExp R_BRACKT)* (ASSIGN initVal)?;
 initVal : exp | L_BRACE (initVal (COMMA initVal)*)? R_BRACE;
 
 // 函数定义
-funcDef : funcType IDENT L_PAREN (funcFParams)* R_PAREN block;
+funcDef : funcType IDENT L_PAREN (funcFParams)? R_PAREN block;
 
 // 函数类型
 funcType : VOID | INT;
