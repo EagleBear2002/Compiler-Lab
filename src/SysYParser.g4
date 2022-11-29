@@ -21,7 +21,7 @@ constDecl : CONST bType constDef (COMMA constDef)* SEMICOLON;
 bType : INT;
 
 // 常数定义
-constDef : IDENT (L_BRACKT constExp R_BRACKT)+ ASSIGN constInitVal;
+constDef : IDENT (L_BRACKT constExp R_BRACKT)* ASSIGN constInitVal;
 
 // 常量初值
 constInitVal : constExp | L_BRACE (constInitVal (COMMA constInitVal)*)? R_BRACE;
