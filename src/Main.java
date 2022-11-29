@@ -47,10 +47,10 @@ public class Main {
 		sysYParser.removeErrorListeners();
 		sysYParser.addErrorListener(myParserErrorListener);
 		
-//		ParseTree tree = sysYParser.program();
-//		// Visitor extends SysYParserBaseVisitor<Void>
-//		Visitor visitor = new Visitor();
-//		visitor.visit(tree);
+		ParseTree tree = sysYParser.program();
+		// Visitor extends SysYParserBaseVisitor<Void>
+		Visitor visitor = new Visitor();
+		visitor.visit(tree);
 		
 		System.err.println("Parser Checking");
 		if (myParserErrorListener.listenError()) {
