@@ -12,9 +12,9 @@ public class Main {
 		CharStream input = CharStreams.fromFileName(sourcePath);
 		SysYLexer sysYLexer = new SysYLexer(input);
 
-//		MyLexerErrorListener myLexerErrorListener = new MyLexerErrorListener();
-//		sysYLexer.removeErrorListeners();
-//		sysYLexer.addErrorListener(myLexerErrorListener);
+		MyLexerErrorListener myLexerErrorListener = new MyLexerErrorListener();
+		sysYLexer.removeErrorListeners();
+		sysYLexer.addErrorListener(myLexerErrorListener);
 //		List<? extends Token> tokenList = sysYLexer.getAllTokens();
 //
 //		if (myLexerErrorListener.listenError()) {
