@@ -1,4 +1,4 @@
-const int a = 5;
+const int b = 0;
 int main() {
     int a=0;
     return a;
