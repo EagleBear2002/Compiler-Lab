@@ -67,25 +67,25 @@ public class Main {
 			return;
 		}
 
-		SysYLexer sysYLexer = lexer(args[0]);
-//		SysYParser sysYParser = parser(sysYLexer);
+//		SysYLexer sysYLexer = lexer(args[0]);
 		
+		String source = args[0];
+		CharStream input = CharStreams.fromFileName(source);
+
+		SysYLexer sysYLexer = new SysYLexer(input);
 		
-//		String source = args[0];
-//		CharStream input = CharStreams.fromFileName(source);
-//		
-//		SysYLexer sysYLexer = new SysYLexer(input);
-		sysYLexer.removeErrorListeners();
-		MyLexerErrorListener myErrorListener = new MyLexerErrorListener();
-		sysYLexer.addErrorListener(myErrorListener);
-		CommonTokenStream commonTokenStream = new CommonTokenStream(sysYLexer);
-		SysYParser sysYParser = new SysYParser(commonTokenStream);
-		sysYParser.removeErrorListeners();
-		MyParserErrorListener parserErrorListener = new MyParserErrorListener();
-		sysYParser.addErrorListener(parserErrorListener);
-		ParseTree tree = sysYParser.program();
-		if (parserErrorListener.listenError()) {
-			return;
-		}
+		SysYParser sysYParser = parser(sysYLexer);
+//		sysYLexer.removeErrorListeners();
+//		MyLexerErrorListener myErrorListener = new MyLexerErrorListener();
+//		sysYLexer.addErrorListener(myErrorListener);
+//		CommonTokenStream commonTokenStream = new CommonTokenStream(sysYLexer);
+//		SysYParser sysYParser = new SysYParser(commonTokenStream);
+//		sysYParser.removeErrorListeners();
+//		MyParserErrorListener parserErrorListener = new MyParserErrorListener();
+//		sysYParser.addErrorListener(parserErrorListener);
+//		ParseTree tree = sysYParser.program();
+//		if (parserErrorListener.listenError()) {
+//			return;
+//		}
 	}
 }
