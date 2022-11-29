@@ -90,10 +90,5 @@ public class Main {
 		if (parserErrorListener.listenError()) {
 			return;
 		}
-		Visitor visitor = new Visitor();
-		String[] s = sysYLexer.getRuleNames();
-		
-		visitor.setTokenNames(s, sysYParser.getRuleNames());
-		visitor.visit(tree);
 	}
 }
