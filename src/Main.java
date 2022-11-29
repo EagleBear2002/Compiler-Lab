@@ -17,9 +17,9 @@ public class Main {
 		sysYLexer.addErrorListener(myLexerErrorListener);
 		List<? extends Token> tokenList = sysYLexer.getAllTokens();
 
-		if (myLexerErrorListener.listenError()) {
-			return sysYLexer;
-		}
+//		if (myLexerErrorListener.listenError()) {
+//			return sysYLexer;
+//		}
 //
 //		String[] ruleNames = sysYLexer.getRuleNames();
 //		for (Token token : tokenList) {
