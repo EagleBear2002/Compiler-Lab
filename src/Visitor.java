@@ -50,12 +50,15 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	@Override
 	public Void visitTerminal(TerminalNode node) {
 		Token token = node.getSymbol();
-		int ruleNum = token.getType();
-		String ruleName = SysYLexer.ruleNames[ruleNum];
-		String tokenText = token.getText();
+		int ruleNum = token.getType() - 1;
 		
-		printIdent(depth);
-		System.err.println(tokenText + " " + ruleName + "[" + getHelight(ruleName) + "]");
+		if (ruleNum >= 0) {
+			String ruleName = SysYLexer.ruleNames[ruleNum];
+			String tokenText = token.getText();
+			
+			printIdent(depth);
+			System.err.println(tokenText + " " + ruleName + "[" + getHelight(ruleName) + "]");
+		}
 		
 		return super.visitTerminal(node);
 	}
