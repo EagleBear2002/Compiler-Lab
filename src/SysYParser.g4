@@ -15,78 +15,78 @@ compUnit : (funcDef | decl)+ EOF;
 decl : constDecl | varDecl;
 
 // 常量声明
-constDecl : CONST bType constDef (COMMA constDef)* SEMICOLON;
+constDecl : CONST bType constDef (',' constDef)* ';';
 
 // 基本类型
 bType : INT;
 
 // 常数定义
-constDef : IDENT (L_BRACKT constExp R_BRACKT)+ ASSIGN constInitVal;
+constDef : IDENT ('[' constExp ']')+ '=' constInitVal;
 
 // 常量初值
-constInitVal : constExp | L_BRACE (constInitVal (COMMA constInitVal)*)? R_BRACE;
+constInitVal : constExp | '{' (constInitVal (',' constInitVal)*)? '}';
 
 // 变量声明
-varDecl : bType varDef (COMMA varDef)* SEMICOLON;
+varDecl : bType varDef (',' varDef)* ';';
 
 // 变量定义
-varDef : IDENT (L_BRACKT constExp R_BRACKT)* (ASSIGN initVal)?;
+varDef : IDENT ('[' constExp ']')* ('=' initVal)?;
 
 // 变量初值
-initVal : exp | L_BRACE (initVal (COMMA initVal)*)? R_BRACE;
+initVal : exp | '{' (initVal (',' initVal)*)? '}';
 
 // 函数定义
-funcDef : funcType IDENT L_PAREN (funcFParams)? R_PAREN block;
+funcDef : funcType IDENT '(' (funcFParams)? ')' block;
 
 // 函数类型
 funcType : VOID | INT;
 
 // 函数形参表
-funcFParams : funcFParam (COMMA funcFParam)*;
+funcFParams : funcFParam (',' funcFParam)*;
 
 // 函数形参
-funcFParam : bType IDENT (L_BRACKT R_BRACKT (L_BRACKT exp R_BRACKT)*)?;
+funcFParam : bType IDENT ('[' ']' ('[' exp ']')*)?;
 
 // 语句块
-block : L_BRACE (blockItem)* R_BRACE;
+block : '{' (blockItem)* '}';
 
 // 语句块项
 blockItem : decl | stmt;
 
 // 语句
-stmt : lVal ASSIGN exp SEMICOLON
-    | (exp)? SEMICOLON
+stmt : lVal '=' exp ';'
+    | (exp)? ';'
     | block
-    | IF L_PAREN cond R_PAREN stmt (ELSE stmt)?
-    | WHILE L_PAREN cond R_PAREN stmt
-    | BREAK SEMICOLON
-    | CONTINUE SEMICOLON
-    | RETURN (exp)? SEMICOLON
+    | IF '(' cond ')' stmt (ELSE stmt)?
+    | WHILE '(' cond ')' stmt
+    | BREAK ';'
+    | CONTINUE ';'
+    | RETURN (exp)? ';'
     ;
 
 // 表达式
-exp : L_PAREN exp R_PAREN
+exp : '(' exp ')'
    | lVal 
    | number
-   | IDENT L_PAREN funcRParams? R_PAREN 
+   | IDENT '(' funcRParams? ')' 
    | unaryOp exp 
-   | exp (MUL | DIV | MOD) exp
-   | exp (PLUS | MINUS) exp
+   | exp ('*' | '/' | '%') exp
+   | exp ('+' | '-') exp
    ;
 
 // 条件表达式
 cond : exp 
-   | cond (LT | GT | LE | GE) cond
-   | cond (EQ | NEQ) cond 
+   | cond ('<' | '>' | '<=' | '>=') cond
+   | cond ('==' | '!=') cond 
    | cond AND cond 
    | cond OR cond 
    ;
 
 // 左值表达式
-lVal : IDENT (L_BRACKT exp R_BRACKT)*;
+lVal : IDENT ('[' exp ']')*;
 
 // 基本表达式
-primaryExp : L_PAREN exp R_PAREN | lVal | number;
+primaryExp : '(' exp ')' | lVal | number;
 
 // 数值
 number : INTEGR_CONST;
@@ -95,19 +95,19 @@ number : INTEGR_CONST;
 unaryExp : primaryExp | IDENT '(' (funcRParams)? ')' | unaryOp unaryExp;
 
 // 单目运算符
-unaryOp : PLUS | MINUS | NOT;
+unaryOp : '+' | '-' | '!';
 
 // 函数实参表， from TA
-funcRParams : param (COMMA param)*;
+funcRParams : param (',' param)*;
 
 // from TA
 param : exp;
 
 // 乘除模表达式
-mulExp : unaryOp | mulExp ('*' | '/' | '%') unaryExp;
+mulExp : unaryOp | '*'Exp ('*' | '/' | '%') unaryExp;
 
 // 加减表达式
-addExp : mulExp | addExp ('+' | '-') mulExp;
+addExp : '*'Exp | addExp ('+' | '-') '*'Exp;
 
 // 关系表达式
 relExp : addExp | relExp ('<' | '>' | '<=' | '>=') addExp;
