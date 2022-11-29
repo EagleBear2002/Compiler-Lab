@@ -15,8 +15,47 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	private String getHelight(String ruleName) {
 		switch (ruleName) {
 			case "CONST":
+			case "INT":
+			case "VOID":
+			case "IF":
+			case "ELSE":
+			case "WHILE":
+			case "BREAK":
+			case "CONTINUE":
+			case "RETURN": {
+				return "orange";
+			}
+			
+			case "PLUS":
+			case "MINUS":
+			case "MUL":
+			case "DIV":
+			case "MOD":
+			case "ASSIGN":
+			case "EQ":
+			case "NEQ":
+			case "LT":
+			case "GT":
+			case "LE":
+			case "GE":
+			case "NOT":
+			case "AND":
+			case "OR": {
+				return "blue";
+			}
+			
+			case "IDENT": {
+				return "red";
+			}
+			
+			case "INTEGR_CONST": {
+				return "green";
+			}
+			
+			default: {
+				return "no color";
+			}
 		}
-		return "color";
 	}
 	
 	@Override
@@ -55,9 +94,12 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		if (ruleNum >= 0) {
 			String ruleName = SysYLexer.ruleNames[ruleNum];
 			String tokenText = token.getText();
+			String color = getHelight(ruleName);
 			
-			printIdent(depth);
-			System.err.println(tokenText + " " + ruleName + "[" + getHelight(ruleName) + "]");
+			if (color != "no color") {
+				printIdent(depth);
+				System.err.println(tokenText + " " + ruleName + "[" + color + "]");
+			}
 		}
 		
 		return super.visitTerminal(node);
