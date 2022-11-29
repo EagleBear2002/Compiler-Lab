@@ -1,5 +1,6 @@
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
+import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
@@ -11,15 +12,27 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		int ruleIndex = ctx.getRuleIndex();
 		String ruleName = SysYParser.ruleNames[ruleIndex];
 		String realName = ruleName.substring(0, 1).toUpperCase() + ruleName.substring(1);
-		
+
 		for (int i = 0; i < depth; ++i)
 			System.err.print("  ");
 		System.err.println(realName);
-		
+
 		depth++;
 		Void ret = super.visitChildren(node);
 		depth--;
-		return ret;
+		
+//		return ret;
+		
+		Void result = this.defaultResult();
+		int n = node.getChildCount();
+		
+		for(int i = 0; i < n && this.shouldVisitNextChild(node, result); ++i) {
+			ParseTree c = node.getChild(i);
+			Void childResult = c.accept(this);
+			result = this.aggregateResult(result, childResult);
+		}
+		
+		return result;
 	}
 	
 	@Override
