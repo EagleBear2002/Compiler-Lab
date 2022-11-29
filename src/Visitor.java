@@ -73,17 +73,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		depth--;
 		
 		return ret;
-
-//		Void result = this.defaultResult();
-//		int n = node.getChildCount();
-//		
-//		for(int i = 0; i < n && this.shouldVisitNextChild(node, result); ++i) {
-//			ParseTree c = node.getChild(i);
-//			Void childResult = c.accept(this);
-//			result = this.aggregateResult(result, childResult);
-//		}
-//		
-//		return result;
 	}
 	
 	@Override
@@ -91,7 +80,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		Token token = node.getSymbol();
 		int ruleNum = token.getType() - 1;
 		
-		if (ruleNum >= 0) {
+//		if (ruleNum >= 0) {
 			String ruleName = SysYLexer.ruleNames[ruleNum];
 			String tokenText = token.getText();
 			String color = getHelight(ruleName);
@@ -100,7 +89,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				printIdent(depth);
 				System.err.println(tokenText + " " + ruleName + "[" + color + "]");
 			}
-		}
+//		}
 		
 		return super.visitTerminal(node);
 	}
