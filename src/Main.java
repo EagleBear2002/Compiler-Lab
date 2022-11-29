@@ -52,7 +52,7 @@ public class Main {
 		}
 		System.err.println("Successful Checking");
 
-		// Visitor extends SysYParserBaseVisitor<Void>
+//		 Visitor extends SysYParserBaseVisitor<Void>
 		Visitor visitor = new Visitor();
 		visitor.visit(tree);
 		
