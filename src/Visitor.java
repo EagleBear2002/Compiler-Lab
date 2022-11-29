@@ -6,6 +6,19 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class Visitor extends SysYParserBaseVisitor<Void> {
 	private static int depth = 0;
+	
+	private void printIdent(int depth) {
+		for (int i = 0; i < depth; ++i)
+			System.err.print("  ");
+	}
+	
+	private String getHelight(String ruleName) {
+		switch (ruleName) {
+			case "CONST":
+		}
+		return "color";
+	}
+	
 	@Override
 	public Void visitChildren(RuleNode node) {
 		RuleContext ctx = node.getRuleContext();
@@ -13,8 +26,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		String ruleName = SysYParser.ruleNames[ruleIndex];
 		String realName = ruleName.substring(0, 1).toUpperCase() + ruleName.substring(1);
 
-		for (int i = 0; i < depth; ++i)
-			System.err.print("  ");
+		printIdent(depth);
 		System.err.println(realName);
 
 		depth++;
@@ -39,9 +51,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	public Void visitTerminal(TerminalNode node) {
 		Token token = node.getSymbol();
 		int tokenIndex = token.getTokenIndex();
-//		System.err.println("terminal text = " + token.getText());
 		String ruleName = SysYLexer.ruleNames[tokenIndex];
-//		System.err.println("index = " + tokenIndex + ", ruleName: " + ruleName);
+		String tokenText = token.getText();
+		
+		printIdent(depth);
+		System.err.println(tokenText + ruleName + "[" + getHelight(ruleName) +"]");
 		
 		return super.visitTerminal(node);
 	}
