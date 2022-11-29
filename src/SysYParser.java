@@ -20,7 +20,7 @@ public class SysYParser extends Parser {
 		PLUS=10, MINUS=11, MUL=12, DIV=13, MOD=14, ASSIGN=15, EQ=16, NEQ=17, LT=18, 
 		GT=19, LE=20, GE=21, NOT=22, AND=23, OR=24, L_PAREN=25, R_PAREN=26, L_BRACE=27, 
 		R_BRACE=28, L_BRACKT=29, R_BRACKT=30, COMMA=31, SEMICOLON=32, IDENT=33, 
-		INTEGR_CONST=34, WS=35, LINE_COMMENT=36, MULTILINE_COMMENT=37;
+		INTEGR_CONST=34, WS=35, SL_COMMENT=36, ML_COMMENT=37;
 	public static final int
 		RULE_program = 0, RULE_compUnit = 1, RULE_decl = 2, RULE_constDecl = 3, 
 		RULE_bType = 4, RULE_constDef = 5, RULE_constInitVal = 6, RULE_varDecl = 7, 
@@ -56,7 +56,7 @@ public class SysYParser extends Parser {
 			"RETURN", "PLUS", "MINUS", "MUL", "DIV", "MOD", "ASSIGN", "EQ", "NEQ", 
 			"LT", "GT", "LE", "GE", "NOT", "AND", "OR", "L_PAREN", "R_PAREN", "L_BRACE", 
 			"R_BRACE", "L_BRACKT", "R_BRACKT", "COMMA", "SEMICOLON", "IDENT", "INTEGR_CONST", 
-			"WS", "LINE_COMMENT", "MULTILINE_COMMENT"
+			"WS", "SL_COMMENT", "ML_COMMENT"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
