@@ -15,7 +15,7 @@ public class Main {
 		MyLexerErrorListener myLexerErrorListener = new MyLexerErrorListener();
 		sysYLexer.removeErrorListeners();
 		sysYLexer.addErrorListener(myLexerErrorListener);
-//		List<? extends Token> tokenList = sysYLexer.getAllTokens();
+		List<? extends Token> tokenList = sysYLexer.getAllTokens();
 //
 //		if (myLexerErrorListener.listenError()) {
 //			return sysYLexer;
