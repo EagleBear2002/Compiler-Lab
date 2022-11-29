@@ -25,16 +25,16 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		int ruleIndex = ctx.getRuleIndex();
 		String ruleName = SysYParser.ruleNames[ruleIndex];
 		String realName = ruleName.substring(0, 1).toUpperCase() + ruleName.substring(1);
-
+		
 		printIdent(depth);
 		System.err.println(realName);
-
+		
 		depth++;
 		Void ret = super.visitChildren(node);
 		depth--;
 		
 		return ret;
-		
+
 //		Void result = this.defaultResult();
 //		int n = node.getChildCount();
 //		
@@ -51,11 +51,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	public Void visitTerminal(TerminalNode node) {
 		Token token = node.getSymbol();
 		int tokenIndex = token.getTokenIndex();
-		String ruleName = SysYLexer.ruleNames[tokenIndex];
+		String ruleName = SysYLexer.ruleNames[tokenIndex + 1];
 		String tokenText = token.getText();
 		
 		printIdent(depth);
-		System.err.println(tokenText + " " + ruleName + "[" + getHelight(ruleName) +"]");
+		System.err.println(tokenText + " " + ruleName + "[" + getHelight(ruleName) + "]");
 		
 		return super.visitTerminal(node);
 	}
