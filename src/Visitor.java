@@ -8,32 +8,31 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	private static int depth = 0;
 	@Override
 	public Void visitChildren(RuleNode node) {
-//		RuleContext ctx = node.getRuleContext();
-//		int ruleIndex = ctx.getRuleIndex();
-//		String ruleName = SysYParser.ruleNames[ruleIndex];
-//		String realName = ruleName.substring(0, 1).toUpperCase() + ruleName.substring(1);
-//
-//		for (int i = 0; i < depth; ++i)
-//			System.err.print("  ");
-//		System.err.println(realName);
-//
-//		depth++;
-//		Void ret = super.visitChildren(node);
-//		depth--;
+		RuleContext ctx = node.getRuleContext();
+		int ruleIndex = ctx.getRuleIndex();
+		String ruleName = SysYParser.ruleNames[ruleIndex];
+		String realName = ruleName.substring(0, 1).toUpperCase() + ruleName.substring(1);
+
+		for (int i = 0; i < depth; ++i)
+			System.err.print("  ");
+		System.err.println(realName);
+
+		depth++;
+		Void ret = super.visitChildren(node);
+		depth--;
 		
-//		return ret;
+		return ret;
 		
-		Void result = this.defaultResult();
-		int n = node.getChildCount();
-		
-		for(int i = 0; i < n && this.shouldVisitNextChild(node, result); ++i) {
-			ParseTree c = node.getChild(i);
-			Void childResult = c.accept(this);
-			result = this.aggregateResult(result, childResult);
-		}
-		System.err.println("123");
-		
-		return result;
+//		Void result = this.defaultResult();
+//		int n = node.getChildCount();
+//		
+//		for(int i = 0; i < n && this.shouldVisitNextChild(node, result); ++i) {
+//			ParseTree c = node.getChild(i);
+//			Void childResult = c.accept(this);
+//			result = this.aggregateResult(result, childResult);
+//		}
+//		
+//		return result;
 	}
 	
 	@Override
