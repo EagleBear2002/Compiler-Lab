@@ -20,7 +20,7 @@ public class SysYParser extends Parser {
 		PLUS=10, MINUS=11, MUL=12, DIV=13, MOD=14, ASSIGN=15, EQ=16, NEQ=17, LT=18, 
 		GT=19, LE=20, GE=21, NOT=22, AND=23, OR=24, L_PAREN=25, R_PAREN=26, L_BRACE=27, 
 		R_BRACE=28, L_BRACKT=29, R_BRACKT=30, COMMA=31, SEMICOLON=32, IDENT=33, 
-		INTEGR_CONST=34, WS=35, SL_COMMENT=36, ML_COMMENT=37;
+		INTEGR_CONST=34, WS=35, SL_COMMENT=36, ML_COMMENT=37, LAND=38, LOR=39;
 	public static final int
 		RULE_program = 0, RULE_compUnit = 1, RULE_decl = 2, RULE_constDecl = 3, 
 		RULE_bType = 4, RULE_constDef = 5, RULE_constInitVal = 6, RULE_varDecl = 7, 
@@ -56,7 +56,7 @@ public class SysYParser extends Parser {
 			"RETURN", "PLUS", "MINUS", "MUL", "DIV", "MOD", "ASSIGN", "EQ", "NEQ", 
 			"LT", "GT", "LE", "GE", "NOT", "AND", "OR", "L_PAREN", "R_PAREN", "L_BRACE", 
 			"R_BRACE", "L_BRACKT", "R_BRACKT", "COMMA", "SEMICOLON", "IDENT", "INTEGR_CONST", 
-			"WS", "SL_COMMENT", "ML_COMMENT"
+			"WS", "SL_COMMENT", "ML_COMMENT", "LAND", "LOR"
 		};
 	}
 	private static final String[] _SYMBOLIC_NAMES = makeSymbolicNames();
@@ -2673,7 +2673,7 @@ public class SysYParser extends Parser {
 		public LAndExpContext lAndExp() {
 			return getRuleContext(LAndExpContext.class,0);
 		}
-		public TerminalNode AND() { return getToken(SysYParser.AND, 0); }
+		public TerminalNode LAND() { return getToken(SysYParser.LAND, 0); }
 		public LAndExpContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2727,7 +2727,7 @@ public class SysYParser extends Parser {
 					setState(385);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(386);
-					match(AND);
+					match(LAND);
 					setState(387);
 					eqExp(0);
 					}
@@ -2757,7 +2757,7 @@ public class SysYParser extends Parser {
 		public LOrExpContext lOrExp() {
 			return getRuleContext(LOrExpContext.class,0);
 		}
-		public TerminalNode OR() { return getToken(SysYParser.OR, 0); }
+		public TerminalNode LOR() { return getToken(SysYParser.LOR, 0); }
 		public LOrExpContext(ParserRuleContext parent, int invokingState) {
 			super(parent, invokingState);
 		}
@@ -2811,7 +2811,7 @@ public class SysYParser extends Parser {
 					setState(396);
 					if (!(precpred(_ctx, 1))) throw new FailedPredicateException(this, "precpred(_ctx, 1)");
 					setState(397);
-					match(OR);
+					match(LOR);
 					setState(398);
 					lAndExp(0);
 					}
@@ -2965,7 +2965,7 @@ public class SysYParser extends Parser {
 	}
 
 	public static final String _serializedATN =
-		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3\'\u0199\4\2\t\2\4"+
+		"\3\u608b\ua72a\u8133\ub9ed\u417c\u3be7\u7786\u5964\3)\u0199\4\2\t\2\4"+
 		"\3\t\3\4\4\t\4\4\5\t\5\4\6\t\6\4\7\t\7\4\b\t\b\4\t\t\t\4\n\t\n\4\13\t"+
 		"\13\4\f\t\f\4\r\t\r\4\16\t\16\4\17\t\17\4\20\t\20\4\21\t\21\4\22\t\22"+
 		"\4\23\t\23\4\24\t\24\4\25\t\25\4\26\t\26\4\27\t\27\4\30\t\30\4\31\t\31"+
@@ -3102,13 +3102,13 @@ public class SysYParser extends Parser {
 		"\u017c\5:\36\2\u017b\u0178\3\2\2\2\u017c\u017f\3\2\2\2\u017d\u017b\3\2"+
 		"\2\2\u017d\u017e\3\2\2\2\u017e=\3\2\2\2\u017f\u017d\3\2\2\2\u0180\u0181"+
 		"\b \1\2\u0181\u0182\5<\37\2\u0182\u0188\3\2\2\2\u0183\u0184\f\3\2\2\u0184"+
-		"\u0185\7\31\2\2\u0185\u0187\5<\37\2\u0186\u0183\3\2\2\2\u0187\u018a\3"+
-		"\2\2\2\u0188\u0186\3\2\2\2\u0188\u0189\3\2\2\2\u0189?\3\2\2\2\u018a\u0188"+
+		"\u0185\7(\2\2\u0185\u0187\5<\37\2\u0186\u0183\3\2\2\2\u0187\u018a\3\2"+
+		"\2\2\u0188\u0186\3\2\2\2\u0188\u0189\3\2\2\2\u0189?\3\2\2\2\u018a\u0188"+
 		"\3\2\2\2\u018b\u018c\b!\1\2\u018c\u018d\5> \2\u018d\u0193\3\2\2\2\u018e"+
-		"\u018f\f\3\2\2\u018f\u0190\7\32\2\2\u0190\u0192\5> \2\u0191\u018e\3\2"+
-		"\2\2\u0192\u0195\3\2\2\2\u0193\u0191\3\2\2\2\u0193\u0194\3\2\2\2\u0194"+
-		"A\3\2\2\2\u0195\u0193\3\2\2\2\u0196\u0197\5$\23\2\u0197C\3\2\2\2+HJPY"+
-		"gtwz\u0082\u008e\u0093\u009c\u009f\u00a2\u00a8\u00b4\u00c1\u00c4\u00ca"+
+		"\u018f\f\3\2\2\u018f\u0190\7)\2\2\u0190\u0192\5> \2\u0191\u018e\3\2\2"+
+		"\2\u0192\u0195\3\2\2\2\u0193\u0191\3\2\2\2\u0193\u0194\3\2\2\2\u0194A"+
+		"\3\2\2\2\u0195\u0193\3\2\2\2\u0196\u0197\5$\23\2\u0197C\3\2\2\2+HJPYg"+
+		"twz\u0082\u008e\u0093\u009c\u009f\u00a2\u00a8\u00b4\u00c1\u00c4\u00ca"+
 		"\u00d1\u00d9\u00e4\u00f2\u00f5\u0101\u0107\u010f\u0111\u0123\u0125\u012f"+
 		"\u0138\u0140\u0146\u014f\u015c\u0167\u0172\u017d\u0188\u0193";
 	public static final ATN _ATN =
