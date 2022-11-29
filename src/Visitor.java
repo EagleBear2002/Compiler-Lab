@@ -84,6 +84,14 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String ruleName = SysYLexer.ruleNames[ruleNum];
 			String tokenText = token.getText();
 			String color = getHelight(ruleName);
+
+			if (ruleNum == 34) {
+				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
+					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
+				} else if (tokenText.startsWith("0")) {
+					tokenText = String.valueOf(Integer.parseInt(tokenText, 8));
+				}
+			}
 			
 			if (color != "no color") {
 				printIdent(depth);

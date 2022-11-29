@@ -1,6 +1,6 @@
 const int c = 10;
 int main() {
-    int a = 0;
+    int a = 0x10;
     const int b = 9;
     return a;
 }
