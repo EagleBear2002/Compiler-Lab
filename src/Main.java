@@ -46,13 +46,10 @@ public class Main {
 		sysYParser.addErrorListener(myParserErrorListener);
 
 		ParseTree tree = sysYParser.program();
-		System.err.println("Parser Checking");
 		if (myParserErrorListener.listenError()) {
 			return sysYParser;
 		}
-		System.err.println("Successful Checking");
 
-//		 Visitor extends SysYParserBaseVisitor<Void>
 		Visitor visitor = new Visitor();
 		visitor.visit(tree);
 		
