@@ -1,4 +1,4 @@
-cosnt int c = 10;
+const int c = 10;
 int main() {
     int a = 0;
     const int b = 9;
