@@ -12,14 +12,14 @@ public class Main {
 		CharStream input = CharStreams.fromFileName(sourcePath);
 		SysYLexer sysYLexer = new SysYLexer(input);
 
-//		MyLexerErrorListener myLexerErrorListener = new MyLexerErrorListener();
-//		sysYLexer.removeErrorListeners();
-//		sysYLexer.addErrorListener(myLexerErrorListener);
-//		List<? extends Token> tokenList = sysYLexer.getAllTokens();
-//
-//		if (myLexerErrorListener.listenError()) {
-//			return sysYLexer;
-//		}
+		MyLexerErrorListener myLexerErrorListener = new MyLexerErrorListener();
+		sysYLexer.removeErrorListeners();
+		sysYLexer.addErrorListener(myLexerErrorListener);
+		List<? extends Token> tokenList = sysYLexer.getAllTokens();
+
+		if (myLexerErrorListener.listenError()) {
+			return sysYLexer;
+		}
 //
 //		String[] ruleNames = sysYLexer.getRuleNames();
 //		for (Token token : tokenList) {
@@ -68,22 +68,6 @@ public class Main {
 		}
 
 		SysYLexer sysYLexer = lexer(args[0]);
-		
-//		String source = args[0];
-//		CharStream input = CharStreams.fromFileName(source);
-		
 		SysYParser sysYParser = parser(sysYLexer);
-//		sysYLexer.removeErrorListeners();
-//		MyLexerErrorListener myErrorListener = new MyLexerErrorListener();
-//		sysYLexer.addErrorListener(myErrorListener);
-//		CommonTokenStream commonTokenStream = new CommonTokenStream(sysYLexer);
-//		SysYParser sysYParser = new SysYParser(commonTokenStream);
-//		sysYParser.removeErrorListeners();
-//		MyParserErrorListener parserErrorListener = new MyParserErrorListener();
-//		sysYParser.addErrorListener(parserErrorListener);
-//		ParseTree tree = sysYParser.program();
-//		if (parserErrorListener.listenError()) {
-//			return;
-//		}
 	}
 }
