@@ -85,7 +85,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String tokenText = token.getText();
 			String color = getHelight(ruleName);
 
-			if (ruleNum == 34) {
+			if (ruleName == "INTEGR_CONST") {
 				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
 					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
 				} else if (tokenText.startsWith("0")) {
