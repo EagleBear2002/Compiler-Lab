@@ -55,7 +55,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		String tokenText = token.getText();
 		
 		printIdent(depth);
-		System.err.println(tokenText + ruleName + "[" + getHelight(ruleName) +"]");
+		System.err.println(tokenText + " " + ruleName + "[" + getHelight(ruleName) +"]");
 		
 		return super.visitTerminal(node);
 	}
