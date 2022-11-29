@@ -92,7 +92,7 @@ primaryExp : L_PAREN exp R_PAREN | lVal | number;
 number : INTEGR_CONST;
 
 // 一元表达式
-unaryExp : primaryExp | IDENT '(' (funcRParams)? ')' | unaryOp unaryExp;
+unaryExp : primaryExp | IDENT L_PAREN (funcRParams)? R_PAREN | unaryOp unaryExp;
 
 // 单目运算符
 unaryOp : PLUS | MINUS | NOT;
