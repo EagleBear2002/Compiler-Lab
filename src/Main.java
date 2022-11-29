@@ -12,30 +12,30 @@ public class Main {
 		CharStream input = CharStreams.fromFileName(sourcePath);
 		SysYLexer sysYLexer = new SysYLexer(input);
 
-		MyLexerErrorListener myLexerErrorListener = new MyLexerErrorListener();
-		sysYLexer.removeErrorListeners();
-		sysYLexer.addErrorListener(myLexerErrorListener);
-		List<? extends Token> tokenList = sysYLexer.getAllTokens();
-
-		if (myLexerErrorListener.listenError()) {
-			return sysYLexer;
-		}
-
-		String[] ruleNames = sysYLexer.getRuleNames();
-		for (Token token : tokenList) {
-			String tokenText = token.getText();
-			int ruleNum = token.getType();
-			int lineNum = token.getLine();
-			if (ruleNum == 34) {
-				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
-					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
-				} else if (tokenText.startsWith("0")) {
-					tokenText = String.valueOf(Integer.parseInt(tokenText, 8));
-				}
-			}
-
-//			System.err.printf("%s %s at Line %d.\n", ruleNames[ruleNum - 1], tokenText, lineNum);
-		}
+//		MyLexerErrorListener myLexerErrorListener = new MyLexerErrorListener();
+//		sysYLexer.removeErrorListeners();
+//		sysYLexer.addErrorListener(myLexerErrorListener);
+//		List<? extends Token> tokenList = sysYLexer.getAllTokens();
+//
+//		if (myLexerErrorListener.listenError()) {
+//			return sysYLexer;
+//		}
+//
+//		String[] ruleNames = sysYLexer.getRuleNames();
+//		for (Token token : tokenList) {
+//			String tokenText = token.getText();
+//			int ruleNum = token.getType();
+//			int lineNum = token.getLine();
+//			if (ruleNum == 34) {
+//				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
+//					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
+//				} else if (tokenText.startsWith("0")) {
+//					tokenText = String.valueOf(Integer.parseInt(tokenText, 8));
+//				}
+//			}
+//
+////			System.err.printf("%s %s at Line %d.\n", ruleNames[ruleNum - 1], tokenText, lineNum);
+//		}
 
 		return sysYLexer;
 	}
@@ -67,12 +67,10 @@ public class Main {
 			return;
 		}
 
-//		SysYLexer sysYLexer = lexer(args[0]);
+		SysYLexer sysYLexer = lexer(args[0]);
 		
-		String source = args[0];
-		CharStream input = CharStreams.fromFileName(source);
-
-		SysYLexer sysYLexer = new SysYLexer(input);
+//		String source = args[0];
+//		CharStream input = CharStreams.fromFileName(source);
 		
 		SysYParser sysYParser = parser(sysYLexer);
 //		sysYLexer.removeErrorListeners();
