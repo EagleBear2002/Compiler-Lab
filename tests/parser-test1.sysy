@@ -1,5 +1,6 @@
+cosnt int c = 10;
 int main() {
-    int a=0;
-    const int b=9;
+    int a = 0;
+    const int b = 9;
     return a;
 }
