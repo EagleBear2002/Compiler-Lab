@@ -103,23 +103,23 @@ funcRParams : param (COMMA param)*;
 // from TA
 param : exp;
 
-// 乘除模表达式
-mulExp : unaryOp | mulExp (MUL | DIV | MOD) unaryExp;
-
-// 加减表达式
-addExp : mulExp | addExp (PLUS | MINUS) mulExp;
-
-// 关系表达式
-relExp : addExp | relExp (LT | GT | LE | GE) addExp;
-
-// 相等性表达式
-eqExp : relExp | eqExp (EQ | NEQ) relExp;
-
-// 逻辑与表达式
-lAndExp : eqExp | lAndExp LAND eqExp;
-
-// 逻辑或表达式
-lOrExp : lAndExp | lOrExp LOR lAndExp;
+//// 乘除模表达式
+//mulExp : unaryOp | mulExp (MUL | DIV | MOD) unaryExp;
+//
+//// 加减表达式
+//addExp : mulExp | addExp (PLUS | MINUS) mulExp;
+//
+//// 关系表达式
+//relExp : addExp | relExp (LT | GT | LE | GE) addExp;
+//
+//// 相等性表达式
+//eqExp : relExp | eqExp (EQ | NEQ) relExp;
+//
+//// 逻辑与表达式
+//lAndExp : eqExp | lAndExp LAND eqExp;
+//
+//// 逻辑或表达式
+//lOrExp : lAndExp | lOrExp LOR lAndExp;
 
 // 常量表达式
 constExp : exp;
