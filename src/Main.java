@@ -42,39 +42,34 @@ public class Main {
 
 	public static SysYParser parser(SysYLexer sysYLexer) {
 		
-//		CommonTokenStream commonTokenStream = new CommonTokenStream(sysYLexer);
-//		SysYParser sysYParser = new SysYParser(commonTokenStream);
-//		sysYParser.removeErrorListeners();
-//		MyParserErrorListener parserErrorListener = new MyParserErrorListener();
-//		sysYParser.addErrorListener(parserErrorListener);
-//		ParseTree tree = sysYParser.program();
-//		if(parserErrorListener.listenError()){
-//			return;
-//		}
-//		Visitor visitor = new Visitor();
-//		String[] s = sysYLexer.getRuleNames();
-////        for(int i = 0; i < sysYLexer.getRuleNames().length; i++){
-////            System.err.println(s[i]);
-////        }
-////		visitor.setTokenNames(s, sysYParser.getRuleNames());
-////		visitor.visit(tree);
-		
-		CommonTokenStream tokens = new CommonTokenStream(sysYLexer);
-		SysYParser sysYParser = new SysYParser(tokens);
-		MyParserErrorListener myParserErrorListener = new MyParserErrorListener();
+		CommonTokenStream commonTokenStream = new CommonTokenStream(sysYLexer);
+		SysYParser sysYParser = new SysYParser(commonTokenStream);
 		sysYParser.removeErrorListeners();
-		sysYParser.addErrorListener(myParserErrorListener);
-
+		MyParserErrorListener parserErrorListener = new MyParserErrorListener();
+		sysYParser.addErrorListener(parserErrorListener);
 		ParseTree tree = sysYParser.program();
-		System.err.println("Parser Checking");
-		if (myParserErrorListener.listenError()) {
+		if(parserErrorListener.listenError()){
 			return sysYParser;
 		}
-		System.err.println("Successful Checking");
-		
-		// Visitor extends SysYParserBaseVisitor<Void>
 		Visitor visitor = new Visitor();
-		visitor.visit(tree);
+		String[] s = sysYLexer.getRuleNames();
+		
+//		CommonTokenStream tokens = new CommonTokenStream(sysYLexer);
+//		SysYParser sysYParser = new SysYParser(tokens);
+//		MyParserErrorListener myParserErrorListener = new MyParserErrorListener();
+//		sysYParser.removeErrorListeners();
+//		sysYParser.addErrorListener(myParserErrorListener);
+//
+//		ParseTree tree = sysYParser.program();
+//		System.err.println("Parser Checking");
+//		if (myParserErrorListener.listenError()) {
+//			return sysYParser;
+//		}
+//		System.err.println("Successful Checking");
+//		
+//		// Visitor extends SysYParserBaseVisitor<Void>
+//		Visitor visitor = new Visitor();
+//		visitor.visit(tree);
 		
 		return sysYParser;
 	}
