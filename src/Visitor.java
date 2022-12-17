@@ -103,13 +103,25 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			}
 		}
 		
-		return super.visitTerminal(node);
+		Void ret = super.visitTerminal(node);
+		
+		if (ruleNum >= 0) {
+			String ruleName = SysYLexer.ruleNames[ruleNum];
+			
+			if (ruleName == "INDENT") {
+				String varName = token.getText();
+				currentScope.resolve(varName);
+			}
+		}
+		
+		return ret;
 	}
 	
 	
 	@Override
 	public Void visit(ParseTree tree) {
-		return super.visit(tree);
+		Void ret = super.visit(tree);
+		return ret;
 	}
 	
 	@Override
@@ -121,7 +133,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		Void ret = super.visitProgram(ctx);
 		
 		System.out.println("exitProgram");
-//		currentScope = currentScope.getEnclosingScope();
+		currentScope = currentScope.getEnclosingScope();
 		
 		return ret;
 	}
@@ -163,6 +175,36 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		System.out.println("exitBlock");
 		currentScope = currentScope.getEnclosingScope();
+		
+		return ret;
+	}
+	
+	@Override
+	public Void visitVarDecl(SysYParser.VarDeclContext ctx) {
+		Void ret = super.visitVarDecl(ctx);
+		
+		String typeName = ctx.bType().getText();
+		Type type = (Type) globalScope.resolve(typeName);
+		
+		for (SysYParser.VarDefContext varDefContext : ctx.varDef()) {
+			String varName = varDefContext.getText();
+			VariableSymbol varSymbol = new VariableSymbol(varName, type);
+			currentScope.define(varSymbol);
+		}
+		
+		return ret;
+	}
+	
+	@Override
+	public Void visitFuncFParam(SysYParser.FuncFParamContext ctx) {
+		Void ret = super.visitFuncFParam(ctx);
+		String typeName = ctx.bType().getText();
+		Type type = (Type) globalScope.resolve(typeName);
+		
+		String varName = ctx.IDENT().getText();
+		VariableSymbol varSymbol = new VariableSymbol(varName, type);
+		
+		currentScope.define(varSymbol);
 		
 		return ret;
 	}
