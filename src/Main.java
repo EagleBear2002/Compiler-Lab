@@ -1,18 +1,20 @@
+import Lexer.SysYLexer;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
+import Parser.MyParserErrorListener;
+import Parser.SysYParser;
+import Parser.Visitor;
 
 import java.io.*;
-import java.util.List;
 
 public class Main {
 	public static SysYLexer lexer(String sourcePath) throws IOException {
 		CharStream input = CharStreams.fromFileName(sourcePath);
 		SysYLexer sysYLexer = new SysYLexer(input);
 
-//		MyLexerErrorListener myLexerErrorListener = new MyLexerErrorListener();
+//		lexer.MyLexerErrorListener myLexerErrorListener = new lexer.MyLexerErrorListener();
 //		sysYLexer.removeErrorListeners();
 //		sysYLexer.addErrorListener(myLexerErrorListener);
 //		List<? extends Token> tokenList = sysYLexer.getAllTokens();
