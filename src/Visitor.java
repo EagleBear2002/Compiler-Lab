@@ -1,3 +1,6 @@
+import SymbolTable.FunctionSymbol;
+import SymbolTable.GlobalScope;
+import SymbolTable.Scope;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -102,6 +105,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		return super.visitTerminal(node);
 	}
 	
+	private GlobalScope globalScope = null;
+	private Scope currentScope = null;
+	
 	@Override
 	public Void visit(ParseTree tree) {
 		return super.visit(tree);
@@ -109,13 +115,26 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitProgram(SysYParser.ProgramContext ctx) {
+		globalScope = new GlobalScope(null);
+		currentScope = globalScope;
+		System.out.println("visitProgram");
+		
 		return super.visitProgram(ctx);
 	}
 	
 	@Override
-	public Void visitCompUnit(SysYParser.CompUnitContext ctx) {
-		return super.visitCompUnit(ctx);
+	public Void visitFuncDef(SysYParser.FuncDefContext ctx) {
+		
+//		String typeName = ctx.getText();
+//		globalScope.resolve(typeName);
+//		
+//		String funName = ctx.ID().getText();
+//		FunctionSymbol fun = new FunctionSymbol(funName, currentScope);
+//		graph.addEdge(funName, currentScope.getName());
+//		
+//		currentScope.define(fun);
+//		currentScope = fun;
+		
+		return super.visitFuncDef(ctx);
 	}
-	
-	
 }
