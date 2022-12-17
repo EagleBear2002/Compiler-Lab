@@ -132,7 +132,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		String typeName = ctx.funcType().getText();
 		globalScope.resolve(typeName);
 		
-		String funcName = ctx.getText();
+		String funcName = ctx.IDENT().getText();
 		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope);
 		
 		currentScope.define(fun);
