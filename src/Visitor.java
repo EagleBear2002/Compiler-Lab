@@ -168,6 +168,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		String localScopeName = localScope.getName() + localScopeCounter;
 		localScope.setName(localScopeName);
 		localScopeCounter++;
+		currentScope = localScope;
 		
 		System.out.println("enterBlock");
 		
