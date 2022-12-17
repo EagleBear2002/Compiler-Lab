@@ -121,7 +121,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		Void ret = super.visitProgram(ctx);
 		
 		System.out.println("exitProgram");
-		currentScope = currentScope.getEnclosingScope();
+//		currentScope = currentScope.getEnclosingScope();
 		
 		return ret;
 	}
