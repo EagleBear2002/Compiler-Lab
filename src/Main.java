@@ -64,7 +64,11 @@ public class Main {
 			return;
 		}
 
-		SysYLexer sysYLexer = lexer(args[0]);
+		String filePath = args[0];
+		int lineNO = Integer.valueOf(args[1]);
+		int column = Integer.valueOf(args[2]);
+		String name = args[2];
+		SysYLexer sysYLexer = lexer(filePath);
 		SysYParser sysYParser = parser(sysYLexer);
 	}
 }
