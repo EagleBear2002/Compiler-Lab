@@ -1,0 +1,144 @@
+2022.12.17 21:17:14 INFO  tracing is disabled for protocol LSP, to enable tracing of incoming and outgoing JSON messages create an empty file at c:\Users\37756\Documents\NJU\2022Fall\Compilers\Lab\.metals\lsp.trace.json or C:\Users\37756\AppData\Local\scalameta\metals\cache\lsp.trace.json
+2022.12.17 21:17:16 INFO  logging to file C:\Users\37756\Documents\NJU\2022Fall\Compilers\Lab\.metals\metals.log
+2022.12.17 21:17:16 INFO  Started: Metals version 0.11.9 in workspace 'C:\Users\37756\Documents\NJU\2022Fall\Compilers\Lab' for client Visual Studio Code 1.74.1.
+2022.12.17 21:17:19 INFO  time: initialize in 2.34s
+2022.12.17 21:17:22 WARN  Build server is not auto-connectable.
+2022.12.17 21:17:22 WARN  no build tool detected in workspace 'C:\Users\37756\Documents\NJU\2022Fall\Compilers\Lab'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+2022.12.17 21:17:22 WARN  no build target for: C:\Users\37756\Documents\NJU\2022Fall\Compilers\Lab\src\Main.java
+2022.12.17 21:17:27 ERROR text document: file:///C:/Users/37756/Documents/NJU/2022Fall/Compilers/Lab/src/Main.javajava.nio.file.InvalidPathException: Illegal char <:> at index 4: file:///C:/Users/37756/Documents/NJU/2022Fall/Compilers/Lab/src/Main.java
+	at sun.nio.fs.WindowsPathParser.normalize(WindowsPathParser.java:182)
+	at sun.nio.fs.WindowsPathParser.parse(WindowsPathParser.java:153)
+	at sun.nio.fs.WindowsPathParser.parse(WindowsPathParser.java:77)
+	at sun.nio.fs.WindowsPath.parse(WindowsPath.java:92)
+	at sun.nio.fs.WindowsFileSystem.getPath(WindowsFileSystem.java:229)
+	at java.nio.file.Path.resolve(Path.java:515)
+	at scala.meta.io.AbsolutePath.resolve(AbsolutePath.scala:43)
+	at scala.meta.internal.implementation.ImplementationProvider.$anonfun$computeInheritance$2(ImplementationProvider.scala:85)
+	at scala.collection.immutable.Vector.foreach(Vector.scala:1895)
+	at scala.meta.internal.implementation.ImplementationProvider.$anonfun$computeInheritance$1(ImplementationProvider.scala:79)
+	at scala.meta.internal.implementation.ImplementationProvider.$anonfun$computeInheritance$1$adapted(ImplementationProvider.scala:78)
+	at scala.collection.immutable.List.foreach(List.scala:333)
+	at scala.meta.internal.implementation.ImplementationProvider.computeInheritance(ImplementationProvider.scala:78)
+	at scala.meta.internal.implementation.ImplementationProvider.$anonfun$onChange$1(ImplementationProvider.scala:68)
+	at java.util.concurrent.ConcurrentHashMap.compute(ConcurrentHashMap.java:1916)
+	at scala.meta.internal.implementation.ImplementationProvider.onChange(ImplementationProvider.scala:68)
+	at scala.meta.internal.metals.SemanticdbIndexer.$anonfun$onChange$1(SemanticdbIndexer.scala:81)
+	at scala.meta.internal.metals.SemanticdbIndexer.$anonfun$onChange$1$adapted(SemanticdbIndexer.scala:81)
+	at scala.collection.immutable.List.foreach(List.scala:333)
+	at scala.meta.internal.metals.SemanticdbIndexer.onChange(SemanticdbIndexer.scala:81)
+	at scala.meta.internal.metals.SemanticdbIndexer.onChange(SemanticdbIndexer.scala:77)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:96)
+	at java.util.HashMap.compute(HashMap.java:1320)
+	at java.util.Collections$SynchronizedMap.compute(Collections.java:2732)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.AggregateSemanticdbs.loop$1(AggregateSemanticdbs.scala:30)
+	at scala.meta.internal.metals.AggregateSemanticdbs.textDocument(AggregateSemanticdbs.scala:36)
+	at scala.meta.internal.metals.CodeLensProvider.findLenses(CodeLensProvider.scala:22)
+	at scala.meta.internal.metals.MetalsLanguageServer.$anonfun$codeLens$2(MetalsLanguageServer.scala:1744)
+	at scala.meta.internal.metals.TimerProvider.timedThunk(TimerProvider.scala:25)
+	at scala.meta.internal.metals.MetalsLanguageServer.$anonfun$codeLens$1(MetalsLanguageServer.scala:1742)
+	at scala.meta.internal.metals.CancelTokens$.$anonfun$apply$2(CancelTokens.scala:26)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:678)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
+	at java.lang.Thread.run(Thread.java:832)
+
+2022.12.17 21:17:27 INFO  time: code lens generation in 4.71s
+2022.12.17 21:19:17 INFO  shutting down Metals
+2022.12.17 21:20:55 INFO  tracing is disabled for protocol LSP, to enable tracing of incoming and outgoing JSON messages create an empty file at c:\Users\37756\Documents\NJU\2022Fall\Compilers\Lab\.metals\lsp.trace.json or C:\Users\37756\AppData\Local\scalameta\metals\cache\lsp.trace.json
+2022.12.17 21:20:58 INFO  logging to file C:\Users\37756\Documents\NJU\2022Fall\Compilers\Lab\.metals\metals.log
+2022.12.17 21:20:58 INFO  Started: Metals version 0.11.9 in workspace 'C:\Users\37756\Documents\NJU\2022Fall\Compilers\Lab' for client Visual Studio Code 1.74.1.
+2022.12.17 21:21:00 INFO  time: initialize in 2.46s
+2022.12.17 21:21:05 WARN  Build server is not auto-connectable.
+2022.12.17 21:21:05 WARN  no build tool detected in workspace 'C:\Users\37756\Documents\NJU\2022Fall\Compilers\Lab'. The most common cause for this problem is that the editor was opened in the wrong working directory, for example if you use sbt then the workspace directory should contain build.sbt. 
+12月 17, 2022 9:21:05 下午 org.eclipse.lsp4j.jsonrpc.RemoteEndpoint handleCancellation
+警告: Unmatched cancel notification for request id 4
+2022.12.17 21:21:05 WARN  no build target for: C:\Users\37756\Documents\NJU\2022Fall\Compilers\Lab\src\Main.java
+2022.12.17 21:21:09 ERROR text document: file:///C:/Users/37756/Documents/NJU/2022Fall/Compilers/Lab/src/Main.javajava.nio.file.InvalidPathException: Illegal char <:> at index 4: file:///C:/Users/37756/Documents/NJU/2022Fall/Compilers/Lab/src/Main.java
+	at sun.nio.fs.WindowsPathParser.normalize(WindowsPathParser.java:182)
+	at sun.nio.fs.WindowsPathParser.parse(WindowsPathParser.java:153)
+	at sun.nio.fs.WindowsPathParser.parse(WindowsPathParser.java:77)
+	at sun.nio.fs.WindowsPath.parse(WindowsPath.java:92)
+	at sun.nio.fs.WindowsFileSystem.getPath(WindowsFileSystem.java:229)
+	at java.nio.file.Path.resolve(Path.java:515)
+	at scala.meta.io.AbsolutePath.resolve(AbsolutePath.scala:43)
+	at scala.meta.internal.implementation.ImplementationProvider.$anonfun$computeInheritance$2(ImplementationProvider.scala:85)
+	at scala.collection.immutable.Vector.foreach(Vector.scala:1895)
+	at scala.meta.internal.implementation.ImplementationProvider.$anonfun$computeInheritance$1(ImplementationProvider.scala:79)
+	at scala.meta.internal.implementation.ImplementationProvider.$anonfun$computeInheritance$1$adapted(ImplementationProvider.scala:78)
+	at scala.collection.immutable.List.foreach(List.scala:333)
+	at scala.meta.internal.implementation.ImplementationProvider.computeInheritance(ImplementationProvider.scala:78)
+	at scala.meta.internal.implementation.ImplementationProvider.$anonfun$onChange$1(ImplementationProvider.scala:68)
+	at java.util.concurrent.ConcurrentHashMap.compute(ConcurrentHashMap.java:1916)
+	at scala.meta.internal.implementation.ImplementationProvider.onChange(ImplementationProvider.scala:68)
+	at scala.meta.internal.metals.SemanticdbIndexer.$anonfun$onChange$1(SemanticdbIndexer.scala:81)
+	at scala.meta.internal.metals.SemanticdbIndexer.$anonfun$onChange$1$adapted(SemanticdbIndexer.scala:81)
+	at scala.collection.immutable.List.foreach(List.scala:333)
+	at scala.meta.internal.metals.SemanticdbIndexer.onChange(SemanticdbIndexer.scala:81)
+	at scala.meta.internal.metals.SemanticdbIndexer.onChange(SemanticdbIndexer.scala:77)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:96)
+	at java.util.HashMap.compute(HashMap.java:1320)
+	at java.util.Collections$SynchronizedMap.compute(Collections.java:2732)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.AggregateSemanticdbs.loop$1(AggregateSemanticdbs.scala:30)
+	at scala.meta.internal.metals.AggregateSemanticdbs.textDocument(AggregateSemanticdbs.scala:36)
+	at scala.meta.internal.metals.CodeLensProvider.findLenses(CodeLensProvider.scala:22)
+	at scala.meta.internal.metals.MetalsLanguageServer.$anonfun$codeLens$2(MetalsLanguageServer.scala:1744)
+	at scala.meta.internal.metals.TimerProvider.timedThunk(TimerProvider.scala:25)
+	at scala.meta.internal.metals.MetalsLanguageServer.$anonfun$codeLens$1(MetalsLanguageServer.scala:1742)
+	at scala.meta.internal.metals.CancelTokens$.$anonfun$apply$2(CancelTokens.scala:26)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:678)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
+	at java.lang.Thread.run(Thread.java:832)
+
+2022.12.17 21:21:09 INFO  time: code lens generation in 4.17s
+2022.12.17 21:21:11 ERROR text document: file:///C:/Users/37756/Documents/NJU/2022Fall/Compilers/Lab/src/Main.javajava.nio.file.InvalidPathException: Illegal char <:> at index 4: file:///C:/Users/37756/Documents/NJU/2022Fall/Compilers/Lab/src/Main.java
+	at sun.nio.fs.WindowsPathParser.normalize(WindowsPathParser.java:182)
+	at sun.nio.fs.WindowsPathParser.parse(WindowsPathParser.java:153)
+	at sun.nio.fs.WindowsPathParser.parse(WindowsPathParser.java:77)
+	at sun.nio.fs.WindowsPath.parse(WindowsPath.java:92)
+	at sun.nio.fs.WindowsFileSystem.getPath(WindowsFileSystem.java:229)
+	at java.nio.file.Path.resolve(Path.java:515)
+	at scala.meta.io.AbsolutePath.resolve(AbsolutePath.scala:43)
+	at scala.meta.internal.implementation.ImplementationProvider.$anonfun$computeInheritance$2(ImplementationProvider.scala:85)
+	at scala.collection.immutable.Vector.foreach(Vector.scala:1895)
+	at scala.meta.internal.implementation.ImplementationProvider.$anonfun$computeInheritance$1(ImplementationProvider.scala:79)
+	at scala.meta.internal.implementation.ImplementationProvider.$anonfun$computeInheritance$1$adapted(ImplementationProvider.scala:78)
+	at scala.collection.immutable.List.foreach(List.scala:333)
+	at scala.meta.internal.implementation.ImplementationProvider.computeInheritance(ImplementationProvider.scala:78)
+	at scala.meta.internal.implementation.ImplementationProvider.$anonfun$onChange$1(ImplementationProvider.scala:68)
+	at java.util.concurrent.ConcurrentHashMap.compute(ConcurrentHashMap.java:1916)
+	at scala.meta.internal.implementation.ImplementationProvider.onChange(ImplementationProvider.scala:68)
+	at scala.meta.internal.metals.SemanticdbIndexer.$anonfun$onChange$1(SemanticdbIndexer.scala:81)
+	at scala.meta.internal.metals.SemanticdbIndexer.$anonfun$onChange$1$adapted(SemanticdbIndexer.scala:81)
+	at scala.collection.immutable.List.foreach(List.scala:333)
+	at scala.meta.internal.metals.SemanticdbIndexer.onChange(SemanticdbIndexer.scala:81)
+	at scala.meta.internal.metals.SemanticdbIndexer.onChange(SemanticdbIndexer.scala:77)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.$anonfun$textDocument$1(InteractiveSemanticdbs.scala:96)
+	at java.util.HashMap.compute(HashMap.java:1320)
+	at java.util.Collections$SynchronizedMap.compute(Collections.java:2732)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:89)
+	at scala.meta.internal.metals.InteractiveSemanticdbs.textDocument(InteractiveSemanticdbs.scala:63)
+	at scala.meta.internal.metals.AggregateSemanticdbs.loop$1(AggregateSemanticdbs.scala:30)
+	at scala.meta.internal.metals.AggregateSemanticdbs.textDocument(AggregateSemanticdbs.scala:36)
+	at scala.meta.internal.metals.CodeLensProvider.findLenses(CodeLensProvider.scala:22)
+	at scala.meta.internal.metals.MetalsLanguageServer.$anonfun$codeLens$2(MetalsLanguageServer.scala:1744)
+	at scala.meta.internal.metals.TimerProvider.timedThunk(TimerProvider.scala:25)
+	at scala.meta.internal.metals.MetalsLanguageServer.$anonfun$codeLens$1(MetalsLanguageServer.scala:1742)
+	at scala.meta.internal.metals.CancelTokens$.$anonfun$apply$2(CancelTokens.scala:26)
+	at scala.concurrent.Future$.$anonfun$apply$1(Future.scala:678)
+	at scala.concurrent.impl.Promise$Transformation.run(Promise.scala:467)
+	at java.util.concurrent.ThreadPoolExecutor.runWorker(ThreadPoolExecutor.java:1130)
+	at java.util.concurrent.ThreadPoolExecutor$Worker.run(ThreadPoolExecutor.java:630)
+	at java.lang.Thread.run(Thread.java:832)
+
+2022.12.17 21:21:11 INFO  time: code lens generation in 5.68s
+12月 17, 2022 9:21:20 下午 org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+信息: Unsupported notification method: $/setTrace
+12月 17, 2022 9:21:49 下午 org.eclipse.lsp4j.jsonrpc.services.GenericEndpoint notify
+信息: Unsupported notification method: $/setTrace
