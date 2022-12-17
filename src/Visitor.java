@@ -1,6 +1,4 @@
-import SymbolTable.FunctionSymbol;
-import SymbolTable.GlobalScope;
-import SymbolTable.Scope;
+import SymbolTable.*;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -9,6 +7,9 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 
 public class Visitor extends SysYParserBaseVisitor<Void> {
 	private static int depth = 0;
+	private GlobalScope globalScope = null;
+	private Scope currentScope = null;
+	private int localScopeCounter = 0;
 	
 	private void printIdent(int depth) {
 		for (int i = 0; i < depth; ++i)
@@ -87,7 +88,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String ruleName = SysYLexer.ruleNames[ruleNum];
 			String tokenText = token.getText();
 			String color = getHelight(ruleName);
-
+			
 			if (ruleName == "INTEGR_CONST") {
 				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
 					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
@@ -105,8 +106,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		return super.visitTerminal(node);
 	}
 	
-	private GlobalScope globalScope = null;
-	private Scope currentScope = null;
 	
 	@Override
 	public Void visit(ParseTree tree) {
@@ -117,24 +116,54 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	public Void visitProgram(SysYParser.ProgramContext ctx) {
 		globalScope = new GlobalScope(null);
 		currentScope = globalScope;
-		System.out.println("visitProgram");
+		System.out.println("enterProgram");
 		
-		return super.visitProgram(ctx);
+		Void ret = super.visitProgram(ctx);
+		
+		System.out.println("exitProgram");
+		currentScope = currentScope.getEnclosingScope();
+		
+		return ret;
 	}
 	
 	@Override
 	public Void visitFuncDef(SysYParser.FuncDefContext ctx) {
 		
-//		String typeName = ctx.getText();
-//		globalScope.resolve(typeName);
-//		
-//		String funName = ctx.ID().getText();
-//		FunctionSymbol fun = new FunctionSymbol(funName, currentScope);
-//		graph.addEdge(funName, currentScope.getName());
-//		
-//		currentScope.define(fun);
-//		currentScope = fun;
+		String typeName = ctx.funcType().getText();
+		globalScope.resolve(typeName);
 		
-		return super.visitFuncDef(ctx);
+		String funcName = ctx.getText();
+		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope);
+		
+		currentScope.define(fun);
+		currentScope = fun;
+		
+		System.out.println("enterFuncDef");
+		System.out.println("typeName = " + typeName);
+		System.out.println("funcName = " + funcName);
+		
+		Void ret = super.visitFuncDef(ctx);
+		
+		System.out.println("exitFuncDef");
+		currentScope = currentScope.getEnclosingScope();
+		
+		return ret;
+	}
+	
+	@Override
+	public Void visitBlock(SysYParser.BlockContext ctx) {
+		LocalScope localScope = new LocalScope(currentScope);
+		String localScopeName = localScope.getName() + localScopeCounter;
+		localScope.setName(localScopeName);
+		localScopeCounter++;
+		
+		System.out.println("enterBlock");
+		
+		Void ret = super.visitBlock(ctx);
+		
+		System.out.println("exitBlock");
+		currentScope = currentScope.getEnclosingScope();
+		
+		return ret;
 	}
 }
