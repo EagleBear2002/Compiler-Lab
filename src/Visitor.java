@@ -295,7 +295,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		if (currentScope.resolve(varName) == null) {
 //			int lineNo = getLineNo(ctx.IDENT());
 //			System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable: " + varName + ".");
-			return new BasicTypeSymbol("void");
+			return new BasicTypeSymbol("noType");
 		}
 		Type varType = currentScope.resolve(varName).getType();
 		for (SysYParser.ExpContext expContext : ctx.exp()) {
@@ -330,13 +330,15 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		if (ctx.ASSIGN() != null) {
 			Type lValType = getLValType(ctx.lVal());
 			Type rValType = getExpType(ctx.exp());
-			if (!lValType.toString().equals(rValType.toString())) {
+			if (lValType.equals("noType") || rValType.equals("noType")) {
+				
+			} else if (!lValType.toString().equals(rValType.toString())) {
 				int lineNo = getLineNo(ctx.ASSIGN());
 				System.err.println("Error type 5 at Line " + lineNo + ": type.Type mismatched for assignment.");
 			}
 		}
 		if (ctx.RETURN() != null) {
-			Type retType = new BasicTypeSymbol("void");
+			Type retType = new BasicTypeSymbol("noType");
 			if (ctx.exp() != null) {
 				retType = getExpType(ctx.exp());
 			}
@@ -395,7 +397,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 //				System.err.println("Error type 6 at Line " + lineNo + ": type.Type mismatched for operands.");
 			}
 		}
-		return new BasicTypeSymbol("void");
+		return new BasicTypeSymbol("noType");
 	}
 	
 	@Override
