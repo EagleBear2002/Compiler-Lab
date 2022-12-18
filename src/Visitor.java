@@ -293,8 +293,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		String varName = ctx.IDENT().getText();
 //		System.out.println("varName = " + varName);
 		if (currentScope.resolve(varName) == null) {
-			int lineNo = getLineNo(ctx.IDENT());
-			System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable: " + varName + ".");
+//			int lineNo = getLineNo(ctx.IDENT());
+//			System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable: " + varName + ".");
 			return new BasicTypeSymbol("void");
 		}
 		Type varType = currentScope.resolve(varName).getType();
@@ -328,8 +328,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	@Override
 	public Void visitStmt(SysYParser.StmtContext ctx) {
 		if (ctx.ASSIGN() != null) {
-			// String lValName = ctx.lVal().IDENT().getText();
-			// BaseSymbol symbol = (BaseSymbol) currentScope.resolve(lValName);
 			Type lValType = getLValType(ctx.lVal());
 			Type rValType = getExpType(ctx.exp());
 			if (!lValType.toString().equals(rValType.toString())) {
@@ -361,8 +359,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		if (ctx.IDENT() != null) { // IDENT L_PAREN funcRParams? R_PAREN
 			String funcName = ctx.IDENT().getText();
 			if (currentScope.resolve(funcName) == null) {
-				int lineNo = getLineNo(ctx.IDENT());
-				System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
+//				int lineNo = getLineNo(ctx.IDENT());
+//				System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
 			} else {
 				Symbol symbol = currentScope.resolve(funcName);
 				Type type = symbol.getType();
@@ -381,6 +379,39 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (op1Type.toString().equals("int") && op2Type.toString().equals("int")) {
 				return op1Type;
 			} else {
+//				TerminalNode operator;
+//				if (ctx.MUL() != null) {
+//					operator = ctx.MUL();
+//				} else if (ctx.DIV() != null) {
+//					operator = ctx.DIV();
+//				} else if (ctx.MOD() != null) {
+//					operator = ctx.MOD();
+//				} else if (ctx.PLUS() != null) {
+//					operator = ctx.PLUS();
+//				} else {
+//					operator = ctx.MINUS();
+//				}
+//				int lineNo = getLineNo(operator);
+//				System.err.println("Error type 6 at Line " + lineNo + ": type.Type mismatched for operands.");
+			}
+		}
+		return new BasicTypeSymbol("void");
+	}
+	
+	@Override
+	public Void visitExp(SysYParser.ExpContext ctx) {
+		if (ctx.IDENT() != null) { // IDENT L_PAREN funcRParams? R_PAREN
+			String funcName = ctx.IDENT().getText();
+			if (currentScope.resolve(funcName) == null) {
+				int lineNo = getLineNo(ctx.IDENT());
+				System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
+			}
+		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null
+				|| ctx.MINUS() != null) {
+			Type op1Type = getExpType(ctx.exp(0));
+			Type op2Type = getExpType(ctx.exp(1));
+			if (op1Type.toString().equals("int") && op2Type.toString().equals("int")) {
+			} else {
 				TerminalNode operator;
 				if (ctx.MUL() != null) {
 					operator = ctx.MUL();
@@ -397,13 +428,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				System.err.println("Error type 6 at Line " + lineNo + ": type.Type mismatched for operands.");
 			}
 		}
-		return new BasicTypeSymbol("void");
-	}
-	
-	@Override
-	public Void visitExp(SysYParser.ExpContext ctx) {
-		getExpType(ctx);
 		Void ret = super.visitExp(ctx);
 		return ret;
 	}
+	
 }
