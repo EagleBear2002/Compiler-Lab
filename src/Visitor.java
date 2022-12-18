@@ -144,10 +144,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitProgram(SysYParser.ProgramContext ctx) {
-		if (isPrint) {
-			return super.visitProgram(ctx);
-		}
-		
 		globalScope = new GlobalScope(null);
 		currentScope = globalScope;
 		Void ret = super.visitProgram(ctx);
@@ -158,10 +154,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitFuncDef(SysYParser.FuncDefContext ctx) {
-		if (isPrint) {
-			return super.visitFuncDef(ctx);	
-		}
-		
 		String typeName = ctx.funcType().getText();
 		globalScope.resolve(typeName);
 		
@@ -180,10 +172,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitBlock(SysYParser.BlockContext ctx) {
-		if (isPrint) {
-			return super.visitBlock(ctx);
-		}
-		
 		LocalScope localScope = new LocalScope(currentScope);
 		String localScopeName = localScope.getName() + localScopeCounter;
 		localScope.setName(localScopeName);
@@ -198,10 +186,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitVarDecl(SysYParser.VarDeclContext ctx) {
-		if (isPrint) {
-			return super.visitVarDecl(ctx);
-		}
-		
 		String typeName = ctx.bType().getText();
 		Type type = (Type) globalScope.resolve(typeName);
 		
@@ -217,10 +201,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitFuncFParam(SysYParser.FuncFParamContext ctx) {
-		if (isPrint) {
-			return super.visitFuncFParam(ctx);
-		}
-		
 		String typeName = ctx.bType().getText();
 		Type type = (Type) globalScope.resolve(typeName);
 		
