@@ -330,7 +330,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				if (varType instanceof ArrayType) {
 					varType = ((ArrayType) varType).elementType;
 				} else {
-					int lineNo = getLineNo(ctx.L_BRACKT());
+					int lineNo = getLineNo(node);
 					System.err.println("Error type 9 at Line " + lineNo + ": Not an array: " + varName + ".");
 					break;
 				}
