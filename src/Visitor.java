@@ -364,13 +364,27 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	private Type getExpType(SysYParser.ExpContext ctx) {
 		if (ctx.IDENT() != null) { // IDENT L_PAREN funcRParams? R_PAREN
 			String funcName = ctx.IDENT().getText();
-			if (currentScope.resolve(funcName) == null) {
-//				int lineNo = getLineNo(ctx.IDENT());
-//				System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
+			Symbol symbol = currentScope.resolve(funcName);
+			if (symbol == null) {
+				int lineNo = getLineNo(ctx.IDENT());
+				System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
+			} else if (!(symbol.getType() instanceof FunctionType)) {
+				int lineNo = getLineNo(ctx.IDENT());
+				System.err.println("Error type 10 at Line " + lineNo + ": Not a function: test1.");
 			} else {
-				Symbol symbol = currentScope.resolve(funcName);
-				Type type = symbol.getType();
-				return type;
+				FunctionType functionType = (FunctionType) currentScope.resolve(funcName).getType();
+				ArrayList<Type> paramsType = functionType.getParamsType();
+				ArrayList<Type> argsType = new ArrayList<>();
+				for (SysYParser.ParamContext paramContext : ctx.funcRParams().param()) {
+					argsType.add(getExpType(paramContext.exp()));
+				}
+				if (!paramsType.equals(argsType)) {
+//					int lineNo = getLineNo(ctx.IDENT());
+//					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
+				} else {
+					Type retType = functionType.getRetType();
+					return retType;
+				}
 			}
 		} else if (ctx.L_PAREN() != null || ctx.unaryOp() != null) { // L_PAREN exp R_PAREN | unaryOp exp
 			return getExpType(ctx.exp(0));
