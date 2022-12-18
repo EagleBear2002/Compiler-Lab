@@ -12,4 +12,8 @@ public class FunctionType implements Type{
 	public String toString() {
 		return retType + "()";
 	}
+	
+	public Type getRetType() {
+		return retType;
+	}
 }
