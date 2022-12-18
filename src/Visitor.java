@@ -96,6 +96,15 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		return ret;
 	}
 	
+	private String toDecimalInteger(String tokenText) {
+		if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
+			tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
+		} else if (tokenText.startsWith("0")) {
+			tokenText = String.valueOf(Integer.parseInt(tokenText, 8));
+		}
+		return tokenText;
+	}
+	
 	@Override
 	public Void visitTerminal(TerminalNode node) {
 		Token token = node.getSymbol();
@@ -107,11 +116,12 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String color = getHelight(ruleName);
 			
 			if (ruleName == "INTEGR_CONST") {
-				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
-					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
-				} else if (tokenText.startsWith("0")) {
-					tokenText = String.valueOf(Integer.parseInt(tokenText, 8));
-				}
+//				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
+//					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
+//				} else if (tokenText.startsWith("0")) {
+//					tokenText = String.valueOf(Integer.parseInt(tokenText, 8));
+//				}
+				tokenText = toDecimalInteger(tokenText);
 			}
 			
 			if (isPrint && ruleName == "IDENT") {
@@ -205,15 +215,21 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	@Override
 	public Void visitVarDecl(SysYParser.VarDeclContext ctx) {
 		String typeName = ctx.bType().getText();
-		Type type = (Type) globalScope.resolve(typeName);
 		
 		for (SysYParser.VarDefContext varDefContext : ctx.varDef()) {
+			Type varType = (Type) globalScope.resolve(typeName);
 			String varName = varDefContext.IDENT().getText();
 			if (currentScope.resolve(varName) != null) {
 				int lineNo = varDefContext.IDENT().getSymbol().getLine();
 				System.err.println("Error type 3 at Line " + lineNo + ": Undefined variable: " + varName + ".");
 			}
-			VariableSymbol varSymbol = new VariableSymbol(varName, type);
+			
+			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
+				int elementCount = Integer.valueOf(toDecimalInteger(constExpContext.getText()));
+				varType = new ArrayType(elementCount, varType);
+			}
+			
+			VariableSymbol varSymbol = new VariableSymbol(varName, varType);
 			currentScope.define(varSymbol);
 		}
 		
