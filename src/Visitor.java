@@ -111,6 +111,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (ruleName == "INDENT") {
 				String varName = token.getText();
 				currentScope.resolve(varName);
+				int lineNO = token.getLine();
+				int columnNO = token.getCharPositionInLine();
+				currentScope.addUsage(lineNO, columnNO, varName);
 			}
 		}
 		
