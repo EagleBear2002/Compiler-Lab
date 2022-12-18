@@ -147,10 +147,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		String funcName = ctx.IDENT().getText();
 		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope);
 		
-		int lineNO = ctx.getStart().getLine();
-		int column = ctx.getStart().getCharPositionInLine();
+//		int lineNO = ctx.
+//		int columnNO = ctx.getStart().getCharPositionInLine();
 		currentScope.define(fun);
-		currentScope.addUsage(lineNO, column, funcName);
+//		currentScope.addUsage(lineNO, columnNO, funcName);
 		currentScope = fun;
 		
 		System.out.println("enterFuncDef");
