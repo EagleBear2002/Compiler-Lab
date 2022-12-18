@@ -10,6 +10,8 @@ public interface Symbol {
 	public void addUsage(int lineNo, int columnNo);
 	
 	public boolean findUsage(int lineNo, int columnNo);
+	
+	public Type getType();
 //	public default void addUsage(int lineNo, int columnNo) {
 //		System.out.println("addUsage(" + lineNo + ", " + columnNo + ", " + getName() + ")");
 //		System.out.println("size = " + usagePosition.size());
