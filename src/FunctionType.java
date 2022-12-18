@@ -16,4 +16,8 @@ public class FunctionType implements Type{
 	public Type getRetType() {
 		return retType;
 	}
+	
+	public ArrayList<Type> getParamsType() {
+		return paramsType;
+	}
 }
