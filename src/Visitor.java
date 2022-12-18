@@ -330,7 +330,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		if (ctx.ASSIGN() != null) {
 			Type lValType = getLValType(ctx.lVal());
 			Type rValType = getExpType(ctx.exp());
-			if (lValType.equals("noType") || rValType.equals("noType")) {
+			if (lValType instanceof FunctionType) {
+				int lineNo = getLineNo(ctx.ASSIGN());
+				System.err.println("Error type 11 at Line " + lineNo + ": The left-hand side of an assignment must be a variable.");
+			} else if (lValType.equals("noType") || rValType.equals("noType")) {
 				
 			} else if (!lValType.toString().equals(rValType.toString())) {
 				int lineNo = getLineNo(ctx.ASSIGN());
