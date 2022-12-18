@@ -336,6 +336,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				System.err.println("Error type 5 at Line " + lineNo + ": type.Type mismatched for assignment.");
 			}
 		}
+		if (ctx.RETURN() != null) {
+			
+		}
 		Void ret = super.visitStmt(ctx);
 		return ret;
 	}
