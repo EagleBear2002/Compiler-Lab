@@ -83,8 +83,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		String ruleName = SysYParser.ruleNames[ruleIndex];
 		String realName = ruleName.substring(0, 1).toUpperCase() + ruleName.substring(1);
 		
-		printIdent(depth);
 		if (isPrint) {
+			printIdent(depth);
 			System.err.println(realName);
 		}
 		
