@@ -416,7 +416,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				for (SysYParser.ParamContext paramContext : ctx.funcRParams().param()) {
 					argsType.add(getExpType(paramContext.exp()));
 				}
-				if (paramsType.equals(argsType)) {
+				if (!paramsType.equals(argsType)) {
 					int lineNo = getLineNo(ctx.IDENT());
 					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
 				}
