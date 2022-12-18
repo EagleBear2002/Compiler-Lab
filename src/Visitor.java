@@ -113,40 +113,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 			}
 			
-//			if (ruleName == "IDENT") {
-//				int lineNO = token.getLine();
-//				int columnNO = token.getCharPositionInLine();
-//				Symbol symbol = currentScope.resolve(tokenText);
-//				symbol.addUsage(lineNO, columnNO);
-//				
-//				if (symbol.findUsage(renameLineNo, renameColumnNo)) {
-//					System.out.println("tokenText = " + tokenText + ", findUsage(" + renameLineNo + ", " + renameColumnNo + ")");
-//					tokenText = newName;
-//				}
-//			}
-			
-//			if (isPrint && color != "no color") {
-//				printIdent(depth);
-//				System.err.println(tokenText + " " + ruleName + "[" + color + "]");
-//			}
-		}
-		
-		Void ret = super.visitTerminal(node);
-		
-		
-		if (ruleNum >= 0) {
-			String ruleName = SysYLexer.ruleNames[ruleNum];
-			String tokenText = token.getText();
-			String color = getHelight(ruleName);
-			
-//			if (ruleName == "INTEGR_CONST") {
-//				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
-//					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
-//				} else if (tokenText.startsWith("0")) {
-//					tokenText = String.valueOf(Integer.parseInt(tokenText, 8));
-//				}
-//			}
-			
 			if (ruleName == "IDENT") {
 				int lineNO = token.getLine();
 				int columnNO = token.getCharPositionInLine();
@@ -165,6 +131,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			}
 		}
 		
+		Void ret = super.visitTerminal(node);
 		return ret;
 	}
 	
@@ -195,9 +162,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		currentScope.define(fun);
 		currentScope = fun;
-
+		
 		Void ret = super.visitFuncDef(ctx);
-
+		
 		currentScope = currentScope.getEnclosingScope();
 		
 		return ret;
@@ -210,7 +177,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		localScope.setName(localScopeName);
 		localScopeCounter++;
 		currentScope = localScope;
-
+		
 		Void ret = super.visitBlock(ctx);
 		currentScope = currentScope.getEnclosingScope();
 		
@@ -243,6 +210,17 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		currentScope.define(varSymbol);
 		
 		Void ret = super.visitFuncFParam(ctx);
+		return ret;
+	}
+	
+	@Override
+	public Void visitLVal(SysYParser.LValContext ctx) {
+		String varName = ctx.IDENT().getText();
+		if (currentScope.resolve(varName) == null) {
+			int lineNo = ctx.IDENT().getSymbol().getLine();
+			System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable: " + varName +".");
+		}
+		Void ret = super.visitLVal(ctx);
 		return ret;
 	}
 }
