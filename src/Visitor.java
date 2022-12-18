@@ -13,6 +13,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	private int renameLineNo;
 	private int renameColumnNo;
 	private String newName;
+	private boolean isPrint;
+	
+	void setPrint(boolean isPrint) {
+		this.isPrint = isPrint;
+	}
 	
 	void setRenameTag(int renameLineNo, int renameColumnNo, String newName) {
 		this.renameLineNo = renameLineNo;
@@ -79,7 +84,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		String realName = ruleName.substring(0, 1).toUpperCase() + ruleName.substring(1);
 		
 		printIdent(depth);
-		System.err.println(realName);
+		if (isPrint) {
+			System.err.println(realName);
+		}
 		
 		depth++;
 		Void ret = super.visitChildren(node);
@@ -117,7 +124,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 			}
 			
-			if (color != "no color") {
+			if (isPrint && color != "no color") {
 				printIdent(depth);
 				System.err.println(tokenText + " " + ruleName + "[" + color + "]");
 			}
@@ -141,7 +148,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 //		System.out.println("enterProgram");
 		
 		Void ret = super.visitProgram(ctx);
-		
+
 //		System.out.println("exitProgram");
 		currentScope = currentScope.getEnclosingScope();
 		
@@ -150,22 +157,21 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitFuncDef(SysYParser.FuncDefContext ctx) {
-		
 		String typeName = ctx.funcType().getText();
 		globalScope.resolve(typeName);
 		
 		String funcName = ctx.IDENT().getText();
 		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope);
-
+		
 		currentScope.define(fun);
 		currentScope = fun;
-		
+
 //		System.out.println("enterFuncDef");
 //		System.out.println("typeName = " + typeName);
 //		System.out.println("funcName = " + funcName);
 		
 		Void ret = super.visitFuncDef(ctx);
-		
+
 //		System.out.println("exitFuncDef");
 		currentScope = currentScope.getEnclosingScope();
 		
@@ -179,11 +185,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		localScope.setName(localScopeName);
 		localScopeCounter++;
 		currentScope = localScope;
-		
+
 //		System.out.println("enterBlock");
 		
 		Void ret = super.visitBlock(ctx);
-		
+
 //		System.out.println("exitBlock");
 		currentScope = currentScope.getEnclosingScope();
 		
@@ -192,7 +198,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitVarDecl(SysYParser.VarDeclContext ctx) {
-		
 		String typeName = ctx.bType().getText();
 		Type type = (Type) globalScope.resolve(typeName);
 		

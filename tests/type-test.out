@@ -1,0 +1,56 @@
+Program
+  CompUnit
+    FuncDef
+      FuncType
+        int INT[orange]
+      a IDENT[red]
+      Block
+        BlockItem
+          Stmt
+            return RETURN[orange]
+            Exp
+              Number
+                10 INTEGR_CONST[green]
+    FuncDef
+      FuncType
+        int INT[orange]
+      main IDENT[red]
+      Block
+        BlockItem
+          Decl
+            VarDecl
+              BType
+                int INT[orange]
+              VarDef
+                d IDENT[red]
+                = ASSIGN[blue]
+                InitVal
+                  Exp
+                    Number
+                      3 INTEGR_CONST[green]
+        BlockItem
+          Decl
+            VarDecl
+              BType
+                int INT[orange]
+              VarDef
+                b IDENT[red]
+                = ASSIGN[blue]
+                InitVal
+                  Exp
+                    Number
+                      4 INTEGR_CONST[green]
+        BlockItem
+          Stmt
+            LVal
+              d IDENT[red]
+            = ASSIGN[blue]
+            Exp
+              Number
+                5 INTEGR_CONST[green]
+        BlockItem
+          Stmt
+            return RETURN[orange]
+            Exp
+              LVal
+                d IDENT[red]
