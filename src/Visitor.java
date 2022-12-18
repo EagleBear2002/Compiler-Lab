@@ -337,6 +337,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				
 			} else if (!lValType.toString().equals(rValType.toString())) {
 				int lineNo = getLineNo(ctx.ASSIGN());
+				System.out.println("lValType = " + lValType.toString() + ", rValType = " + rValType.toString());
 				System.err.println("Error type 5 at Line " + lineNo + ": type.Type mismatched for assignment.");
 			}
 		}
