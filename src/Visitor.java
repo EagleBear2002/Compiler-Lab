@@ -132,8 +132,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					symbol.addUsage(lineNO, columnNO);
 					
 					if (symbol.findUsage(renameLineNo, renameColumnNo)) {
-						System.out.println("tokenText = " + tokenText + ", findUsage(" + renameLineNo + ", "
-								+ renameColumnNo + ")");
+//						System.out.println("tokenText = " + tokenText + ", findUsage(" + renameLineNo + ", " + renameColumnNo + ")");
 						tokenText = newName;
 					}
 				}
@@ -232,8 +231,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (varDefContext.ASSIGN() != null) {
 				// TODO: Type 5
 			}
-			
-			System.out.println("varName = " + varName + ", varType = " + varType.toString());
+
+//			System.out.println("varName = " + varName + ", varType = " + varType.toString());
 			
 			VariableSymbol varSymbol = new VariableSymbol(varName, varType);
 			currentScope.define(varSymbol);
@@ -261,7 +260,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			}
 			
 			if (varDefContext.ASSIGN() == null) {
-				System.out.println("const defination without initial value");
+				System.err.println("const defination without initial value");
 			}
 			
 			// TODO: Type 5
@@ -292,7 +291,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	private Type getLValType(SysYParser.LValContext ctx) {
 		String varName = ctx.IDENT().getText();
-		System.out.println("varName = " + varName);
+//		System.out.println("varName = " + varName);
 		if (currentScope.resolve(varName) == null) {
 			int lineNo = getLineNo(ctx.IDENT());
 			System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable: " + varName + ".");
@@ -300,7 +299,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		Type varType = currentScope.resolve(varName).getType();
 		for (SysYParser.ExpContext expContext : ctx.exp()) {
-			System.out.println("varType = " + varType);
+//			System.out.println("varType = " + varType);
 			if (varType instanceof ArrayType) {
 				varType = ((ArrayType) varType).elementType;
 			} else {
