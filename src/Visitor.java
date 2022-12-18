@@ -127,7 +127,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			
 			if (isPrint && color != "no color") {
 				printIdent(depth);
-				// System.err.println(tokenText + " " + ruleName + "[" + color + "]");
+				System.err.println(tokenText + " " + ruleName + "[" + color + "]");
 			}
 		}
 		
