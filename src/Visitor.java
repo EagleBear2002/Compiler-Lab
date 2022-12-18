@@ -174,7 +174,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		String funcName = ctx.IDENT().getText();
 		if (currentScope.resolve(funcName) != null) {
 			int lineNo = ctx.IDENT().getSymbol().getLine();
-			System.err.println("Error type 4 at Line " + lineNo + ": Undefined variable: " + funcName + ".");
+			System.err.println("Error type 4 at Line " + lineNo + ": Redefined function: " + funcName + ".");
 		}
 		
 		ArrayList<Type> paramsType = new ArrayList<>();
@@ -221,7 +221,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String varName = varDefContext.IDENT().getText();
 			if (currentScope.resolve(varName) != null) {
 				int lineNo = varDefContext.IDENT().getSymbol().getLine();
-				System.err.println("Error type 3 at Line " + lineNo + ": Undefined variable: " + varName + ".");
+				System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + varName + ".");
 			}
 			
 			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
@@ -272,6 +272,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (varType instanceof ArrayType) {
 				varType = ((ArrayType) varType).elementType;
 			} else {
+//				TODO
 //				System.err.println("Error type  at Line " + lineNo + ": Undefined variable: " + varName + ".");
 			}
 		}
@@ -293,15 +294,14 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	@Override
 	public Void visitStmt(SysYParser.StmtContext ctx) {
 		if (ctx.ASSIGN() != null) {
-			// String lValName = ctx.lVal().IDENT().getText();
-			// BaseSymbol symbol = (BaseSymbol) currentScope.resolve(lValName);
-			// Type lValType = symbol.getType();
-			// Type rValType = ctx.exp().
-			// if (currentScope.resolve(funcName) == null) {
-			// int lineNo = ctx.ASSIGN().getSymbol().getLine();
-			// System.err.println("Error type 5 at Line " + lineNo + ": Undefined variable:
-			// " + funcName + ".");
-			// }
+			String lValName = ctx.lVal().IDENT().getText();
+			BaseSymbol symbol = (BaseSymbol) currentScope.resolve(lValName);
+			Type lValType = symbol.getType();
+			Type rValType = getExpType(ctx.exp());
+			if (!lValType.toString().equals(rValType.toString())) {
+				int lineNo = ctx.ASSIGN().getSymbol().getLine();
+				System.err.println("Error type 5 at Line " + lineNo + ": type.Type mismatched for assignment.");
+			}
 		}
 		Void ret = super.visitStmt(ctx);
 		return ret;
@@ -312,7 +312,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String funcName = ctx.IDENT().getText();
 			if (currentScope.resolve(funcName) == null) {
 				int lineNo = ctx.IDENT().getSymbol().getLine();
-				System.err.println("Error type 2 at Line " + lineNo + ": Undefined variable: " + funcName + ".");
+				System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
 			} else {
 				Symbol symbol = currentScope.resolve(funcName);
 				Type type = symbol.getType();
