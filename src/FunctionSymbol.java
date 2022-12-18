@@ -6,6 +6,12 @@ import java.util.List;
 public class FunctionSymbol extends BaseScope implements Symbol {
 	public FunctionType type;
 	public List<Pair<Integer, Integer>> usagePosition;
+	
+	@Override
+	public FunctionType getType() {
+		return type;
+	}
+	
 	public FunctionSymbol(String name, Scope enclosingScope, FunctionType type) {
 		super(name, enclosingScope);
 		this.usagePosition = new ArrayList<>();
