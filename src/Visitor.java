@@ -115,8 +115,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				String varName = token.getText();
 				int lineNO = token.getLine();
 				int columnNO = token.getCharPositionInLine();
-				currentScope.resolve(varName);
-				currentScope.addUsage(lineNO, columnNO, varName);
+				Symbol symbol = currentScope.resolve(varName);
+				symbol.addUsage(lineNO, columnNO);
 			}
 		}
 		
@@ -153,10 +153,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		String funcName = ctx.IDENT().getText();
 		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope);
 
-//		int lineNO = ctx.
-//		int columnNO = ctx.getStart().getCharPositionInLine();
 		currentScope.define(fun);
-//		currentScope.addUsage(lineNO, columnNO, funcName);
 		currentScope = fun;
 		
 		System.out.println("enterFuncDef");
