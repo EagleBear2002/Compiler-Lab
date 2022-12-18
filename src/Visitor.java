@@ -160,8 +160,12 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		globalScope.resolve(typeName);
 
 		String funcName = ctx.IDENT().getText();
+		if (currentScope.resolve(funcName) != null) {
+			int lineNo = ctx.IDENT().getSymbol().getLine();
+			System.err.println("Error type 4 at Line " + lineNo + ": Undefined variable: " + funcName + ".");
+		}
+		
 		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope);
-
 		currentScope.define(fun);
 		currentScope = fun;
 
