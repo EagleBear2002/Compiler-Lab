@@ -152,7 +152,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		String funcName = ctx.IDENT().getText();
 		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope);
-		
+
 //		int lineNO = ctx.
 //		int columnNO = ctx.getStart().getCharPositionInLine();
 		currentScope.define(fun);
@@ -191,7 +191,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitVarDecl(SysYParser.VarDeclContext ctx) {
-		Void ret = super.visitVarDecl(ctx);
 		
 		String typeName = ctx.bType().getText();
 		Type type = (Type) globalScope.resolve(typeName);
@@ -202,12 +201,12 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			currentScope.define(varSymbol);
 		}
 		
+		Void ret = super.visitVarDecl(ctx);
 		return ret;
 	}
 	
 	@Override
 	public Void visitFuncFParam(SysYParser.FuncFParamContext ctx) {
-		Void ret = super.visitFuncFParam(ctx);
 		String typeName = ctx.bType().getText();
 		Type type = (Type) globalScope.resolve(typeName);
 		
@@ -216,6 +215,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		currentScope.define(varSymbol);
 		
+		Void ret = super.visitFuncFParam(ctx);
 		return ret;
 	}
 }
