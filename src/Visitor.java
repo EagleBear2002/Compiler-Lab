@@ -14,6 +14,12 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	private int renameColumnNo;
 	private String newName;
 	
+	void setRenameTag(int renameLineNo, int renameColumnNo, String newName) {
+		this.renameLineNo = renameLineNo;
+		this.renameColumnNo = renameColumnNo;
+		this.newName = newName;
+	}
+	
 	private void printIdent(int depth) {
 		for (int i = 0; i < depth; ++i)
 			System.err.print("  ");
