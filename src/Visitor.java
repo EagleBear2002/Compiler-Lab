@@ -244,6 +244,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		Type varType = currentScope.resolve(varName).getType();
 		for (SysYParser.ExpContext expContext : ctx.exp()) {
+			System.out.println("varType = " + varType);
 			varType = ((ArrayType) varType).elementType;
 		}
 		return varType;

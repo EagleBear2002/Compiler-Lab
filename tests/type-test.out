@@ -1,0 +1,11 @@
+Error type 4 at Line 5: Redefined function: a.
+Error type 1 at Line 10: Undefined variable: b.
+Error type 2 at Line 10: Undefined function: c.
+Error type 3 at Line 12: Redefined variable: test1.
+Error type 5 at Line 14: type.Type mismatched for assignment.
+Error type 6 at Line 15: type.Type mismatched for operands.
+Error type 8 at Line 16: Function is not applicable for arguments.
+Error type 9 at Line 17: Not an array: test1.
+Error type 10 at Line 18: Not a function: test1.
+Error type 11 at Line 19: The left-hand side of an assignment must be a variable.
+Error type 7 at Line 20: type.Type mismatched for return.
