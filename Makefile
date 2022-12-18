@@ -55,7 +55,7 @@ clean:
 	rm -f src/SysYLexer.java src/SysYParser.java src/SysYParserBaseListener.java src/SysYParserBaseVisitor.java src/SysYParserListener.java src/SysYParserVisitor.java
 	rm -rf classes
 
-submit: clean
+submit:
 	git gc
 	#bash -c "$$(curl -s $(DOMAINNAME)/scripts/submit-v2.sh)"
 	bash submit.sh
