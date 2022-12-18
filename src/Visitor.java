@@ -227,15 +227,14 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
 				int elementCount = Integer.valueOf(toDecimalInteger(constExpContext.getText()));
 				varType = new ArrayType(elementCount, varType);
-				System.out.println("elementCount = " + elementCount);
+//				System.out.println("elementCount = " + elementCount);
 			}
 			
 			if (varDefContext.ASSIGN() != null) {
 //				TODO
 			}
 			
-			System.out.println("varType = " + varType.toString());
-			System.out.println("varName = " + varName);
+			System.out.println("varName = " + varName + ", varType = " + varType.toString());
 			
 			VariableSymbol varSymbol = new VariableSymbol(varName, varType);
 			currentScope.define(varSymbol);

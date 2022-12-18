@@ -17,6 +17,7 @@ public class ArrayType implements Type{
 				.append(elementCount)
 				.append(",")
 				.append(elementType)
+				.append(")")
 				.toString();
 	}
 }
