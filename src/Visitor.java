@@ -294,8 +294,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	@Override
 	public Void visitStmt(SysYParser.StmtContext ctx) {
 		if (ctx.ASSIGN() != null) {
-			String lValName = ctx.lVal().IDENT().getText();
-			BaseSymbol symbol = (BaseSymbol) currentScope.resolve(lValName);
+//			String lValName = ctx.lVal().IDENT().getText();
+//			BaseSymbol symbol = (BaseSymbol) currentScope.resolve(lValName);
 			Type lValType = getLValType(ctx.lVal());
 			Type rValType = getExpType(ctx.exp());
 			if (!lValType.toString().equals(rValType.toString())) {
