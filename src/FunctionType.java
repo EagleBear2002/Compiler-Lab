@@ -7,4 +7,9 @@ public class FunctionType implements Type{
 		this.retType = retType;
 		this.paramsType = paramsType;
 	}
+
+	@Override
+	public String toString() {
+		return retType + "()";
+	}
 }
