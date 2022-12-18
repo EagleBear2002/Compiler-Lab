@@ -120,6 +120,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				symbol.addUsage(lineNO, columnNO);
 				
 				if (symbol.findUsage(renameLineNo, renameColumnNo)) {
+					System.out.println("tokenText = " + tokenText + ", findUsage(" + renameLineNo + ", " + renameColumnNo + ")");
 					tokenText = newName;
 				}
 			}
