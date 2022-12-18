@@ -402,9 +402,13 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	public Void visitExp(SysYParser.ExpContext ctx) {
 		if (ctx.IDENT() != null) { // IDENT L_PAREN funcRParams? R_PAREN
 			String funcName = ctx.IDENT().getText();
-			if (currentScope.resolve(funcName) == null) {
+			Symbol symbol = currentScope.resolve(funcName);
+			if (symbol == null) {
 				int lineNo = getLineNo(ctx.IDENT());
 				System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
+			} else if (!(symbol.getType() instanceof FunctionType)) {
+				int lineNo = getLineNo(ctx.IDENT());
+				System.err.println("Error type 10 at Line " + lineNo + ": Not a function: test1.");
 			} else {
 				FunctionType functionType = (FunctionType) currentScope.resolve(funcName).getType();
 				ArrayList<Type> paramsType = functionType.getParamsType();
