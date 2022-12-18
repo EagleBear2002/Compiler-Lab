@@ -377,7 +377,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					operator = ctx.MINUS();
 				}
 				int lineNo = operator.getSymbol().getLine();
-				System.err.println("Error type 6 at Line " + lineNo + "type.Type mismatched for operands.");
+				System.err.println("Error type 6 at Line " + lineNo + ": type.Type mismatched for operands.");
 			}
 		}
 		return new BasicTypeSymbol("void");
