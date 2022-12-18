@@ -37,5 +37,6 @@ public class Main {
 		Visitor visitor = new Visitor();
 		visitor.setRenameTag(lineNo, columnNo, name);
 		visitor.visit(tree);
+		visitor.visit(tree);
 	}
 }
