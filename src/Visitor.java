@@ -124,19 +124,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		
 		Void ret = super.visitTerminal(node);
-		
-//		if (ruleNum >= 0) {
-//			String ruleName = SysYLexer.ruleNames[ruleNum];
-//			
-//			if (ruleName == "IDENT") {
-//				String varName = token.getText();
-//				int lineNO = token.getLine();
-//				int columnNO = token.getCharPositionInLine();
-//				Symbol symbol = currentScope.resolve(varName);
-//				symbol.addUsage(lineNO, columnNO);
-//			}
-//		}
-		
 		return ret;
 	}
 	
@@ -151,11 +138,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	public Void visitProgram(SysYParser.ProgramContext ctx) {
 		globalScope = new GlobalScope(null);
 		currentScope = globalScope;
-		System.out.println("enterProgram");
+//		System.out.println("enterProgram");
 		
 		Void ret = super.visitProgram(ctx);
 		
-		System.out.println("exitProgram");
+//		System.out.println("exitProgram");
 		currentScope = currentScope.getEnclosingScope();
 		
 		return ret;
@@ -173,13 +160,13 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		currentScope.define(fun);
 		currentScope = fun;
 		
-		System.out.println("enterFuncDef");
-		System.out.println("typeName = " + typeName);
-		System.out.println("funcName = " + funcName);
+//		System.out.println("enterFuncDef");
+//		System.out.println("typeName = " + typeName);
+//		System.out.println("funcName = " + funcName);
 		
 		Void ret = super.visitFuncDef(ctx);
 		
-		System.out.println("exitFuncDef");
+//		System.out.println("exitFuncDef");
 		currentScope = currentScope.getEnclosingScope();
 		
 		return ret;
@@ -193,11 +180,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		localScopeCounter++;
 		currentScope = localScope;
 		
-		System.out.println("enterBlock");
+//		System.out.println("enterBlock");
 		
 		Void ret = super.visitBlock(ctx);
 		
-		System.out.println("exitBlock");
+//		System.out.println("exitBlock");
 		currentScope = currentScope.getEnclosingScope();
 		
 		return ret;
