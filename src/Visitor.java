@@ -193,7 +193,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 
 		for (SysYParser.VarDefContext varDefContext : ctx.varDef()) {
 			String varName = varDefContext.IDENT().getText();
-			if (currentScope.resolve(varName) == null) {
+			if (currentScope.resolve(varName) != null) {
 				int lineNo = varDefContext.IDENT().getSymbol().getLine();
 				System.err.println("Error type 3 at Line " + lineNo + ": Undefined variable: " + varName + ".");
 			}
