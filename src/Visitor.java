@@ -224,6 +224,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				System.err.println("Error type 3 at Line " + lineNo + ": Undefined variable: " + varName + ".");
 			}
 			
+			System.out.println("varType = " + varType.toString());
 			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
 				int elementCount = Integer.valueOf(toDecimalInteger(constExpContext.getText()));
 				varType = new ArrayType(elementCount, varType);
