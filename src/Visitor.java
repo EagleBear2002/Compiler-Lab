@@ -106,6 +106,14 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 			}
 			
+			if (ruleName == "IDENT") {
+				String varName = token.getText();
+				int lineNO = token.getLine();
+				int columnNO = token.getCharPositionInLine();
+				Symbol symbol = currentScope.resolve(varName);
+				symbol.addUsage(lineNO, columnNO);
+			}
+			
 			if (color != "no color") {
 				printIdent(depth);
 				System.err.println(tokenText + " " + ruleName + "[" + color + "]");
@@ -114,17 +122,17 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		Void ret = super.visitTerminal(node);
 		
-		if (ruleNum >= 0) {
-			String ruleName = SysYLexer.ruleNames[ruleNum];
-			
-			if (ruleName == "IDENT") {
-				String varName = token.getText();
-				int lineNO = token.getLine();
-				int columnNO = token.getCharPositionInLine();
-				Symbol symbol = currentScope.resolve(varName);
-				symbol.addUsage(lineNO, columnNO);
-			}
-		}
+//		if (ruleNum >= 0) {
+//			String ruleName = SysYLexer.ruleNames[ruleNum];
+//			
+//			if (ruleName == "IDENT") {
+//				String varName = token.getText();
+//				int lineNO = token.getLine();
+//				int columnNO = token.getCharPositionInLine();
+//				Symbol symbol = currentScope.resolve(varName);
+//				symbol.addUsage(lineNO, columnNO);
+//			}
+//		}
 		
 		return ret;
 	}
