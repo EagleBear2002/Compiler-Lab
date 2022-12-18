@@ -269,7 +269,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		Type varType = currentScope.resolve(varName).getType();
 		for (SysYParser.ExpContext expContext : ctx.exp()) {
 			System.out.println("varType = " + varType);
-			varType = ((ArrayType) varType).elementType;
+			if (varType instanceof ArrayType) {
+				varType = ((ArrayType) varType).elementType;
+			} else {
+//				System.err.println("Error type  at Line " + lineNo + ": Undefined variable: " + varName + ".");
+			}
 		}
 		return varType;
 	}
