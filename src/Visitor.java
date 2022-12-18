@@ -366,8 +366,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String funcName = ctx.IDENT().getText();
 			Symbol symbol = currentScope.resolve(funcName);
 			if (symbol == null) {
-				int lineNo = getLineNo(ctx.IDENT());
-				System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
+//				int lineNo = getLineNo(ctx.IDENT());
+//				System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
 			} else if (!(symbol.getType() instanceof FunctionType)) {
 				int lineNo = getLineNo(ctx.IDENT());
 				System.err.println("Error type 10 at Line " + lineNo + ": Not a function: test1.");
