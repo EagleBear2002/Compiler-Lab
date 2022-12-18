@@ -197,7 +197,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		Type type = (Type) globalScope.resolve(typeName);
 		
 		for (SysYParser.VarDefContext varDefContext : ctx.varDef()) {
-			String varName = varDefContext.getText();
+			String varName = varDefContext.IDENT().getText();
 			VariableSymbol varSymbol = new VariableSymbol(varName, type);
 			currentScope.define(varSymbol);
 		}
