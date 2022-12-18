@@ -225,4 +225,23 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		Void ret = super.visitLVal(ctx);
 		return ret;
 	}
+	
+	@Override
+	public Void visitStmt(SysYParser.StmtContext ctx) {
+		Void ret = super.visitStmt(ctx);
+		return ret;
+	}
+	
+	@Override
+	public Void visitExp(SysYParser.ExpContext ctx) {
+		if (ctx.IDENT() != null) {
+			String funcName = ctx.IDENT().getText();
+			if (currentScope.resolve(funcName) == null) {
+				int lineNo = ctx.IDENT().getSymbol().getLine();
+				System.err.println("Error type 2 at Line " + lineNo + ": Undefined variable: " + funcName + ".");
+			}
+		}
+		Void ret = super.visitExp(ctx);
+		return ret;
+	}
 }
