@@ -107,11 +107,14 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			}
 			
 			if (ruleName == "IDENT") {
-				String varName = token.getText();
 				int lineNO = token.getLine();
 				int columnNO = token.getCharPositionInLine();
-				Symbol symbol = currentScope.resolve(varName);
+				Symbol symbol = currentScope.resolve(tokenText);
 				symbol.addUsage(lineNO, columnNO);
+				
+				if (symbol.findUsage(renameLineNo, renameColumnNo)) {
+					tokenText = newName;
+				}
 			}
 			
 			if (color != "no color") {
