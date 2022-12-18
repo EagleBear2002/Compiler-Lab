@@ -33,6 +33,7 @@ public class Main {
 		SysYLexer sysYLexer = lexer(filePath);
 		SysYParser sysYParser = parser(sysYLexer);
 		
+		ParseTree tree = sysYParser.program();
 		Visitor visitor = new Visitor();
 		visitor.setRenameTag(lineNo, columnNo, name);
 		visitor.visit(tree);
