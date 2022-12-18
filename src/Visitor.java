@@ -113,6 +113,40 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 			}
 			
+//			if (ruleName == "IDENT") {
+//				int lineNO = token.getLine();
+//				int columnNO = token.getCharPositionInLine();
+//				Symbol symbol = currentScope.resolve(tokenText);
+//				symbol.addUsage(lineNO, columnNO);
+//				
+//				if (symbol.findUsage(renameLineNo, renameColumnNo)) {
+//					System.out.println("tokenText = " + tokenText + ", findUsage(" + renameLineNo + ", " + renameColumnNo + ")");
+//					tokenText = newName;
+//				}
+//			}
+			
+//			if (isPrint && color != "no color") {
+//				printIdent(depth);
+//				System.err.println(tokenText + " " + ruleName + "[" + color + "]");
+//			}
+		}
+		
+		Void ret = super.visitTerminal(node);
+		
+		
+		if (ruleNum >= 0) {
+			String ruleName = SysYLexer.ruleNames[ruleNum];
+			String tokenText = token.getText();
+			String color = getHelight(ruleName);
+			
+//			if (ruleName == "INTEGR_CONST") {
+//				if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
+//					tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
+//				} else if (tokenText.startsWith("0")) {
+//					tokenText = String.valueOf(Integer.parseInt(tokenText, 8));
+//				}
+//			}
+			
 			if (ruleName == "IDENT") {
 				int lineNO = token.getLine();
 				int columnNO = token.getCharPositionInLine();
@@ -131,7 +165,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			}
 		}
 		
-		Void ret = super.visitTerminal(node);
 		return ret;
 	}
 	
