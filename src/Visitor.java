@@ -108,7 +108,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		if (ruleNum >= 0) {
 			String ruleName = SysYLexer.ruleNames[ruleNum];
 			
-			if (ruleName == "INDENT") {
+			if (ruleName == "IDENT") {
 				String varName = token.getText();
 				currentScope.resolve(varName);
 				int lineNO = token.getLine();
