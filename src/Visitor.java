@@ -296,7 +296,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		if (ctx.ASSIGN() != null) {
 			String lValName = ctx.lVal().IDENT().getText();
 			BaseSymbol symbol = (BaseSymbol) currentScope.resolve(lValName);
-			Type lValType = symbol.getType();
+			Type lValType = getLValType(ctx.lVal());
 			Type rValType = getExpType(ctx.exp());
 			if (!lValType.toString().equals(rValType.toString())) {
 				int lineNo = ctx.ASSIGN().getSymbol().getLine();
