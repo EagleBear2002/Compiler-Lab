@@ -117,11 +117,13 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				int lineNO = token.getLine();
 				int columnNO = token.getCharPositionInLine();
 				Symbol symbol = currentScope.resolve(tokenText);
-				symbol.addUsage(lineNO, columnNO);
-				
-				if (symbol.findUsage(renameLineNo, renameColumnNo)) {
-					System.out.println("tokenText = " + tokenText + ", findUsage(" + renameLineNo + ", " + renameColumnNo + ")");
-					tokenText = newName;
+				if (symbol != null) {
+					symbol.addUsage(lineNO, columnNO);
+					
+					if (symbol.findUsage(renameLineNo, renameColumnNo)) {
+						System.out.println("tokenText = " + tokenText + ", findUsage(" + renameLineNo + ", " + renameColumnNo + ")");
+						tokenText = newName;
+					}
 				}
 			}
 			
@@ -218,7 +220,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		String varName = ctx.IDENT().getText();
 		if (currentScope.resolve(varName) == null) {
 			int lineNo = ctx.IDENT().getSymbol().getLine();
-			System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable: " + varName +".");
+			System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable: " + varName + ".");
 		}
 		Void ret = super.visitLVal(ctx);
 		return ret;
