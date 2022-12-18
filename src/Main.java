@@ -29,7 +29,7 @@ public class Main {
 		String filePath = args[0];
 		int lineNO = Integer.valueOf(args[1]);
 		int columnNO = Integer.valueOf(args[2]);
-		String name = args[2];
+		String name = args[3];
 		SysYLexer sysYLexer = lexer(filePath);
 		SysYParser sysYParser = parser(sysYLexer);
 		

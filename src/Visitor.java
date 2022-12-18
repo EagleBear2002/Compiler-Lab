@@ -10,6 +10,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	private GlobalScope globalScope = null;
 	private Scope currentScope = null;
 	private int localScopeCounter = 0;
+	private int renameLineNo;
+	private int renameColumnNo;
+	private String newName;
 	
 	private void printIdent(int depth) {
 		for (int i = 0; i < depth; ++i)
@@ -110,9 +113,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			
 			if (ruleName == "IDENT") {
 				String varName = token.getText();
-				currentScope.resolve(varName);
 				int lineNO = token.getLine();
 				int columnNO = token.getCharPositionInLine();
+				currentScope.resolve(varName);
 				currentScope.addUsage(lineNO, columnNO, varName);
 			}
 		}
