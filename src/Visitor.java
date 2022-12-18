@@ -405,6 +405,17 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (currentScope.resolve(funcName) == null) {
 				int lineNo = getLineNo(ctx.IDENT());
 				System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
+			} else {
+				FunctionType functionType = (FunctionType) currentScope.resolve(funcName).getType();
+				ArrayList<Type> paramsType = functionType.getParamsType();
+				ArrayList<Type> argsType = new ArrayList<>();
+				for (SysYParser.ParamContext paramContext : ctx.funcRParams().param()) {
+					argsType.add(getExpType(paramContext.exp()));
+				}
+				if (paramsType.equals(argsType)) {
+					int lineNo = getLineNo(ctx.IDENT());
+					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
+				}
 			}
 		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null
 				|| ctx.MINUS() != null) {
