@@ -113,7 +113,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 			}
 
-			if (ruleName == "IDENT") {
+			if (isPrint && ruleName == "IDENT") {
 				int lineNO = token.getLine();
 				int columnNO = token.getCharPositionInLine();
 				Symbol symbol = currentScope.resolve(tokenText);
