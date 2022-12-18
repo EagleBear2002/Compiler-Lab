@@ -227,11 +227,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
 				int elementCount = Integer.valueOf(toDecimalInteger(constExpContext.getText()));
 				varType = new ArrayType(elementCount, varType);
-//				System.out.println("elementCount = " + elementCount);
 			}
 			
 			if (varDefContext.ASSIGN() != null) {
-//				TODO
+//				TODO: Type 5
 			}
 			
 			System.out.println("varName = " + varName + ", varType = " + varType.toString());
@@ -241,6 +240,38 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		
 		Void ret = super.visitVarDecl(ctx);
+		return ret;
+	}
+	
+	@Override
+	public Void visitConstDecl(SysYParser.ConstDeclContext ctx) {
+		String typeName = ctx.bType().getText();
+		
+		for (SysYParser.ConstDefContext varDefContext : ctx.constDef()) {
+			Type constType = (Type) globalScope.resolve(typeName);
+			String constName = varDefContext.IDENT().getText();
+			if (currentScope.resolve(constName) != null) {
+				int lineNo = varDefContext.IDENT().getSymbol().getLine();
+				System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + constName + ".");
+			}
+			
+			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
+				int elementCount = Integer.valueOf(toDecimalInteger(constExpContext.getText()));
+				constType = new ArrayType(elementCount, constType);
+			}
+			
+			if (varDefContext.ASSIGN() == null) {
+				System.out.println("const defination without initial value");
+			}
+
+//				TODO: Type 5
+//			System.out.println("constName = " + constName + ", varType = " + constName.toString());
+			
+			VariableSymbol constSymbol = new VariableSymbol(constName, constType);
+			currentScope.define(constSymbol);
+		}
+		
+		Void ret = super.visitConstDecl(ctx);
 		return ret;
 	}
 	
@@ -325,7 +356,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		} else if (ctx.number() != null) { // number
 			return new BasicTypeSymbol("int");
 		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null || ctx.MINUS() != null) {
-			return new BasicTypeSymbol("int");
+			Type op1Type = getExpType(ctx.exp(0));
+			Type op2Type = getExpType(ctx.exp(1));
+			if (op1Type.toString().equals("int") && op2Type.toString().equals("int")) {
+				return op1Type;
+			}
 		}
 		return new BasicTypeSymbol("void");
 	}
