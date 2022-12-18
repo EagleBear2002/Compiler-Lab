@@ -260,6 +260,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	private Type getLValType(SysYParser.LValContext ctx) {
 		String varName = ctx.IDENT().getText();
+		System.out.println("varName = " + varName);
 		if (currentScope.resolve(varName) == null) {
 			int lineNo = ctx.IDENT().getSymbol().getLine();
 			System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable: " + varName + ".");
