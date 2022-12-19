@@ -300,8 +300,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		
 		Type varType = symbol.getType();
-		int arrayDimision = ctx.exp().size();
-		for (int i = 0; i < arrayDimision; ++i) {
+		int arrayDimension = ctx.exp().size();
+		for (int i = 0; i < arrayDimension; ++i) {
 			if (varType instanceof ArrayType) {
 				varType = ((ArrayType) varType).elementType;
 				SysYParser.ExpContext expContext = ctx.exp(i);
