@@ -18,7 +18,7 @@ int intFunc1() {
 }
 
 int intFunc2(int param1) {
-    return; // type 7
+    return intFunc2(param1); // valid
 }
 
 int intFunc3(int param1, int param2[]) {
