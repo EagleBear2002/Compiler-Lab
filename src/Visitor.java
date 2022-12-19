@@ -170,19 +170,18 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		Type retType = (Type) globalScope.resolve(retTypeName);
 		ArrayList<Type> paramsType = new ArrayList<>();
 		FunctionType functionType = new FunctionType(retType, paramsType);
+		if (ctx.funcFParams() != null) {
+			for (SysYParser.FuncFParamContext funcFParamContext : ctx.funcFParams().funcFParam()) {
+				Type fParamType = getFuncFParamType(funcFParamContext);
+				paramsType.add(fParamType);
+			}
+		}
+		
 		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope, functionType);
 		currentScope.define(fun);
 		currentScope = fun;
 		
 		Void ret = super.visitFuncDef(ctx);
-		
-		if (!isError && ctx.funcFParams() != null) {
-			for (SysYParser.FuncFParamContext funcFParamContext : ctx.funcFParams().funcFParam()) {
-				String fParamName = funcFParamContext.IDENT().getText();
-				Type fParamType = currentScope.resolve(fParamName).getType();
-				paramsType.add(fParamType);
-			}
-		}
 		
 		currentScope = currentScope.getEnclosingScope();
 		
@@ -267,6 +266,16 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		
 		return super.visitConstDecl(ctx);
+	}
+	
+	private Type getFuncFParamType(SysYParser.FuncFParamContext ctx) {
+		String typeNae = ctx.bType().getText();
+		Type paramType = (Type) globalScope.resolve(typeNae);
+		for (TerminalNode node : ctx.L_BRACKT()) {
+//			TODO: number 0 is trick
+			paramType = new ArrayType(0, paramType);
+		}
+		return paramType;
 	}
 	
 	@Override
@@ -361,7 +370,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			Type expectedType = ((FunctionSymbol) tmpScope).getType().getRetType();
 			if (!retType.toString().equals(expectedType.toString())) {
 				int lineNo = getLineNo(ctx.RETURN());
-				System.out.println("retType = " + retType + ", expectedType" + expectedType);
+				System.out.println("retType: " + retType + ", expectedType: " + expectedType);
 				System.err.println("Error type 7 at Line " + lineNo + ": Type mismatched for return.");
 				findError();
 			}
