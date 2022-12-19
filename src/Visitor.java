@@ -539,6 +539,29 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitCond(SysYParser.CondContext ctx) {
+		if (ctx.exp() == null && !getCondType(ctx).equals("int")) {
+			TerminalNode operator;
+			if (ctx.LT() != null) {
+				operator = ctx.LT();
+			} else if (ctx.GT() != null) {
+				operator = ctx.GT();
+			} else if (ctx.LE() != null) {
+				operator = ctx.LE();
+			} else if (ctx.GE() != null) {
+				operator = ctx.GE();
+			} else if (ctx.EQ() != null) {
+				operator = ctx.EQ();
+			} else if (ctx.NEQ() != null) {
+				operator = ctx.NEQ();
+			} else if (ctx.AND() != null) {
+				operator = ctx.AND();
+			} else{
+				operator = ctx.OR();
+			}
+			int lineNo = getLineNo(operator);
+			System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
+			findError();
+		}
 		return super.visitCond(ctx);
 	}
 }
