@@ -25,8 +25,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		errorFound = true;
 	}
 	
-	void setPrint(boolean isPrint) {
-		this.isPrint = isPrint;
+	void setPrint() {
+		this.isPrint = true;
 	}
 	
 	void setRenameTag(int renameLineNo, int renameColumnNo, String newName) {
@@ -137,20 +137,18 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 			}
 			
-			if (isPrint && color != "no color") {
+			if (isPrint && !color.equals("no color")) {
 				printIdent(depth);
 				System.err.println(tokenText + " " + ruleName + "[" + color + "]");
 			}
 		}
 		
-		Void ret = super.visitTerminal(node);
-		return ret;
+		return super.visitTerminal(node);
 	}
 	
 	@Override
 	public Void visit(ParseTree tree) {
-		Void ret = super.visit(tree);
-		return ret;
+		return super.visit(tree);
 	}
 	
 	@Override
@@ -228,7 +226,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 			} else {
 				for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
-					int elementCount = Integer.valueOf(toDecimalInteger(constExpContext.getText()));
+					int elementCount = Integer.parseInt(toDecimalInteger(constExpContext.getText()));
 					varType = new ArrayType(elementCount, varType);
 				}
 				
@@ -248,8 +246,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			currentScope.define(varSymbol);
 		}
 		
-		Void ret = super.visitVarDecl(ctx);
-		return ret;
+		return super.visitVarDecl(ctx);
 	}
 	
 	@Override
@@ -268,7 +265,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			}
 			
 			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
-				int elementCount = Integer.valueOf(toDecimalInteger(constExpContext.getText()));
+				int elementCount = Integer.parseInt(toDecimalInteger(constExpContext.getText()));
 				constType = new ArrayType(elementCount, constType);
 			}
 			
@@ -282,8 +279,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			currentScope.define(constSymbol);
 		}
 		
-		Void ret = super.visitConstDecl(ctx);
-		return ret;
+		return super.visitConstDecl(ctx);
 	}
 	
 	@Override
@@ -296,8 +292,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		currentScope.define(varSymbol);
 		
-		Void ret = super.visitFuncFParam(ctx);
-		return ret;
+		return super.visitFuncFParam(ctx);
 	}
 	
 	private Type getLValType(SysYParser.LValContext ctx) {
@@ -348,8 +343,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			}
 		}
 		
-		Void ret = super.visitLVal(ctx);
-		return ret;
+		return super.visitLVal(ctx);
 	}
 	
 	@Override
@@ -384,8 +378,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				findError();
 			}
 		}
-		Void ret = super.visitStmt(ctx);
-		return ret;
+		return super.visitStmt(ctx);
 	}
 	
 	private Type getExpType(SysYParser.ExpContext ctx) {
@@ -405,8 +398,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 				if (!paramsType.equals(argsType)) {
 				} else {
-					Type retType = functionType.getRetType();
-					return retType;
+					return functionType.getRetType();
 				}
 			}
 		} else if (ctx.L_PAREN() != null || ctx.unaryOp() != null) { // L_PAREN exp R_PAREN | unaryOp exp
@@ -504,8 +496,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 			}
 		}
-		Void ret = super.visitExp(ctx);
-		return ret;
+		return super.visitExp(ctx);
 	}
 	
 }
