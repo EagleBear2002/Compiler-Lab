@@ -287,7 +287,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			findError();
 		} else {
 			currentScope.define(varSymbol);
-			((FunctionSymbol) currentScope).getType().getParamsType().add(varType);
+			((FunctionSymbol) currentScope).getType().paramsType().add(varType);
 		}
 		return super.visitFuncFParam(ctx);
 	}
@@ -367,7 +367,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			while (!(tmpScope instanceof FunctionSymbol)) {
 				tmpScope = tmpScope.getEnclosingScope();
 			}
-			Type expectedType = ((FunctionSymbol) tmpScope).getType().getRetType();
+			Type expectedType = ((FunctionSymbol) tmpScope).getType().retType();
 			if (retType.toString().equals("noType") || expectedType.toString().equals("noType")) {
 				
 			} else if (!retType.toString().equals(expectedType.toString())) {
@@ -387,16 +387,15 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			} else if (!(symbol.getType() instanceof FunctionType)) {
 			} else {
 				FunctionType functionType = (FunctionType) currentScope.resolve(funcName).getType();
-				ArrayList<Type> paramsType = functionType.getParamsType();
+				ArrayList<Type> paramsType = functionType.paramsType();
 				ArrayList<Type> argsType = new ArrayList<>();
 				if (ctx.funcRParams() != null) {
 					for (SysYParser.ParamContext paramContext : ctx.funcRParams().param()) {
 						argsType.add(getExpType(paramContext.exp()));
 					}
 				}
-				if (!paramsType.equals(argsType)) {
-				} else {
-					return functionType.getRetType();
+				if (paramsType.equals(argsType)) {
+					return functionType.retType();
 				}
 			}
 		} else if (ctx.L_PAREN() != null) { // L_PAREN exp R_PAREN
@@ -407,13 +406,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			return getLValType(ctx.lVal());
 		} else if (ctx.number() != null) { // number
 			return new BasicTypeSymbol("int");
-		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null
-				|| ctx.MINUS() != null) {
+		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null || ctx.MINUS() != null) {
 			Type op1Type = getExpType(ctx.exp(0));
 			Type op2Type = getExpType(ctx.exp(1));
 			if (op1Type.toString().equals("int") && op2Type.toString().equals("int")) {
 				return op1Type;
-			} else {
 			}
 		}
 		return new BasicTypeSymbol("noType");
@@ -465,7 +462,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				findError();
 			} else {
 				FunctionType functionType = (FunctionType) symbol.getType();
-				ArrayList<Type> paramsType = functionType.getParamsType();
+				ArrayList<Type> paramsType = functionType.paramsType();
 				ArrayList<Type> argsType = new ArrayList<>();
 				if (ctx.funcRParams() != null) {
 					for (SysYParser.ParamContext paramContext : ctx.funcRParams().param()) {
@@ -494,8 +491,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
 				findError();
 			}
-		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null
-				|| ctx.MINUS() != null) {
+		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null || ctx.MINUS() != null) {
 			Type op1Type = getExpType(ctx.exp(0));
 			Type op2Type = getExpType(ctx.exp(1));
 			if (op1Type.toString().equals("noType") || op2Type.toString().equals("noType")) {
@@ -528,8 +524,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		Type cond1 = getCondType(ctx.cond(0));
 		Type cond2 = getCondType(ctx.cond(1));
-//		System.out.println("cond1: " + cond1.toString());
-//		System.out.println("cond2: " + cond2.toString());
 		if (cond1.toString().equals("int") && cond2.toString().equals("int")) {
 			return cond1;
 		}

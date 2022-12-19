@@ -18,13 +18,10 @@ public class FunctionSymbol extends BaseScope implements Symbol {
 		this.type = type;
 	}
 	public void addUsage(int lineNo, int columnNo) {
-//		System.out.println("addUsage(" + lineNo + ", " + columnNo + ", " + getName() + ")");
-//		System.out.println("size = " + usagePosition.size());
-		usagePosition.add(new Pair(lineNo, columnNo));
+		usagePosition.add(new Pair<>(lineNo, columnNo));
 	}
 	
 	public boolean findUsage(int lineNo, int columnNo) {
-		boolean ret = usagePosition.contains(new Pair(lineNo, columnNo));
-		return ret;
+		return usagePosition.contains(new Pair<>(lineNo, columnNo));
 	}
 }
