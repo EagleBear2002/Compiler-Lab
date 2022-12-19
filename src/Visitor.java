@@ -450,7 +450,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 				if (!checkArgsTyps(paramsType, argsType)) {
 					int lineNo = getLineNo(ctx.IDENT());
-					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
+//					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
 					findError();
 				}
 			}
@@ -467,7 +467,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					operator = unaryOpContext.NOT();
 				}
 				int lineNo = getLineNo(operator);
-//				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
+				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
 				findError();
 			}
 		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null
@@ -490,7 +490,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					operator = ctx.MINUS();
 				}
 				int lineNo = getLineNo(operator);
-//				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
+				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
 				findError();
 			}
 		}
