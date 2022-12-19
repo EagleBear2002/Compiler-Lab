@@ -33,19 +33,19 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	private String getHelight(String ruleName) {
 		switch (ruleName) {
-			case "CONST", "INT", "VOID", "IF", "ELSE", "WHILE", "BREAK", "CONTINUE", "RETURN" -> {
+			case "CONST", "INT", "VOID", "IF", "ELSE", "WHILE", "BREAK", "CONTINUE", "RETURN": {
 				return "orange";
 			}
-			case "PLUS", "MINUS", "MUL", "DIV", "MOD", "ASSIGN", "EQ", "NEQ", "LT", "GT", "LE", "GE", "NOT", "AND", "OR" -> {
+			case "PLUS", "MINUS", "MUL", "DIV", "MOD", "ASSIGN", "EQ", "NEQ", "LT", "GT", "LE", "GE", "NOT", "AND", "OR": {
 				return "blue";
 			}
-			case "IDENT" -> {
+			case "IDENT": {
 				return "red";
 			}
-			case "INTEGR_CONST" -> {
+			case "INTEGR_CONST": {
 				return "green";
 			}
-			default -> {
+			default: {
 				return "no color";
 			}
 		}
