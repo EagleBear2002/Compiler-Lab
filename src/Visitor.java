@@ -359,7 +359,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
 			}
 		} else if (ctx.RETURN() != null) {
-			Type retType = new BasicTypeSymbol("noType");
+			Type retType = new BasicTypeSymbol("void");
 			if (ctx.exp() != null) {
 				retType = getExpType(ctx.exp());
 			}
@@ -420,21 +420,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (op1Type.toString().equals("int") && op2Type.toString().equals("int")) {
 				return op1Type;
 			} else {
-				// TerminalNode operator;
-				// if (ctx.MUL() != null) {
-				// operator = ctx.MUL();
-				// } else if (ctx.DIV() != null) {
-				// operator = ctx.DIV();
-				// } else if (ctx.MOD() != null) {
-				// operator = ctx.MOD();
-				// } else if (ctx.PLUS() != null) {
-				// operator = ctx.PLUS();
-				// } else {
-				// operator = ctx.MINUS();
-				// }
-				// int lineNo = getLineNo(operator);
-				// System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched
-				// for operands.");
 			}
 		}
 		return new BasicTypeSymbol("noType");
