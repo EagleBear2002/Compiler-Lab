@@ -174,6 +174,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				System.err.println("Error type 4 at Line " + lineNo + ": Redefined function: " + funcName + ".");
 				findError();
 			}
+			return super.visitFuncDef(ctx);
 		}
 		
 		ArrayList<Type> paramsType = new ArrayList<>();
@@ -184,13 +185,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		Void ret = super.visitFuncDef(ctx);
 		
-//		System.out.println("visitfuncDef: " + funcName);
 		if (ctx.funcFParams() != null) {
 			for (SysYParser.FuncFParamContext funcFParamContext : ctx.funcFParams().funcFParam()) {
 				String fParamName = funcFParamContext.IDENT().getText();
-//				System.out.println("fParamName: " + fParamName);
 				Type fParamType = currentScope.resolve(fParamName).getType();
-//				System.out.println("add paramType: " + fParamType.toString());
 				paramsType.add(fParamType);
 			}
 		}
