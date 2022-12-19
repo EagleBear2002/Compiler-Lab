@@ -34,8 +34,8 @@ public class Main {
 		ParseTree tree = sysYParser.program();
 		Visitor visitor = new Visitor();
 		visitor.setRenameTag(lineNo, columnNo, name);
+//		visitor.visit(tree);
+		visitor.setPrint(true);
 		visitor.visit(tree);
-		// visitor.setPrint(true);
-		// visitor.visit(tree);
 	}
 }

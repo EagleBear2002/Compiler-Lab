@@ -33,45 +33,19 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	private String getHelight(String ruleName) {
 		switch (ruleName) {
-			case "CONST":
-			case "INT":
-			case "VOID":
-			case "IF":
-			case "ELSE":
-			case "WHILE":
-			case "BREAK":
-			case "CONTINUE":
-			case "RETURN": {
+			case "CONST", "INT", "VOID", "IF", "ELSE", "WHILE", "BREAK", "CONTINUE", "RETURN" -> {
 				return "orange";
 			}
-			
-			case "PLUS":
-			case "MINUS":
-			case "MUL":
-			case "DIV":
-			case "MOD":
-			case "ASSIGN":
-			case "EQ":
-			case "NEQ":
-			case "LT":
-			case "GT":
-			case "LE":
-			case "GE":
-			case "NOT":
-			case "AND":
-			case "OR": {
+			case "PLUS", "MINUS", "MUL", "DIV", "MOD", "ASSIGN", "EQ", "NEQ", "LT", "GT", "LE", "GE", "NOT", "AND", "OR" -> {
 				return "blue";
 			}
-			
-			case "IDENT": {
+			case "IDENT" -> {
 				return "red";
 			}
-			
-			case "INTEGR_CONST": {
+			case "INTEGR_CONST" -> {
 				return "green";
 			}
-			
-			default: {
+			default -> {
 				return "no color";
 			}
 		}
@@ -115,16 +89,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String tokenText = token.getText();
 			String color = getHelight(ruleName);
 			
-			if (ruleName == "INTEGR_CONST") {
-				// if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
-				// tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
-				// } else if (tokenText.startsWith("0")) {
-				// tokenText = String.valueOf(Integer.parseInt(tokenText, 8));
-				// }
+			if (ruleName.equals("INTEGR_CONST")) {
 				tokenText = toDecimalInteger(tokenText);
 			}
 			
-			if (isPrint && ruleName == "IDENT") {
+			if (isPrint && ruleName.equals("IDENT")) {
 				int lineNO = token.getLine();
 				int columnNO = token.getCharPositionInLine();
 				Symbol symbol = currentScope.resolve(tokenText);
@@ -132,8 +101,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					symbol.addUsage(lineNO, columnNO);
 					
 					if (symbol.findUsage(renameLineNo, renameColumnNo)) {
-						// System.out.println("tokenText = " + tokenText + ", findUsage(" + renameLineNo
-						// + ", " + renameColumnNo + ")");
 						tokenText = newName;
 					}
 				}
@@ -235,8 +202,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 						if (varType instanceof FunctionType) {
 						} else if (varType.toString().equals("noType") || initValType.toString().equals("noType")) {
 						} else if (!varType.toString().equals(initValType.toString())) {
-//							int lineNo = getLineNo(varDefContext.ASSIGN());
-//							System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
 						}
 					}
 				}
@@ -354,10 +319,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				int lineNo = getLineNo(ctx.ASSIGN());
 				System.err.println("Error type 11 at Line " + lineNo + ": The left-hand side of an assignment must be a variable.");
 			} else if (lValType.toString().equals("noType") || rValType.toString().equals("noType")) {
-				
 			} else if (!lValType.toString().equals(rValType.toString())) {
-//				int lineNo = getLineNo(ctx.ASSIGN());
-//				System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
+				int lineNo = getLineNo(ctx.ASSIGN());
+				System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
 			}
 		} else if (ctx.RETURN() != null) {
 			Type retType = new BasicTypeSymbol("void");
