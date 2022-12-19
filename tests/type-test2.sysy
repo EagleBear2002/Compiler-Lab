@@ -18,7 +18,7 @@ int intFunc1() {
 }
 
 int intFunc1(int param) {
-	return intFunc1();
+	return intFunc1(); // valid?
 }
 
 int intFunc2(int param1) {

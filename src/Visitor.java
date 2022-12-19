@@ -165,6 +165,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			System.err.println("Error type 4 at Line " + lineNo + ": Redefined function: " + funcName + ".");
 			findError();
 			isError = true;
+			Void ret = null;
+			return ret;
 		}
 		
 		Type retType = (Type) globalScope.resolve(retTypeName);
