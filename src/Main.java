@@ -36,8 +36,17 @@ public class Main {
 		visitor.setRenameTag(lineNo, columnNo, name);
 		visitor.visit(tree);
 		if (!visitor.getErrorFound()) {
-			visitor.setPrint();
-			visitor.visit(tree);
+			for (Object obj : visitor.getMsgToPrint()) {
+				if (obj instanceof Symbol) {
+					if (((Symbol) obj).findUsage(lineNo, columnNo)) {
+						System.err.print(name);
+					} else {
+						System.err.print(((Symbol) obj).getName());
+					}
+				} else {
+					System.err.print(obj);
+				}
+			}
 		}
 	}
 }

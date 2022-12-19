@@ -5,6 +5,7 @@ import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
 
 import java.util.ArrayList;
+import java.util.List;
 
 public class Visitor extends SysYParserBaseVisitor<Void> {
 	private static int depth = 0;
@@ -16,6 +17,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	private String newName;
 	private boolean isPrint;
 	private boolean errorFound = false;
+	private List<Object> msgToPrint = new ArrayList<>();
+	
+	public List<Object> getMsgToPrint() {
+		return msgToPrint;
+	}
 	
 	public boolean getErrorFound() {
 		return errorFound;
@@ -35,9 +41,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		this.newName = newName;
 	}
 	
-	private void printIdent(int depth) {
+	private String ident2String(int depth) {
+		String ret = "";
 		for (int i = 0; i < depth; ++i)
-			System.err.print("  ");
+			ret += "  ";
+		return ret;
 	}
 	
 	private String getHelight(String ruleName) {
@@ -89,10 +97,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		String ruleName = SysYParser.ruleNames[ruleIndex];
 		String realName = ruleName.substring(0, 1).toUpperCase() + ruleName.substring(1);
 		
-		if (isPrint) {
-			printIdent(depth);
-			System.err.println(realName);
-		}
+//		if (isPrint) {
+			System.err.println(ident2String(depth) + realName);
+			msgToPrint.add(ident2String(depth) + realName + "\n");
+//		}
 		
 		depth++;
 		Void ret = super.visitChildren(node);
@@ -119,15 +127,15 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String ruleName = SysYLexer.ruleNames[ruleNum];
 			String tokenText = token.getText();
 			String color = getHelight(ruleName);
+			Symbol symbol = currentScope.resolve(tokenText);
 			
 			if (ruleName.equals("INTEGR_CONST")) {
 				tokenText = toDecimalInteger(tokenText);
 			}
 			
-			if (isPrint && ruleName.equals("IDENT")) {
+			if (ruleName.equals("IDENT")) {
 				int lineNO = token.getLine();
 				int columnNO = token.getCharPositionInLine();
-				Symbol symbol = currentScope.resolve(tokenText);
 				if (symbol != null) {
 					symbol.addUsage(lineNO, columnNO);
 					
@@ -137,9 +145,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 			}
 			
-			if (isPrint && !color.equals("no color")) {
-				printIdent(depth);
-				System.err.println(tokenText + " " + ruleName + "[" + color + "]");
+			if (!color.equals("no color")) {
+				System.err.println(ident2String(depth) + tokenText + " " + ruleName + "[" + color + "]");
+				msgToPrint.add(ident2String(depth));
+				msgToPrint.add(symbol);
+				msgToPrint.add(" " + ruleName + "[" + color + "]" + "\n");
 			}
 		}
 		
@@ -170,11 +180,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		boolean isError = false;
 		if (currentScope.definedSymbol(funcName)) {
 			int lineNo = getLineNo(ctx.IDENT());
-			if (!isPrint) {
+//			if (!isPrint) {
 				System.err.println("Error type 4 at Line " + lineNo + ": Redefined function: " + funcName + ".");
 				findError();
 				isError = true;
-			}
+//			}
 		}
 		
 		Type retType = (Type) globalScope.resolve(retTypeName);
@@ -222,10 +232,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String varName = varDefContext.IDENT().getText();
 			if (currentScope.definedSymbol(varName)) {
 				int lineNo = getLineNo(varDefContext.IDENT());
-				if (!isPrint) {
+//				if (!isPrint) {
 					System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + varName + ".");
 					findError();
-				}
+//				}
 			} else {
 				for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
 					int elementCount = Integer.parseInt(toDecimalInteger(constExpContext.getText()));
@@ -260,10 +270,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String constName = varDefContext.IDENT().getText();
 			if (currentScope.definedSymbol(constName)) {
 				int lineNo = getLineNo(varDefContext.IDENT());
-				if (!isPrint) {
+//				if (!isPrint) {
 					System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + constName + ".");
 					findError();
-				}
+//				}
 			}
 			
 			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
@@ -334,10 +344,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		Symbol symbol = currentScope.resolve(varName);
 		if (symbol == null) {
 			int lineNo = getLineNo(ctx.IDENT());
-			if (!isPrint) {
+//			if (!isPrint) {
 				System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable: " + varName + ".");
 				findError();
-			}
+//			}
 		} else {
 			Type varType = symbol.getType();
 			int arrayDimision = ctx.exp().size();
@@ -457,16 +467,16 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			Symbol symbol = currentScope.resolve(funcName);
 			if (symbol == null) {
 				int lineNo = getLineNo(ctx.IDENT());
-				if (!isPrint) {
+//				if (!isPrint) {
 					System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
 					findError();
-				}
+//				}
 			} else if (!(symbol.getType() instanceof FunctionType)) {
 				int lineNo = getLineNo(ctx.IDENT());
-				if (!isPrint) {
+//				if (!isPrint) {
 					System.err.println("Error type 10 at Line " + lineNo + ": Not a function: " + funcName);
 					findError();
-				}
+//				}
 			} else {
 				FunctionType functionType = (FunctionType) currentScope.resolve(funcName).getType();
 				ArrayList<Type> paramsType = functionType.getParamsType();
@@ -478,10 +488,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 				if (!checkArgsTyps(paramsType, argsType)) {
 					int lineNo = getLineNo(ctx.IDENT());
-					if (!isPrint) {
+//					if (!isPrint) {
 						System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
 						findError();
-					}
+//					}
 				}
 			}
 		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null
@@ -503,10 +513,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					operator = ctx.MINUS();
 				}
 				int lineNo = getLineNo(operator);
-				if (!isPrint) {
+//				if (!isPrint) {
 					System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
 					findError();
-				}
+//				}
 			}
 		}
 		return super.visitExp(ctx);
