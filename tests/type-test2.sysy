@@ -22,7 +22,7 @@ int intFunc2(int param1) {
 }
 
 int intFunc3(int param1, int param2[]) {
-    return param2; // type 7 report: no
+    return param2; // type 7
 }
 
 int voidFunc1() { // type 4
