@@ -421,11 +421,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	private boolean checkArgsTyps(ArrayList<Type> paramsType, ArrayList<Type> argsType) {
 		int len1 = paramsType.size();
 		int len2 = argsType.size();
-		if (len1 != len2) {
-			return false;
-		}
-		
-		for (int i = 0; i < len1; ++i) {
+		for (int i = 0; i < len1 && i < len2; ++i) {
 			Type paramType = paramsType.get(i);
 			Type argType = argsType.get(i);
 			if (paramsType.toString().equals("noType") || argType.toString().equals("noType")) {
@@ -435,7 +431,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			}
 		}
 		
-		return true;
+		return len1 == len2;
 	}
 	
 	@Override
