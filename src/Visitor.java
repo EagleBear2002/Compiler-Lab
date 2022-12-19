@@ -230,8 +230,19 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			}
 			
 			if (varDefContext.ASSIGN() != null) {
-				int lineNo = getLineNo(varDefContext.ASSIGN());
-				System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
+				SysYParser.ExpContext expContext = varDefContext.initVal().exp();
+				if (expContext != null) {
+					Type initValType = getExpType(expContext);
+					if (!(varType instanceof BasicTypeSymbol)) {
+						int lineNo = getLineNo(varDefContext.ASSIGN());
+						System.err.println("Error type 11 at Line " + lineNo + ": The left-hand side of an assignment must be a variable.");
+					} else if (varType.toString().equals("noType") || initValType.toString().equals("noType")) {
+						
+					} else if (!varType.toString().equals(initValType.toString())) {
+						int lineNo = getLineNo(varDefContext.ASSIGN());
+						System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
+					}
+				}
 			}
 			
 			VariableSymbol varSymbol = new VariableSymbol(varName, varType);
@@ -338,7 +349,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		if (ctx.ASSIGN() != null) {
 			Type lValType = getLValType(ctx.lVal());
 			Type rValType = getExpType(ctx.exp());
-			if (lValType instanceof FunctionType) {
+			if (!(lValType instanceof BasicTypeSymbol)) {
 				int lineNo = getLineNo(ctx.ASSIGN());
 				System.err.println("Error type 11 at Line " + lineNo + ": The left-hand side of an assignment must be a variable.");
 			} else if (lValType.toString().equals("noType") || rValType.toString().equals("noType")) {
