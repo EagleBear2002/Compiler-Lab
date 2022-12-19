@@ -61,6 +61,7 @@ int main(){
     }
     
     int k = voidFunc1(); // type 5
-    int l = k;
+    int l = voidFunc(); // type 2
+    int m = k;
     return z(); // type 2
 }

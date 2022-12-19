@@ -25,8 +25,6 @@ public class BaseSymbol implements Symbol {
 	}
 	
 	public void addUsage(int lineNo, int columnNo) {
-		// System.out.println("addUsage(" + lineNo + ", " + columnNo + ", " + getName() + ")");
-		// System.out.println("size = " + usagePosition.size());
 		usagePosition.add(new Pair(lineNo, columnNo));
 	}
 	
@@ -34,11 +32,4 @@ public class BaseSymbol implements Symbol {
 		boolean ret = usagePosition.contains(new Pair(lineNo, columnNo));
 		return ret;
 	}
-	
-//	public String toString() {
-//		return MoreObjects.toStringHelper(this)
-//				.add("name", name)
-//				.add("type", type)
-//				.toString();
-//	}
 }

@@ -47,7 +47,6 @@ public class BaseScope implements Scope {
 	public Symbol resolve(String name) {
 		Symbol symbol = symbols.get(name);
 		if (symbol != null) {
-//			System.out.println("*" + name);
 			return symbol;
 		}
 		
@@ -57,12 +56,4 @@ public class BaseScope implements Scope {
 		
 		return null;
 	}
-
-//	@Override
-//	public String toString() {
-//		return MoreObjects.toStringHelper(this)
-//				.add("name", name)
-//				.add("symbols", symbols.values().toString())
-//				.toString();
-//	}
 }
