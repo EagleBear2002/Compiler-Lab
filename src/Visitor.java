@@ -541,7 +541,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitCond(SysYParser.CondContext ctx) {
-		if (ctx.exp() == null && !getCondType(ctx).equals("int")) {
+		if (ctx.exp() != null && !getCondType(ctx).equals("int")) {
 			TerminalNode operator;
 			if (ctx.LT() != null) {
 				operator = ctx.LT();
