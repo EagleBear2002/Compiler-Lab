@@ -299,7 +299,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			
 		} else {
 			currentScope.define(varSymbol);
-			((FunctionType) currentScope).getParamsType().add(varType);
+			((FunctionSymbol) currentScope).getType().getParamsType().add(varType);
 		}
 		return super.visitFuncFParam(ctx);
 	}
