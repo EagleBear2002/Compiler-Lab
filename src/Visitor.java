@@ -361,7 +361,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			Type expectedType = ((FunctionSymbol) tmpScope).getType().getRetType();
 			if (!retType.toString().equals(expectedType.toString())) {
 				int lineNo = getLineNo(ctx.RETURN());
-				System.err.println("Error type 7 at Line " + lineNo + ": Type mismatched for return.");
+//				System.err.println("Error type 7 at Line " + lineNo + ": Type mismatched for return.");
 				findError();
 			}
 		}
@@ -448,7 +448,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 				if (!checkArgsTyps(paramsType, argsType)) {
 					int lineNo = getLineNo(ctx.IDENT());
-					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
+//					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
 					findError();
 				}
 			}
@@ -471,7 +471,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					operator = ctx.MINUS();
 				}
 				int lineNo = getLineNo(operator);
-				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
+//				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
 				findError();
 			}
 		}
