@@ -483,7 +483,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	@Override
 	public Void visitCond(SysYParser.CondContext ctx) {
 		if (ctx.exp() == null && !getCondType(ctx).toString().equals("int")) {
-			int lineNo = ctx.getStart().getlin();
+			int lineNo = ctx.getStart().getLine();
 			// TerminalNode operator;
 			// if (ctx.LT() != null) {
 			// 	operator = ctx.LT();
