@@ -207,16 +207,6 @@ public interface SysYParserListener extends ParseTreeListener {
 	 */
 	void exitLVal(SysYParser.LValContext ctx);
 	/**
-	 * Enter a parse tree produced by {@link SysYParser#primaryExp}.
-	 * @param ctx the parse tree
-	 */
-	void enterPrimaryExp(SysYParser.PrimaryExpContext ctx);
-	/**
-	 * Exit a parse tree produced by {@link SysYParser#primaryExp}.
-	 * @param ctx the parse tree
-	 */
-	void exitPrimaryExp(SysYParser.PrimaryExpContext ctx);
-	/**
 	 * Enter a parse tree produced by {@link SysYParser#number}.
 	 * @param ctx the parse tree
 	 */

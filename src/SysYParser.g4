@@ -86,7 +86,7 @@ cond : exp
 lVal : IDENT (L_BRACKT exp R_BRACKT)*;
 
 // 基本表达式
-primaryExp : L_PAREN exp R_PAREN | lVal | number;
+//primaryExp : L_PAREN exp R_PAREN | lVal | number;
 
 // 数值
 number : INTEGR_CONST;
