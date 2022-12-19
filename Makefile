@@ -38,6 +38,10 @@ type-test: compile
 	$(call git_commit, "type-test")
 	java -classpath ./classes:$(ANTLRPATH) Main tests/type-test.sysy 8 4 d
 
+type-test2: compile
+	$(call git_commit, "type-test2")
+	java -classpath ./classes:$(ANTLRPATH) Main tests/type-test2.sysy 8 4 d
+
 rename-test: compile
 	$(call git_commit, "rename-test")
 	java -classpath ./classes:$(ANTLRPATH) Main tests/rename-test.sysy 8 4 d

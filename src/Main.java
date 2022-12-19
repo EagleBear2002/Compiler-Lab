@@ -36,7 +36,7 @@ public class Main {
 		visitor.setRenameTag(lineNo, columnNo, name);
 		visitor.visit(tree);
 		if (!visitor.getErrorFound()) {
-			visitor.setPrint(true);
+			visitor.setPrint();
 			visitor.visit(tree);
 		}
 	}
