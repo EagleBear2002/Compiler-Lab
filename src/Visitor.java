@@ -286,11 +286,15 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitFuncFParam(SysYParser.FuncFParamContext ctx) {
-		String typeName = ctx.bType().getText();
-		Type type = (Type) globalScope.resolve(typeName);
+		String varTypeName = ctx.bType().getText();
+		Type varType = (Type) globalScope.resolve(varTypeName);
 		
+		for (TerminalNode node : ctx.L_BRACKT()) {
+//			TODO: number 0 is trick
+			varType = new ArrayType(0, varType);
+		}
 		String varName = ctx.IDENT().getText();
-		VariableSymbol varSymbol = new VariableSymbol(varName, type);
+		VariableSymbol varSymbol = new VariableSymbol(varName, varType);
 		
 		currentScope.define(varSymbol);
 		
