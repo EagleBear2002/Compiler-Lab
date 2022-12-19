@@ -483,25 +483,26 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	@Override
 	public Void visitCond(SysYParser.CondContext ctx) {
 		if (ctx.exp() == null && !getCondType(ctx).toString().equals("int")) {
-			TerminalNode operator;
-			if (ctx.LT() != null) {
-				operator = ctx.LT();
-			} else if (ctx.GT() != null) {
-				operator = ctx.GT();
-			} else if (ctx.LE() != null) {
-				operator = ctx.LE();
-			} else if (ctx.GE() != null) {
-				operator = ctx.GE();
-			} else if (ctx.EQ() != null) {
-				operator = ctx.EQ();
-			} else if (ctx.NEQ() != null) {
-				operator = ctx.NEQ();
-			} else if (ctx.AND() != null) {
-				operator = ctx.AND();
-			} else {
-				operator = ctx.OR();
-			}
-			reportError(6, getLineNo(operator), "Type mismatched for operands");
+			int lineNo = ctx.getStart().getlin();
+			// TerminalNode operator;
+			// if (ctx.LT() != null) {
+			// 	operator = ctx.LT();
+			// } else if (ctx.GT() != null) {
+			// 	operator = ctx.GT();
+			// } else if (ctx.LE() != null) {
+			// 	operator = ctx.LE();
+			// } else if (ctx.GE() != null) {
+			// 	operator = ctx.GE();
+			// } else if (ctx.EQ() != null) {
+			// 	operator = ctx.EQ();
+			// } else if (ctx.NEQ() != null) {
+			// 	operator = ctx.NEQ();
+			// } else if (ctx.AND() != null) {
+			// 	operator = ctx.AND();
+			// } else {
+			// 	operator = ctx.OR();
+			// }
+			reportError(6, lineNo, "Type mismatched for operands");
 		}
 		return super.visitCond(ctx);
 	}
