@@ -399,9 +399,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					}
 				}
 				if (!paramsType.equals(argsType)) {
-					// int lineNo = getLineNo(ctx.IDENT());
-					// System.err.println("Error type 8 at Line " + lineNo + ": Function is not
-					// applicable for arguments.");
 				} else {
 					Type retType = functionType.getRetType();
 					return retType;
@@ -425,6 +422,24 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		return new BasicTypeSymbol("noType");
 	}
 	
+	private boolean checkArgsTyps(ArrayList<Type> paramsType, ArrayList<Type> argsType) {
+		int len1 = paramsType.size();
+		int len2 = argsType.size();
+		if (len1 != len2) {
+			return false;
+		}
+		
+		for (int i = 0; i < len1; ++i) {
+			String paramType = paramsType.get(i).toString();
+			String argType = argsType.get(i).toString();
+			if (!paramType.equals(argType)) {
+				return false;
+			}
+		}
+		
+		return true;
+	}
+	
 	@Override
 	public Void visitExp(SysYParser.ExpContext ctx) {
 		if (ctx.IDENT() != null) { // IDENT L_PAREN funcRParams? R_PAREN
@@ -445,7 +460,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 						argsType.add(getExpType(paramContext.exp()));
 					}
 				}
-				if (!paramsType.equals(argsType)) {
+				if (!checkArgsTyps(paramsType, argsType)) {
 					int lineNo = getLineNo(ctx.IDENT());
 					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
 				}
