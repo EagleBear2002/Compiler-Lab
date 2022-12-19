@@ -517,7 +517,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					operator = ctx.MINUS();
 				}
 				int lineNo = getLineNo(operator);
-				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
+//				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
 				findError();
 			}
 		}
@@ -561,7 +561,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				operator = ctx.OR();
 			}
 			int lineNo = getLineNo(operator);
-			System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
+//			System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
 			findError();
 		}
 		return super.visitCond(ctx);
