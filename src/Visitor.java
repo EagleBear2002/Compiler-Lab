@@ -98,7 +98,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		String realName = ruleName.substring(0, 1).toUpperCase() + ruleName.substring(1);
 		
 //		if (isPrint) {
-			System.err.println(ident2String(depth) + realName);
+//			System.err.println(ident2String(depth) + realName);
 			msgToPrint.add(ident2String(depth) + realName + "\n");
 //		}
 		
@@ -146,7 +146,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			}
 			
 			if (!color.equals("no color")) {
-				System.err.println(ident2String(depth) + tokenText + " " + ruleName + "[" + color + "]");
+//				System.err.println(ident2String(depth) + tokenText + " " + ruleName + "[" + color + "]");
 				msgToPrint.add(ident2String(depth));
 				msgToPrint.add(symbol);
 				msgToPrint.add(" " + ruleName + "[" + color + "]" + "\n");
