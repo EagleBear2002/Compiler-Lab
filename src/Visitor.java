@@ -329,10 +329,14 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable: " + varName + ".");
 		} else {
 			Type varType = symbol.getType();
-			for (TerminalNode node : ctx.L_BRACKT()) {
+			int arrayDimision = ctx.exp().size();
+			for (int i = 0; i < arrayDimision; ++i) {
 				if (varType instanceof ArrayType) {
 					varType = ((ArrayType) varType).elementType;
+					SysYParser.ExpContext expContext = ctx.exp(i);
+					varName += "[" + expContext.getText() + "]";
 				} else {
+					TerminalNode node = ctx.L_BRACKT(i);
 					int lineNo = getLineNo(node);
 					System.err.println("Error type 9 at Line " + lineNo + ": Not an array: " + varName + ".");
 					break;
@@ -383,12 +387,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String funcName = ctx.IDENT().getText();
 			Symbol symbol = currentScope.resolve(funcName);
 			if (symbol == null) {
-				// int lineNo = getLineNo(ctx.IDENT());
-				// System.err.println("Error type 2 at Line " + lineNo + ": Undefined function:
-				// " + funcName + ".");
 			} else if (!(symbol.getType() instanceof FunctionType)) {
-				int lineNo = getLineNo(ctx.IDENT());
-				System.err.println("Error type 10 at Line " + lineNo + ": Not a function: test1.");
+//				int lineNo = getLineNo(ctx.IDENT());
+//				System.err.println("Error type 10 at Line " + lineNo + ": Not a function: " + funcName);
 			} else {
 				FunctionType functionType = (FunctionType) currentScope.resolve(funcName).getType();
 				ArrayList<Type> paramsType = functionType.getParamsType();
