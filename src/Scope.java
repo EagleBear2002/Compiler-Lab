@@ -1,17 +1,17 @@
 import java.util.Map;
 
 public interface Scope {
-	public String getName();
+	String getName();
 	
-	public void setName(String name);
+	void setName(String name);
 	
-	public Scope getEnclosingScope();
+	Scope getEnclosingScope();
 	
-	public Map<String, Symbol> getSymbols();
+	Map<String, Symbol> getSymbols();
 	
-	public void define(Symbol symbol);
+	void define(Symbol symbol);
 	
-	public Symbol resolve(String name);
+	Symbol resolve(String name);
 	
-	public boolean definedSymbol(String name);
+	boolean definedSymbol(String name);
 }
