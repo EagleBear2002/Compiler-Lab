@@ -52,7 +52,7 @@ int main(){
     c = 6; // type 5
     voidFunc1 = 6; // type 11
     
-    if (1 || c || 2 || b) {
+    if (1 || globalArray || 2 || d) {
         
     }
     return 0;
