@@ -415,9 +415,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			Symbol symbol = currentScope.resolve(funcName);
 			if (symbol == null) {
 				reportError(2, getLineNo(ctx.IDENT()), "Undefined function: " + funcName);
-			} else if (!(symbol.getType() instanceof FunctionType functionType)) {
+			} else if (!(symbol.getType() instanceof FunctionType)) {
 				reportError(10, getLineNo(ctx.IDENT()), "Not a function: " + funcName);
 			} else {
+				FunctionType functionType = (FunctionType) symbol.getType(); 
 				ArrayList<Type> paramsType = functionType.getParamsType();
 				ArrayList<Type> argsType = new ArrayList<>();
 				if (ctx.funcRParams() != null) {
