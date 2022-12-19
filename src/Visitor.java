@@ -29,9 +29,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	
 	private String ident2String(int depth) {
-		StringBuilder ret = new StringBuilder();
-		ret.append("  ".repeat(Math.max(0, depth)));
-		return ret.toString();
+		return "  ".repeat(Math.max(0, depth));
 	}
 	
 	private String getHelight(String ruleName) {
@@ -163,8 +161,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			int lineNo = getLineNo(ctx.IDENT());
 			System.err.println("Error type 4 at Line " + lineNo + ": Redefined function: " + funcName + ".");
 			findError();
-			Void ret = null;
-			return ret;
+			return null;
 		}
 		
 		Type retType = (Type) globalScope.resolve(retTypeName);
@@ -255,10 +252,18 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				constType = new ArrayType(elementCount, constType);
 			}
 			
-			if (varDefContext.ASSIGN() == null) {
-			}
-			
 			// TODO: Type 5
+			SysYParser.ConstExpContext expContext = varDefContext.constInitVal().constExp();
+			if (expContext != null) {
+				Type initValType = getExpType(expContext.exp());
+				if (constType.toString().equals("noType") || initValType.toString().equals("noType")) {
+					continue;
+				} else if (!constType.toString().equals(initValType.toString())) {
+					int lineNo = getLineNo(varDefContext.ASSIGN());
+					System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
+					findError();
+				}
+			}
 			
 			VariableSymbol constSymbol = new VariableSymbol(constName, constType);
 			currentScope.define(constSymbol);
@@ -367,7 +372,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				
 			} else if (!retType.toString().equals(expectedType.toString())) {
 				int lineNo = getLineNo(ctx.RETURN());
-//				System.out.println("retType: " + retType + ", expectedType: " + expectedType);
 				System.err.println("Error type 7 at Line " + lineNo + ": Type mismatched for return.");
 				findError();
 			}
