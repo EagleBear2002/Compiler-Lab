@@ -10,7 +10,12 @@ public class FunctionType implements Type{
 
 	@Override
 	public String toString() {
-		return retType + "()";
+		StringBuilder ret = new StringBuilder(retType + "(");
+		for (Type type : paramsType) {
+			ret.append(type.toString());
+		}
+		ret.append(")");
+		return ret.toString();
 	}
 	
 	public Type getRetType() {
