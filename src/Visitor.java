@@ -21,7 +21,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		return errorFound;
 	}
 	
-	private boolean findError() {
+	private void findError() {
 		errorFound = true;
 	}
 	
