@@ -456,7 +456,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				|| ctx.MINUS() != null) {
 			Type op1Type = getExpType(ctx.exp(0));
 			Type op2Type = getExpType(ctx.exp(1));
-			if (op1Type.toString().equals("int") && op2Type.toString().equals("int")) {
+			if (op1Type.toString().equals("noType") || op2Type.toString().equals("noType")) {
+			} else if (op1Type.toString().equals("int") && op2Type.toString().equals("int")) {
 			} else {
 				TerminalNode operator;
 				if (ctx.MUL() != null) {
