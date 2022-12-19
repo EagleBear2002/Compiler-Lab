@@ -219,9 +219,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				SysYParser.ExpContext expContext = varDefContext.initVal().exp();
 				if (expContext != null) {
 					Type initValType = getExpType(expContext);
-					if (varType instanceof FunctionType) {
-					} else if (varType.toString().equals("noType") || initValType.toString().equals("noType")) {
+					if (varType.toString().equals("noType") || initValType.toString().equals("noType")) {
 					} else if (!varType.toString().equals(initValType.toString())) {
+						int lineNo = getLineNo(varDefContext.ASSIGN());
+						System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
+						findError();
 					}
 				}
 			}
@@ -345,9 +347,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				findError();
 			} else if (lValType.toString().equals("noType") || rValType.toString().equals("noType")) {
 			} else if (!lValType.toString().equals(rValType.toString())) {
-				int lineNo = getLineNo(ctx.ASSIGN());
-				System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
-				findError();
+				int lineNo = getLineNo(ctx.ASSIGN());  
 			}
 		} else if (ctx.RETURN() != null) {
 			Type retType = new BasicTypeSymbol("void");
