@@ -439,9 +439,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		
 		for (int i = 0; i < len1; ++i) {
-			String paramType = paramsType.get(i).toString();
-			String argType = argsType.get(i).toString();
-			if (!paramType.equals(argType)) {
+			Type paramType = paramsType.get(i);
+			Type argType = argsType.get(i);
+			if (!paramType.toString().equals(argType.toString())) {
 				return false;
 			}
 		}

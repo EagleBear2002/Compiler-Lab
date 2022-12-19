@@ -14,8 +14,8 @@ public class ArrayType implements Type{
 //			return typeStr.append(elementType).toString();
 //		}
 		return typeStr.append("array(")
-				.append(elementCount)
-				.append(",")
+//				.append(elementCount)
+//				.append(",")
 				.append(elementType)
 				.append(")")
 				.toString();
