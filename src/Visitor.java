@@ -172,7 +172,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		Type retType = (Type) globalScope.resolve(retTypeName);
 		
 		String funcName = ctx.IDENT().getText();
-		if (currentScope.resolve(funcName) != null) {
+		if (currentScope.definedSymbol(funcName)) {
 			int lineNo = getLineNo(ctx.IDENT());
 			System.err.println("Error type 4 at Line " + lineNo + ": Redefined function: " + funcName + ".");
 		}
@@ -219,7 +219,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		for (SysYParser.VarDefContext varDefContext : ctx.varDef()) {
 			Type varType = (Type) globalScope.resolve(typeName);
 			String varName = varDefContext.IDENT().getText();
-			if (currentScope.resolve(varName) != null) {
+			if (currentScope.definedSymbol(varName)) {
 				int lineNo = getLineNo(varDefContext.IDENT());
 				System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + varName + ".");
 			}
@@ -251,7 +251,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		for (SysYParser.ConstDefContext varDefContext : ctx.constDef()) {
 			Type constType = (Type) globalScope.resolve(typeName);
 			String constName = varDefContext.IDENT().getText();
-			if (currentScope.resolve(constName) != null) {
+			if (currentScope.definedSymbol(constName)) {
 				int lineNo = getLineNo(varDefContext.IDENT());
 				System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + constName + ".");
 			}

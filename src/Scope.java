@@ -13,4 +13,5 @@ public interface Scope {
 	
 	public Symbol resolve(String name);
 	
+	public boolean definedSymbol(String name);
 }
