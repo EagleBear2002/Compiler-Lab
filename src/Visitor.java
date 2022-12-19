@@ -256,7 +256,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (expContext != null) {
 				Type initValType = getExpType(expContext.exp());
 				if (constType.toString().equals("noType") || initValType.toString().equals("noType")) {
-					continue;
 				} else if (!constType.toString().equals(initValType.toString())) {
 					int lineNo = getLineNo(varDefContext.ASSIGN());
 					System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
@@ -283,7 +282,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		VariableSymbol varSymbol = new VariableSymbol(varName, varType);
 		
 		if (currentScope.definedSymbol(varName)) {
-			
+			int lineNo = getLineNo(ctx.IDENT());
+			System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + varName + ".");
+			findError();
 		} else {
 			currentScope.define(varSymbol);
 			((FunctionSymbol) currentScope).getType().getParamsType().add(varType);
