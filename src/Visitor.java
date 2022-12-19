@@ -236,7 +236,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 						} else if (varType.toString().equals("noType") || initValType.toString().equals("noType")) {
 						} else if (!varType.toString().equals(initValType.toString())) {
 							int lineNo = getLineNo(varDefContext.ASSIGN());
-							System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
+//							System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
 						}
 					}
 				}
