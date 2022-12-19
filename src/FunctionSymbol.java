@@ -17,6 +17,7 @@ public class FunctionSymbol extends BaseScope implements Symbol {
 		this.usagePosition = new ArrayList<>();
 		this.type = type;
 	}
+	
 	public void addUsage(int lineNo, int columnNo) {
 		usagePosition.add(new Pair<>(lineNo, columnNo));
 	}
