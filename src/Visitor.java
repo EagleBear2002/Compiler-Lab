@@ -177,16 +177,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		
 		ArrayList<Type> paramsType = new ArrayList<>();
-//		System.out.println("visitfuncDef: " + funcName);
-//		if (ctx.funcFParams() != null) {
-//			for (SysYParser.FuncFParamContext funcFParamContext : ctx.funcFParams().funcFParam()) {
-//				String fParamTypeName = funcFParamContext.bType().getText();
-//				BasicTypeSymbol fParamType = (BasicTypeSymbol) currentScope.resolve(fParamTypeName);
-//				System.out.println("add paramType: " + fParamType.getName());
-//				paramsType.add(fParamType);
-//			}
-//		}
-		
 		FunctionType functionType = new FunctionType(retType, paramsType);
 		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope, functionType);
 		currentScope.define(fun);
@@ -197,8 +187,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		System.out.println("visitfuncDef: " + funcName);
 		if (ctx.funcFParams() != null) {
 			for (SysYParser.FuncFParamContext funcFParamContext : ctx.funcFParams().funcFParam()) {
-				String fParamTypeName = funcFParamContext.bType().getText();
-				BasicTypeSymbol fParamType = (BasicTypeSymbol) currentScope.resolve(fParamTypeName);
+				String fParamName = funcFParamContext.IDENT().getText();
+				BasicTypeSymbol fParamType = (BasicTypeSymbol) currentScope.resolve(fParamName).getType();
 				System.out.println("add paramType: " + fParamType.getName());
 				paramsType.add(fParamType);
 			}
@@ -314,7 +304,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			return new BasicTypeSymbol("noType");
 		}
 		Type varType = symbol.getType();
-		System.out.println("vaeName = " + varName + ", varType = " + varType.toString());
+		System.out.println("varName = " + varName + ", varType = " + varType.toString());
 		for (SysYParser.ExpContext expContext : ctx.exp()) {
 			if (varType instanceof ArrayType) {
 				varType = ((ArrayType) varType).elementType;
