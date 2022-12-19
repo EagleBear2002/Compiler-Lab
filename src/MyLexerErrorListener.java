@@ -6,9 +6,6 @@ import java.util.BitSet;
 
 public class MyLexerErrorListener extends BaseErrorListener {
 	private boolean isError = false;
-	public boolean listenError() {
-		return isError;
-	}
 	
 	
 	@Override

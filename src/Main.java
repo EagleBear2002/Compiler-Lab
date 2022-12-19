@@ -8,14 +8,12 @@ import java.io.*;
 public class Main {
 	public static SysYLexer lexer(String sourcePath) throws IOException {
 		CharStream input = CharStreams.fromFileName(sourcePath);
-		SysYLexer sysYLexer = new SysYLexer(input);
-		return sysYLexer;
+		return new SysYLexer(input);
 	}
 	
 	public static SysYParser parser(SysYLexer sysYLexer) {
 		CommonTokenStream tokens = new CommonTokenStream(sysYLexer);
-		SysYParser sysYParser = new SysYParser(tokens);
-		return sysYParser;
+		return new SysYParser(tokens);
 	}
 	
 	public static void main(String[] args) throws IOException {
@@ -25,8 +23,8 @@ public class Main {
 		}
 		
 		String filePath = args[0];
-		int lineNo = Integer.valueOf(args[1]);
-		int columnNo = Integer.valueOf(args[2]);
+		int lineNo = Integer.parseInt(args[1]);
+		int columnNo = Integer.parseInt(args[2]);
 		String name = args[3];
 		SysYLexer sysYLexer = lexer(filePath);
 		SysYParser sysYParser = parser(sysYLexer);
