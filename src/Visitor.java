@@ -293,20 +293,15 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	private Type getLValType(SysYParser.LValContext ctx) {
 		String varName = ctx.IDENT().getText();
-		// System.out.println("varName = " + varName);
 		if (currentScope.resolve(varName) == null) {
-			// int lineNo = getLineNo(ctx.IDENT());
-			// System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable:
-			// " + varName + ".");
 			return new BasicTypeSymbol("noType");
 		}
 		Type varType = currentScope.resolve(varName).getType();
 		for (SysYParser.ExpContext expContext : ctx.exp()) {
-			// System.out.println("varType = " + varType);
 			if (varType instanceof ArrayType) {
 				varType = ((ArrayType) varType).elementType;
 			} else {
-				// TODO
+				return new BasicTypeSymbol("noType");
 			}
 		}
 		return varType;
@@ -318,7 +313,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitLVal(SysYParser.LValContext ctx) {
-		// getLValType(ctx);
 		String varName = ctx.IDENT().getText();
 		Symbol symbol = currentScope.resolve(varName);
 		if (symbol == null) {
@@ -451,7 +445,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
 			} else if (!(symbol.getType() instanceof FunctionType)) {
 				int lineNo = getLineNo(ctx.IDENT());
-				System.err.println("Error type 10 at Line " + lineNo + ": Not a function: test1.");
+				System.err.println("Error type 10 at Line " + lineNo + ": Not a function: " + funcName);
 			} else {
 				FunctionType functionType = (FunctionType) currentScope.resolve(funcName).getType();
 				ArrayList<Type> paramsType = functionType.getParamsType();
@@ -463,8 +457,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 				if (!paramsType.equals(argsType)) {
 					int lineNo = getLineNo(ctx.IDENT());
-					System.err
-							.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
+					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
 				}
 			}
 		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null
