@@ -323,7 +323,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				} else {
 					TerminalNode node = ctx.L_BRACKT(i);
 					int lineNo = getLineNo(node);
-					System.err.println("Error type 9 at Line " + lineNo + ": Not an array: " + varName + ".");
+//					System.err.println("Error type 9 at Line " + lineNo + ": Not an array: " + varName + ".");
 					findError();
 					break;
 				}
@@ -450,7 +450,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 				if (!checkArgsTyps(paramsType, argsType)) {
 					int lineNo = getLineNo(ctx.IDENT());
-//					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
+					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
 					findError();
 				}
 			}
