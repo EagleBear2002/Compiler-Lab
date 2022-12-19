@@ -4,7 +4,7 @@ public class FunctionType implements Type {
 	Type retType;
 	ArrayList<Type> paramsType;
 	
-	FunctionType(Type retType, ArrayList<> paramsType) {
+	FunctionType(Type retType, ArrayList<Type> paramsType) {
 		this.retType = retType;
 		this.paramsType = paramsType;
 	}
