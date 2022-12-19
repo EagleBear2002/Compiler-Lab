@@ -60,7 +60,7 @@ int main(){
         
     }
     
-    int k = voidFunc(); // type 5
+    int k = voidFunc1(); // type 5
     int l = k;
     return z();
 }
