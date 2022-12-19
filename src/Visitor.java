@@ -1,3 +1,4 @@
+import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
@@ -155,7 +156,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		globalScope.resolve(retTypeName);
 		String funcName = ctx.IDENT().getText();
 		if (currentScope.definedSymbol(funcName)) {
-			reportError(4, getLineNo(ctx.IDENT()), "Redefined function: " + funcName);
+			reportError(4, getLineNo(ctx), "Redefined function: " + funcName);
 			return null;
 		}
 		
@@ -182,6 +183,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		return ret;
 	}
 	
+	int getLineNo(ParserRuleContext ctx) {
+		return ctx.getStart().getLine();
+	}
+	
 	@Override
 	public Void visitVarDecl(SysYParser.VarDeclContext ctx) {
 		String typeName = ctx.bType().getText();
@@ -190,7 +195,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			Type varType = (Type) globalScope.resolve(typeName);
 			String varName = varDefContext.IDENT().getText();
 			if (currentScope.definedSymbol(varName)) {
-				reportError(3, getLineNo(varDefContext.IDENT()), "Redefined variable: " + varName);
+				reportError(3, getLineNo(varDefContext), "Redefined variable: " + varName);
 				continue;
 			}
 			
@@ -204,7 +209,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				if (expContext != null) {
 					Type initValType = getExpType(expContext);
 					if (!initValType.toString().equals("noType") && !varType.toString().equals(initValType.toString())) {
-						reportError(5, getLineNo(varDefContext.ASSIGN()), "Type mismatched for assignment");
+						reportError(5, getLineNo(varDefContext), "Type mismatched for assignment");
 					}
 				}
 			}
@@ -224,7 +229,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			Type constType = (Type) globalScope.resolve(typeName);
 			String constName = varDefContext.IDENT().getText();
 			if (currentScope.definedSymbol(constName)) {
-				reportError(3, getLineNo(varDefContext.IDENT()), "Redefined variable: " + constName);
+				reportError(3, getLineNo(varDefContext), "Redefined variable: " + constName);
 				continue;
 			}
 			
@@ -237,7 +242,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (expContext != null) {
 				Type initValType = getExpType(expContext.exp());
 				if (!initValType.toString().equals("noType") && !constType.toString().equals(initValType.toString())) {
-					reportError(5, getLineNo(varDefContext.ASSIGN()), "Type mismatched for assignment");
+					reportError(5, getLineNo(varDefContext), "Type mismatched for assignment");
 				}
 			}
 			
@@ -259,7 +264,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		VariableSymbol varSymbol = new VariableSymbol(varName, varType);
 		
 		if (currentScope.definedSymbol(varName)) {
-			reportError(3, getLineNo(ctx.IDENT()), "Redefined variable: " + varName);
+			reportError(3, getLineNo(ctx), "Redefined variable: " + varName);
 		} else {
 			currentScope.define(varSymbol);
 			((FunctionSymbol) currentScope).getType().getParamsType().add(varType);
@@ -284,16 +289,13 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		return varType;
 	}
 	
-	private int getLineNo(TerminalNode node) {
-		return node.getSymbol().getLine();
-	}
 	
 	@Override
 	public Void visitLVal(SysYParser.LValContext ctx) {
 		String varName = ctx.IDENT().getText();
 		Symbol symbol = currentScope.resolve(varName);
 		if (symbol == null) {
-			reportError(1, getLineNo(ctx.IDENT()), "Undefined variable: " + varName);
+			reportError(1, getLineNo(ctx), "Undefined variable: " + varName);
 			return null;
 		}
 		
@@ -306,7 +308,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				varName += "[" + expContext.getText() + "]";
 			} else {
 				TerminalNode node = ctx.L_BRACKT(i);
-				reportError(9, getLineNo(node), "Not an array: " + varName);
+				reportError(9, getLineNo(ctx), "Not an array: " + varName);
 				break;
 			}
 		}
@@ -320,9 +322,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			Type lValType = getLValType(ctx.lVal());
 			Type rValType = getExpType(ctx.exp());
 			if (lValType instanceof FunctionType) {
-				reportError(11, getLineNo(ctx.ASSIGN()), "The left-hand side of an assignment must be a variable");
+				reportError(11, getLineNo(ctx), "The left-hand side of an assignment must be a variable");
 			} else if (!lValType.toString().equals("noType") && !rValType.toString().equals("noType") && !lValType.toString().equals(rValType.toString())) {
-				reportError(5, getLineNo(ctx.ASSIGN()), "Type mismatched for assignment");
+				reportError(5, getLineNo(ctx), "Type mismatched for assignment");
 			}
 		} else if (ctx.RETURN() != null) {
 			Type retType = new BasicTypeSymbol("void");
@@ -337,7 +339,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			
 			Type expectedType = ((FunctionSymbol) tmpScope).getType().getRetType();
 			if (!retType.toString().equals("noType") && !expectedType.toString().equals("noType") && !retType.toString().equals(expectedType.toString())) {
-				reportError(7, getLineNo(ctx.RETURN()), "Type mismatched for return");
+				reportError(7, getLineNo(ctx), "Type mismatched for return");
 			}
 		}
 		return super.visitStmt(ctx);
@@ -414,9 +416,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String funcName = ctx.IDENT().getText();
 			Symbol symbol = currentScope.resolve(funcName);
 			if (symbol == null) {
-				reportError(2, getLineNo(ctx.IDENT()), "Undefined function: " + funcName);
+				reportError(2, getLineNo(ctx), "Undefined function: " + funcName);
 			} else if (!(symbol.getType() instanceof FunctionType)) {
-				reportError(10, getLineNo(ctx.IDENT()), "Not a function: " + funcName);
+				reportError(10, getLineNo(ctx), "Not a function: " + funcName);
 			} else {
 				FunctionType functionType = (FunctionType) symbol.getType(); 
 				ArrayList<Type> paramsType = functionType.getParamsType();
@@ -427,41 +429,20 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					}
 				}
 				if (!checkArgsTyps(paramsType, argsType)) {
-					reportError(8, getLineNo(ctx.IDENT()), "Function is not applicable for arguments");
+					reportError(8, getLineNo(ctx), "Function is not applicable for arguments");
 				}
 			}
 		} else if (ctx.unaryOp() != null) { // unaryOp exp
 			Type expType = getExpType(ctx.exp(0));
 			if (!expType.toString().equals("int")) {
-				SysYParser.UnaryOpContext unaryOpContext = ctx.unaryOp();
-				TerminalNode operator;
-				if (unaryOpContext.PLUS() != null) {
-					operator = unaryOpContext.PLUS();
-				} else if (unaryOpContext.MINUS() != null) {
-					operator = unaryOpContext.MINUS();
-				} else {
-					operator = unaryOpContext.NOT();
-				}
-				reportError(6, getLineNo(operator), "Type mismatched for operands");
+				reportError(6, getLineNo(ctx), "Type mismatched for operands");
 			}
 		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null || ctx.MINUS() != null) {
 			Type op1Type = getExpType(ctx.exp(0)), op2Type = getExpType(ctx.exp(1));
 			if (op1Type.toString().equals("noType") || op2Type.toString().equals("noType")) {
 			} else if (op1Type.toString().equals("int") && op2Type.toString().equals("int")) {
 			} else {
-				TerminalNode operator;
-				if (ctx.MUL() != null) {
-					operator = ctx.MUL();
-				} else if (ctx.DIV() != null) {
-					operator = ctx.DIV();
-				} else if (ctx.MOD() != null) {
-					operator = ctx.MOD();
-				} else if (ctx.PLUS() != null) {
-					operator = ctx.PLUS();
-				} else {
-					operator = ctx.MINUS();
-				}
-				reportError(6, getLineNo(operator), "Type mismatched for operands");
+				reportError(6, getLineNo(ctx), "Type mismatched for operands");
 			}
 		}
 		return super.visitExp(ctx);
@@ -483,26 +464,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	@Override
 	public Void visitCond(SysYParser.CondContext ctx) {
 		if (ctx.exp() == null && !getCondType(ctx).toString().equals("int")) {
-			int lineNo = ctx.getStart().getLine();
-			// TerminalNode operator;
-			// if (ctx.LT() != null) {
-			// 	operator = ctx.LT();
-			// } else if (ctx.GT() != null) {
-			// 	operator = ctx.GT();
-			// } else if (ctx.LE() != null) {
-			// 	operator = ctx.LE();
-			// } else if (ctx.GE() != null) {
-			// 	operator = ctx.GE();
-			// } else if (ctx.EQ() != null) {
-			// 	operator = ctx.EQ();
-			// } else if (ctx.NEQ() != null) {
-			// 	operator = ctx.NEQ();
-			// } else if (ctx.AND() != null) {
-			// 	operator = ctx.AND();
-			// } else {
-			// 	operator = ctx.OR();
-			// }
-			reportError(6, lineNo, "Type mismatched for operands");
+			reportError(6, getLineNo(ctx), "Type mismatched for operands");
 		}
 		return super.visitCond(ctx);
 	}
