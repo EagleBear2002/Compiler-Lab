@@ -1,6 +1,21 @@
 import java.util.ArrayList;
 
-public record FunctionType(Type retType, ArrayList<Type> paramsType) implements Type {
+public class FunctionType implements Type {
+	Type retType;
+	ArrayList<Type> paramsType;
+	
+	FunctionType(Type retType, ArrayList<> paramsType) {
+		this.retType = retType;
+		this.paramsType = paramsType;
+	}
+	
+	public Type getRetType() {
+		return retType;
+	}
+	
+	public ArrayList<Type> getParamsType() {
+		return paramsType;
+	}
 	
 	@Override
 	public String toString() {

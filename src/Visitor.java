@@ -287,7 +287,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			findError();
 		} else {
 			currentScope.define(varSymbol);
-			((FunctionSymbol) currentScope).getType().paramsType().add(varType);
+			((FunctionSymbol) currentScope).getType().getParamsType().add(varType);
 		}
 		return super.visitFuncFParam(ctx);
 	}
@@ -367,7 +367,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			while (!(tmpScope instanceof FunctionSymbol)) {
 				tmpScope = tmpScope.getEnclosingScope();
 			}
-			Type expectedType = ((FunctionSymbol) tmpScope).getType().retType();
+			Type expectedType = ((FunctionSymbol) tmpScope).getType().getRetType();
 			if (retType.toString().equals("noType") || expectedType.toString().equals("noType")) {
 				
 			} else if (!retType.toString().equals(expectedType.toString())) {
@@ -387,7 +387,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			} else if (!(symbol.getType() instanceof FunctionType)) {
 			} else {
 				FunctionType functionType = (FunctionType) currentScope.resolve(funcName).getType();
-				ArrayList<Type> paramsType = functionType.paramsType();
+				ArrayList<Type> paramsType = functionType.getParamsType();
 				ArrayList<Type> argsType = new ArrayList<>();
 				if (ctx.funcRParams() != null) {
 					for (SysYParser.ParamContext paramContext : ctx.funcRParams().param()) {
@@ -395,7 +395,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					}
 				}
 				if (paramsType.equals(argsType)) {
-					return functionType.retType();
+					return functionType.getRetType();
 				}
 			}
 		} else if (ctx.L_PAREN() != null) { // L_PAREN exp R_PAREN
@@ -462,7 +462,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				findError();
 			} else {
 				FunctionType functionType = (FunctionType) symbol.getType();
-				ArrayList<Type> paramsType = functionType.paramsType();
+				ArrayList<Type> paramsType = functionType.getParamsType();
 				ArrayList<Type> argsType = new ArrayList<>();
 				if (ctx.funcRParams() != null) {
 					for (SysYParser.ParamContext paramContext : ctx.funcRParams().param()) {
