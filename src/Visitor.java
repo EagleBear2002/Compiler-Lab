@@ -524,4 +524,21 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		return super.visitExp(ctx);
 	}
 	
+	private Type getCondType(SysYParser.CondContext ctx) {
+		if (ctx.exp() != null) {
+			return getExpType(ctx.exp());
+		}
+		
+		Type cond1 = getCondType(ctx.cond(0));
+		Type cond2 = getCondType(ctx.cond(1));
+		if (cond1.toString().equals("int") && cond2.toString().equals("int")) {
+			return cond1;
+		}
+		return new BasicTypeSymbol("noType");
+	}
+	
+	@Override
+	public Void visitCond(SysYParser.CondContext ctx) {
+		return super.visitCond(ctx);
+	}
 }

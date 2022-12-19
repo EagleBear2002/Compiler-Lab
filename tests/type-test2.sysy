@@ -51,5 +51,7 @@ int main(){
     int j = c(); // type 10
     c = 6; // type 5
     voidFunc1 = 6; // type 11
+    
+    int cond = 1 || c;
     return 0;
 }
