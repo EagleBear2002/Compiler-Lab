@@ -351,7 +351,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			Type rValType = getExpType(ctx.exp());
 			if (lValType instanceof FunctionType) {
 				int lineNo = getLineNo(ctx.ASSIGN());
-//				System.err.println("Error type 11 at Line " + lineNo + ": The left-hand side of an assignment must be a variable.");
+				System.err.println("Error type 11 at Line " + lineNo + ": The left-hand side of an assignment must be a variable.");
 				findError();
 			} else if (lValType.toString().equals("noType") || rValType.toString().equals("noType")) {
 			} else if (!lValType.toString().equals(rValType.toString())) {
@@ -464,7 +464,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				findError();
 			} else if (!(symbol.getType() instanceof FunctionType)) {
 				int lineNo = getLineNo(ctx.IDENT());
-//				System.err.println("Error type 10 at Line " + lineNo + ": Not a function: " + funcName);
+				System.err.println("Error type 10 at Line " + lineNo + ": Not a function: " + funcName);
 				findError();
 			} else {
 				FunctionType functionType = (FunctionType) symbol.getType();
