@@ -159,25 +159,23 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		globalScope.resolve(retTypeName);
 		
 		String funcName = ctx.IDENT().getText();
-		boolean isError = false;
 		if (currentScope.definedSymbol(funcName)) {
 			int lineNo = getLineNo(ctx.IDENT());
 			System.err.println("Error type 4 at Line " + lineNo + ": Redefined function: " + funcName + ".");
 			findError();
-			isError = true;
 			Void ret = null;
 			return ret;
 		}
 		
 		Type retType = (Type) globalScope.resolve(retTypeName);
 		ArrayList<Type> paramsType = new ArrayList<>();
-		FunctionType functionType = new FunctionType(retType, paramsType);
 		if (ctx.funcFParams() != null) {
 			for (SysYParser.FuncFParamContext funcFParamContext : ctx.funcFParams().funcFParam()) {
 				Type fParamType = getFuncFParamType(funcFParamContext);
 				paramsType.add(fParamType);
 			}
 		}
+		FunctionType functionType = new FunctionType(retType, paramsType);
 		
 		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope, functionType);
 		currentScope.define(fun);
@@ -273,10 +271,16 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	private Type getFuncFParamType(SysYParser.FuncFParamContext ctx) {
 		String typeNae = ctx.bType().getText();
 		Type paramType = (Type) globalScope.resolve(typeNae);
+		String paramName = ctx.IDENT().getText();
+		if (currentScope.definedSymbol(paramName)) {
+			return new BasicTypeSymbol("noType");
+		}
+
 		for (TerminalNode node : ctx.L_BRACKT()) {
 //			TODO: number 0 is trick
 			paramType = new ArrayType(0, paramType);
 		}
+		
 		return paramType;
 	}
 	
@@ -374,7 +378,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				
 			} else if (!retType.toString().equals(expectedType.toString())) {
 				int lineNo = getLineNo(ctx.RETURN());
-				System.out.println("retType: " + retType + ", expectedType: " + expectedType);
+//				System.out.println("retType: " + retType + ", expectedType: " + expectedType);
 				System.err.println("Error type 7 at Line " + lineNo + ": Type mismatched for return.");
 				findError();
 			}
