@@ -297,10 +297,12 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	private Type getLValType(SysYParser.LValContext ctx) {
 		String varName = ctx.IDENT().getText();
-		if (currentScope.resolve(varName) == null) {
+		Symbol symbol = currentScope.resolve(varName);
+		if (symbol == null) {
 			return new BasicTypeSymbol("noType");
 		}
-		Type varType = currentScope.resolve(varName).getType();
+		Type varType = symbol.getType();
+		System.out.println("vaeName = " + varName + "vaeType = " + varType.toString());
 		for (SysYParser.ExpContext expContext : ctx.exp()) {
 			if (varType instanceof ArrayType) {
 				varType = ((ArrayType) varType).elementType;

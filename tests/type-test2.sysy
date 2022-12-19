@@ -22,7 +22,7 @@ int intFunc2(int param1) {
 }
 
 int intFunc3(int param1, int param2[]) {
-    return param2; // type 7 FAIL TO REPORT!!!!
+    return param2; // type 7 report: no
 }
 
 int voidFunc1() { // type 4
@@ -36,16 +36,16 @@ int main(){
 
     int c[3][3][3];
     int d[2][2];
-    c[1] = d; // valid REPORT!
+    c[1] = d; // report: type 5
     c[1][1] = d; // type 5
     c[1][1] = d; // type 5
-    int f = voidFunc1() + intFunc1(); // type 6 FAIL TO REPORT!!!
+    int f = voidFunc1() + intFunc1(); // type 6 report: no
     int g = intFunc3(b); // type 8
-    int h = intFunc3(b, globalArray); // valid REPORT!!!
+    int h = intFunc3(b, globalArray); // report: type 8
 
     int i = b[5]; // type 9
     int j = c(); // type 10
-    c = 6; // type 11 FALSE REPORT!!!
+    c = 6; // type 5
     voidFunc1 = 6; // type 11
     return 0;
 }
