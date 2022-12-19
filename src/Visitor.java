@@ -184,13 +184,13 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		Void ret = super.visitFuncDef(ctx);
 		
-		System.out.println("visitfuncDef: " + funcName);
+//		System.out.println("visitfuncDef: " + funcName);
 		if (ctx.funcFParams() != null) {
 			for (SysYParser.FuncFParamContext funcFParamContext : ctx.funcFParams().funcFParam()) {
 				String fParamName = funcFParamContext.IDENT().getText();
-				System.out.println("fParamName: " + fParamName);
+//				System.out.println("fParamName: " + fParamName);
 				Type fParamType = currentScope.resolve(fParamName).getType();
-				System.out.println("add paramType: " + fParamType.toString());
+//				System.out.println("add paramType: " + fParamType.toString());
 				paramsType.add(fParamType);
 			}
 		}
@@ -292,14 +292,14 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		for (TerminalNode node : ctx.L_BRACKT()) {
 //			TODO: number 0 is trick
-			System.out.println("node here");
-			System.out.println("varType1: " + varType.toString());
+//			System.out.println("node here");
+//			System.out.println("varType1: " + varType.toString());
 			varType = new ArrayType(0, varType);
-			System.out.println("varType2: " + varType.toString());
+//			System.out.println("varType2: " + varType.toString());
 		}
 		String varName = ctx.IDENT().getText();
-		System.out.println("visitFuncFParam:");
-		System.out.println("varName: " + varName + ", varType: " + varType.toString());
+//		System.out.println("visitFuncFParam:");
+//		System.out.println("varName: " + varName + ", varType: " + varType.toString());
 		VariableSymbol varSymbol = new VariableSymbol(varName, varType);
 		
 		currentScope.define(varSymbol);
@@ -314,7 +314,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			return new BasicTypeSymbol("noType");
 		}
 		Type varType = symbol.getType();
-		System.out.println("varName = " + varName + ", varType = " + varType.toString());
+//		System.out.println("varName = " + varName + ", varType = " + varType.toString());
 		for (SysYParser.ExpContext expContext : ctx.exp()) {
 			if (varType instanceof ArrayType) {
 				varType = ((ArrayType) varType).elementType;
