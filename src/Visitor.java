@@ -233,7 +233,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				SysYParser.ExpContext expContext = varDefContext.initVal().exp();
 				if (expContext != null) {
 					Type initValType = getExpType(expContext);
-					if (!(varType instanceof BasicTypeSymbol)) {
+					if (varType instanceof FunctionType) {
 						int lineNo = getLineNo(varDefContext.ASSIGN());
 						System.err.println("Error type 11 at Line " + lineNo + ": The left-hand side of an assignment must be a variable.");
 					} else if (varType.toString().equals("noType") || initValType.toString().equals("noType")) {
@@ -349,7 +349,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		if (ctx.ASSIGN() != null) {
 			Type lValType = getLValType(ctx.lVal());
 			Type rValType = getExpType(ctx.exp());
-			if (!(lValType instanceof BasicTypeSymbol)) {
+			if (lValType instanceof FunctionType) {
 				int lineNo = getLineNo(ctx.ASSIGN());
 				System.err.println("Error type 11 at Line " + lineNo + ": The left-hand side of an assignment must be a variable.");
 			} else if (lValType.toString().equals("noType") || rValType.toString().equals("noType")) {
