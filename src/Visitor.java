@@ -368,7 +368,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				tmpScope = tmpScope.getEnclosingScope();
 			}
 			Type expectedType = ((FunctionSymbol) tmpScope).getType().getRetType();
-			if (!retType.toString().equals(expectedType.toString())) {
+			if (retType.toString().equals("noType") || expectedType.toString().equals("noType")) {
+				
+			} else if (!retType.toString().equals(expectedType.toString())) {
 				int lineNo = getLineNo(ctx.RETURN());
 				System.out.println("retType: " + retType + ", expectedType: " + expectedType);
 				System.err.println("Error type 7 at Line " + lineNo + ": Type mismatched for return.");
