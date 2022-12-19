@@ -96,10 +96,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		int ruleIndex = ctx.getRuleIndex();
 		String ruleName = SysYParser.ruleNames[ruleIndex];
 		String realName = ruleName.substring(0, 1).toUpperCase() + ruleName.substring(1);
-		
+
 //		if (isPrint) {
 //			System.err.println(ident2String(depth) + realName);
-			msgToPrint.add(ident2String(depth) + realName + "\n");
+		msgToPrint.add(ident2String(depth) + realName + "\n");
 //		}
 		
 		depth++;
@@ -148,7 +148,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (!color.equals("no color")) {
 //				System.err.println(ident2String(depth) + tokenText + " " + ruleName + "[" + color + "]");
 				msgToPrint.add(ident2String(depth));
-				msgToPrint.add(symbol);
+				if (symbol.getName() == null) {
+					msgToPrint.add(tokenText);
+				} else {
+					msgToPrint.add(symbol);
+				}
 				msgToPrint.add(" " + ruleName + "[" + color + "]" + "\n");
 			}
 		}
@@ -181,9 +185,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		if (currentScope.definedSymbol(funcName)) {
 			int lineNo = getLineNo(ctx.IDENT());
 //			if (!isPrint) {
-				System.err.println("Error type 4 at Line " + lineNo + ": Redefined function: " + funcName + ".");
-				findError();
-				isError = true;
+			System.err.println("Error type 4 at Line " + lineNo + ": Redefined function: " + funcName + ".");
+			findError();
+			isError = true;
 //			}
 		}
 		
@@ -233,8 +237,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (currentScope.definedSymbol(varName)) {
 				int lineNo = getLineNo(varDefContext.IDENT());
 //				if (!isPrint) {
-					System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + varName + ".");
-					findError();
+				System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + varName + ".");
+				findError();
 //				}
 			} else {
 				for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
@@ -271,8 +275,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (currentScope.definedSymbol(constName)) {
 				int lineNo = getLineNo(varDefContext.IDENT());
 //				if (!isPrint) {
-					System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + constName + ".");
-					findError();
+				System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + constName + ".");
+				findError();
 //				}
 			}
 			
@@ -345,8 +349,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		if (symbol == null) {
 			int lineNo = getLineNo(ctx.IDENT());
 //			if (!isPrint) {
-				System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable: " + varName + ".");
-				findError();
+			System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable: " + varName + ".");
+			findError();
 //			}
 		} else {
 			Type varType = symbol.getType();
@@ -468,14 +472,14 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (symbol == null) {
 				int lineNo = getLineNo(ctx.IDENT());
 //				if (!isPrint) {
-					System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
-					findError();
+				System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
+				findError();
 //				}
 			} else if (!(symbol.getType() instanceof FunctionType)) {
 				int lineNo = getLineNo(ctx.IDENT());
 //				if (!isPrint) {
-					System.err.println("Error type 10 at Line " + lineNo + ": Not a function: " + funcName);
-					findError();
+				System.err.println("Error type 10 at Line " + lineNo + ": Not a function: " + funcName);
+				findError();
 //				}
 			} else {
 				FunctionType functionType = (FunctionType) currentScope.resolve(funcName).getType();
@@ -489,8 +493,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				if (!checkArgsTyps(paramsType, argsType)) {
 					int lineNo = getLineNo(ctx.IDENT());
 //					if (!isPrint) {
-						System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
-						findError();
+					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
+					findError();
 //					}
 				}
 			}
@@ -514,8 +518,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 				int lineNo = getLineNo(operator);
 //				if (!isPrint) {
-					System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
-					findError();
+				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
+				findError();
 //				}
 			}
 		}
