@@ -17,6 +17,10 @@ int intFunc1() {
     return 1;
 }
 
+int intFunc1(int param) {
+	return intFunc1();
+}
+
 int intFunc2(int param1) {
     return intFunc2(param1); // valid
 }
