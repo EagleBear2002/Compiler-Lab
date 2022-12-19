@@ -13,6 +13,10 @@ public class BaseScope implements Scope {
 		this.enclosingScope = enclosingScope;
 	}
 	
+	@Override
+	public boolean definedSymbol(String name) {
+		return symbols.containsKey(name);
+	}
 	
 	@Override
 	public String getName() {
