@@ -56,11 +56,11 @@ int main(){
     c = 6; // type 5
     voidFunc1 = 6; // type 11
     
-    if (1 || globalArray || 2 || d) {
+    if (1 || globalArray || 2 || d) { // type 6
         
     }
     
-    int k = voidFunc();
+    int k = voidFunc(); // type 5
     int l = k;
     return z();
 }
