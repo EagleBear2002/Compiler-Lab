@@ -292,9 +292,12 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		for (TerminalNode node : ctx.L_BRACKT()) {
 //			TODO: number 0 is trick
+			System.out.println("node here");
 			varType = new ArrayType(0, varType);
 		}
 		String varName = ctx.IDENT().getText();
+		System.out.println("visitFuncFParam:");
+		System.out.println("varName: " + varName + ", varType" + varType.toString());
 		VariableSymbol varSymbol = new VariableSymbol(varName, varType);
 		
 		currentScope.define(varSymbol);
