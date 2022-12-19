@@ -165,18 +165,19 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	public Void visitFuncDef(SysYParser.FuncDefContext ctx) {
 		String retTypeName = ctx.funcType().getText();
 		globalScope.resolve(retTypeName);
-		Type retType = (Type) globalScope.resolve(retTypeName);
 		
 		String funcName = ctx.IDENT().getText();
+		boolean isError = false;
 		if (currentScope.definedSymbol(funcName)) {
 			int lineNo = getLineNo(ctx.IDENT());
 			if (!isPrint) {
 				System.err.println("Error type 4 at Line " + lineNo + ": Redefined function: " + funcName + ".");
 				findError();
+				isError = true;
 			}
-			return super.visitFuncDef(ctx);
 		}
 		
+		Type retType = (Type) globalScope.resolve(retTypeName);
 		ArrayList<Type> paramsType = new ArrayList<>();
 		FunctionType functionType = new FunctionType(retType, paramsType);
 		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope, functionType);
@@ -185,7 +186,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		Void ret = super.visitFuncDef(ctx);
 		
-		if (ctx.funcFParams() != null) {
+		if (!isError && ctx.funcFParams() != null) {
 			for (SysYParser.FuncFParamContext funcFParamContext : ctx.funcFParams().funcFParam()) {
 				String fParamName = funcFParamContext.IDENT().getText();
 				Type fParamType = currentScope.resolve(fParamName).getType();
