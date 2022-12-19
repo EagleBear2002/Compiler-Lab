@@ -148,7 +148,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (!color.equals("no color")) {
 //				System.err.println(ident2String(depth) + tokenText + " " + ruleName + "[" + color + "]");
 				msgToPrint.add(ident2String(depth));
-				if (symbol.getName() == null) {
+				if (symbol == null) {
 					msgToPrint.add(tokenText);
 				} else {
 					msgToPrint.add(symbol);
