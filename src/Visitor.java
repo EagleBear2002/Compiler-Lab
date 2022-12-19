@@ -169,12 +169,12 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		Type retType = (Type) globalScope.resolve(retTypeName);
 		ArrayList<Type> paramsType = new ArrayList<>();
-		if (ctx.funcFParams() != null) {
-			for (SysYParser.FuncFParamContext funcFParamContext : ctx.funcFParams().funcFParam()) {
-				Type fParamType = getFuncFParamType(funcFParamContext);
-				paramsType.add(fParamType);
-			}
-		}
+//		if (ctx.funcFParams() != null) {
+//			for (SysYParser.FuncFParamContext funcFParamContext : ctx.funcFParams().funcFParam()) {
+//				Type fParamType = getFuncFParamType(funcFParamContext);
+//				paramsType.add(fParamType);
+//			}
+//		}
 		FunctionType functionType = new FunctionType(retType, paramsType);
 		
 		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope, functionType);
@@ -267,22 +267,22 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		return super.visitConstDecl(ctx);
 	}
-	
-	private Type getFuncFParamType(SysYParser.FuncFParamContext ctx) {
-		String typeNae = ctx.bType().getText();
-		Type paramType = (Type) globalScope.resolve(typeNae);
-		String paramName = ctx.IDENT().getText();
-		if (currentScope.definedSymbol(paramName)) {
-			return new BasicTypeSymbol("noType");
-		}
 
-		for (TerminalNode node : ctx.L_BRACKT()) {
-//			TODO: number 0 is trick
-			paramType = new ArrayType(0, paramType);
-		}
-		
-		return paramType;
-	}
+//	private Type getFuncFParamType(SysYParser.FuncFParamContext ctx) {
+//		String typeNae = ctx.bType().getText();
+//		Type paramType = (Type) globalScope.resolve(typeNae);
+//		String paramName = ctx.IDENT().getText();
+//		if (currentScope.definedSymbol(paramName)) {
+//			return new BasicTypeSymbol("noType");
+//		}
+//
+//		for (TerminalNode node : ctx.L_BRACKT()) {
+////			TODO: number 0 is trick
+//			paramType = new ArrayType(0, paramType);
+//		}
+//		
+//		return paramType;
+//	}
 	
 	@Override
 	public Void visitFuncFParam(SysYParser.FuncFParamContext ctx) {
@@ -294,7 +294,13 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		String varName = ctx.IDENT().getText();
 		VariableSymbol varSymbol = new VariableSymbol(varName, varType);
-		currentScope.define(varSymbol);
+		
+		if (currentScope.definedSymbol(varName)) {
+			
+		} else {
+			currentScope.define(varSymbol);
+			((FunctionType) currentScope).getParamsType().add(varType);
+		}
 		return super.visitFuncFParam(ctx);
 	}
 	
@@ -561,7 +567,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				operator = ctx.NEQ();
 			} else if (ctx.AND() != null) {
 				operator = ctx.AND();
-			} else{
+			} else {
 				operator = ctx.OR();
 			}
 			int lineNo = getLineNo(operator);
