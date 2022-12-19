@@ -220,6 +220,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				if (expContext != null) {
 					Type initValType = getExpType(expContext);
 					if (varType.toString().equals("noType") || initValType.toString().equals("noType")) {
+						continue;
 					} else if (!varType.toString().equals(initValType.toString())) {
 						int lineNo = getLineNo(varDefContext.ASSIGN());
 						System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
