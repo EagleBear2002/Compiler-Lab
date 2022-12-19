@@ -262,7 +262,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			}
 			
 			if (varDefContext.ASSIGN() == null) {
-				System.err.println("const defination without initial value");
+//				System.err.println("const defination without initial value");
 			}
 			
 			// TODO: Type 5
