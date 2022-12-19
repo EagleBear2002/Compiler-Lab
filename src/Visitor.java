@@ -222,9 +222,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					if (varType.toString().equals("noType") || initValType.toString().equals("noType")) {
 						continue;
 					} else if (!varType.toString().equals(initValType.toString())) {
-//						int lineNo = getLineNo(varDefContext.ASSIGN());
-//						System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
-//						findError();
+						int lineNo = getLineNo(varDefContext.ASSIGN());
+						System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
+						findError();
 					}
 				}
 			}
@@ -348,7 +348,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				findError();
 			} else if (lValType.toString().equals("noType") || rValType.toString().equals("noType")) {
 			} else if (!lValType.toString().equals(rValType.toString())) {
-				int lineNo = getLineNo(ctx.ASSIGN());  
+				int lineNo = getLineNo(ctx.ASSIGN());
+				System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
+				findError();
 			}
 		} else if (ctx.RETURN() != null) {
 			Type retType = new BasicTypeSymbol("void");
