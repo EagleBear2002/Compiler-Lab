@@ -483,7 +483,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			}
 		} else if (ctx.unaryOp() != null) { // unaryOp exp
 			Type expType = getExpType(ctx.exp(0));
-			if (!expType.equals("int")) {
+			if (!expType.toString().equals("int")) {
 				SysYParser.UnaryOpContext unaryOpContext = ctx.unaryOp();
 				TerminalNode operator;
 				if (unaryOpContext.PLUS() != null) {
@@ -541,7 +541,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	
 	@Override
 	public Void visitCond(SysYParser.CondContext ctx) {
-		if (ctx.exp() == null && !getCondType(ctx).equals("int")) {
+		if (ctx.exp() == null && !getCondType(ctx).toString().equals("int")) {
 			TerminalNode operator;
 			if (ctx.LT() != null) {
 				operator = ctx.LT();
