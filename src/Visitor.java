@@ -230,11 +230,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			}
 			
 			if (varDefContext.ASSIGN() != null) {
-				// TODO: Type 5
+				int lineNo = getLineNo(varDefContext.ASSIGN());
+				System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
 			}
-			
-			// System.out.println("varName = " + varName + ", varType = " +
-			// varType.toString());
 			
 			VariableSymbol varSymbol = new VariableSymbol(varName, varType);
 			currentScope.define(varSymbol);
@@ -342,18 +340,14 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			Type rValType = getExpType(ctx.exp());
 			if (lValType instanceof FunctionType) {
 				int lineNo = getLineNo(ctx.ASSIGN());
-				System.err.println("Error type 11 at Line " + lineNo
-						+ ": The left-hand side of an assignment must be a variable.");
+				System.err.println("Error type 11 at Line " + lineNo + ": The left-hand side of an assignment must be a variable.");
 			} else if (lValType.toString().equals("noType") || rValType.toString().equals("noType")) {
 				
 			} else if (!lValType.toString().equals(rValType.toString())) {
 				int lineNo = getLineNo(ctx.ASSIGN());
-				// System.out.println("lValType = " + lValType.toString() + ", rValType = " +
-				// rValType.toString());
-				System.err.println("Error type 5 at Line " + lineNo + ": type.Type mismatched for assignment.");
+				System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
 			}
-		}
-		if (ctx.RETURN() != null) {
+		} else if (ctx.RETURN() != null) {
 			Type retType = new BasicTypeSymbol("noType");
 			if (ctx.exp() != null) {
 				retType = getExpType(ctx.exp());
@@ -366,7 +360,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			Type expectedType = ((FunctionSymbol) tmpScope).getType().getRetType();
 			if (!retType.toString().equals(expectedType.toString())) {
 				int lineNo = getLineNo(ctx.RETURN());
-				System.err.println("Error type 7 at Line " + lineNo + ": type.Type mismatched for return.");
+				System.err.println("Error type 7 at Line " + lineNo + ": Type mismatched for return.");
 			}
 		}
 		Void ret = super.visitStmt(ctx);
@@ -428,7 +422,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				// operator = ctx.MINUS();
 				// }
 				// int lineNo = getLineNo(operator);
-				// System.err.println("Error type 6 at Line " + lineNo + ": type.Type mismatched
+				// System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched
 				// for operands.");
 			}
 		}
@@ -479,7 +473,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					operator = ctx.MINUS();
 				}
 				int lineNo = getLineNo(operator);
-				System.err.println("Error type 6 at Line " + lineNo + ": type.Type mismatched for operands.");
+				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
 			}
 		}
 		Void ret = super.visitExp(ctx);
