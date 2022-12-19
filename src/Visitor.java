@@ -477,7 +477,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 				if (!checkArgsTyps(paramsType, argsType)) {
 					int lineNo = getLineNo(ctx.IDENT());
-//					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
+					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
 					findError();
 				}
 			}
@@ -531,8 +531,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		Type cond1 = getCondType(ctx.cond(0));
 		Type cond2 = getCondType(ctx.cond(1));
-		System.out.println("cond1: " + cond1.toString());
-		System.out.println("cond2: " + cond2.toString());
+//		System.out.println("cond1: " + cond1.toString());
+//		System.out.println("cond2: " + cond2.toString());
 		if (cond1.toString().equals("int") && cond2.toString().equals("int")) {
 			return cond1;
 		}

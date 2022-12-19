@@ -33,6 +33,10 @@ int voidFunc1() { // type 4
 
 }
 
+int test(int i, int i){
+    return test(i + 1); // valid
+}
+
 int main(){
     a = 3; // type 1
     int b = func(); // type 2
