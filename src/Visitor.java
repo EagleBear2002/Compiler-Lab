@@ -222,25 +222,22 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (currentScope.definedSymbol(varName)) {
 				int lineNo = getLineNo(varDefContext.IDENT());
 				System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + varName + ".");
-			}
-			
-			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
-				int elementCount = Integer.valueOf(toDecimalInteger(constExpContext.getText()));
-				varType = new ArrayType(elementCount, varType);
-			}
-			
-			if (varDefContext.ASSIGN() != null) {
-				SysYParser.ExpContext expContext = varDefContext.initVal().exp();
-				if (expContext != null) {
-					Type initValType = getExpType(expContext);
-					if (varType instanceof FunctionType) {
-						int lineNo = getLineNo(varDefContext.ASSIGN());
-						System.err.println("Error type 11 at Line " + lineNo + ": The left-hand side of an assignment must be a variable.");
-					} else if (varType.toString().equals("noType") || initValType.toString().equals("noType")) {
-						
-					} else if (!varType.toString().equals(initValType.toString())) {
-						int lineNo = getLineNo(varDefContext.ASSIGN());
-						System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
+			} else {
+				for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
+					int elementCount = Integer.valueOf(toDecimalInteger(constExpContext.getText()));
+					varType = new ArrayType(elementCount, varType);
+				}
+				
+				if (varDefContext.ASSIGN() != null) {
+					SysYParser.ExpContext expContext = varDefContext.initVal().exp();
+					if (expContext != null) {
+						Type initValType = getExpType(expContext);
+						if (varType instanceof FunctionType) {
+						} else if (varType.toString().equals("noType") || initValType.toString().equals("noType")) {
+						} else if (!varType.toString().equals(initValType.toString())) {
+							int lineNo = getLineNo(varDefContext.ASSIGN());
+							System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
+						}
 					}
 				}
 			}
@@ -388,8 +385,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			Symbol symbol = currentScope.resolve(funcName);
 			if (symbol == null) {
 			} else if (!(symbol.getType() instanceof FunctionType)) {
-//				int lineNo = getLineNo(ctx.IDENT());
-//				System.err.println("Error type 10 at Line " + lineNo + ": Not a function: " + funcName);
 			} else {
 				FunctionType functionType = (FunctionType) currentScope.resolve(funcName).getType();
 				ArrayList<Type> paramsType = functionType.getParamsType();
