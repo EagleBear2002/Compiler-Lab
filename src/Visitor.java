@@ -388,7 +388,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					return functionType.getRetType();
 				}
 			}
-		} else if (ctx.L_PAREN() != null || ctx.unaryOp() != null) { // L_PAREN exp R_PAREN | unaryOp exp
+		} else if (ctx.L_PAREN() != null) { // L_PAREN exp R_PAREN
+			return getExpType(ctx.exp(0));
+		} else if (ctx.unaryOp() != null) { // unaryOp exp
 			return getExpType(ctx.exp(0));
 		} else if (ctx.lVal() != null) { // lVal
 			return getLValType(ctx.lVal());
@@ -451,6 +453,22 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 //					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
 					findError();
 				}
+			}
+		} else if (ctx.unaryOp() != null) { // unaryOp exp
+			Type expType = getExpType(ctx.exp(0));
+			if (!expType.equals("int")) {
+				SysYParser.UnaryOpContext unaryOpContext = ctx.unaryOp();
+				TerminalNode operator;
+				if (unaryOpContext.PLUS() != null) {
+					operator = unaryOpContext.PLUS();
+				} else if (unaryOpContext.MINUS() != null) {
+					operator = unaryOpContext.MINUS();
+				} else {
+					operator = unaryOpContext.NOT();
+				}
+				int lineNo = getLineNo(operator);
+				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
+				findError();
 			}
 		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null
 				|| ctx.MINUS() != null) {
