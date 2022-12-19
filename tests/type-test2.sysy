@@ -59,5 +59,8 @@ int main(){
     if (1 || globalArray || 2 || d) {
         
     }
+    
+    int k = voidFunc();
+    int l = k;
     return z();
 }
