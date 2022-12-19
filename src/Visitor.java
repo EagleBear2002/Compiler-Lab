@@ -302,7 +302,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			return new BasicTypeSymbol("noType");
 		}
 		Type varType = symbol.getType();
-		System.out.println("vaeName = " + varName + "vaeType = " + varType.toString());
+		System.out.println("vaeName = " + varName + ", varType = " + varType.toString());
 		for (SysYParser.ExpContext expContext : ctx.exp()) {
 			if (varType instanceof ArrayType) {
 				varType = ((ArrayType) varType).elementType;
