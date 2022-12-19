@@ -14,24 +14,23 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	private int localScopeCounter = 0;
 	private boolean errorFound = false;
 	private final List<Object> msgToPrint = new ArrayList<>();
-	
+
 	public List<Object> getMsgToPrint() {
 		return msgToPrint;
 	}
-	
+
 	public boolean getErrorFound() {
 		return errorFound;
 	}
-	
+
 	private void findError() {
 		errorFound = true;
 	}
-	
-	
+
 	private String ident2String(int depth) {
 		return "  ".repeat(Math.max(0, depth));
 	}
-	
+
 	private String getHelight(String ruleName) {
 		switch (ruleName) {
 			case "CONST":
@@ -73,23 +72,23 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			}
 		}
 	}
-	
+
 	@Override
 	public Void visitChildren(RuleNode node) {
 		RuleContext ctx = node.getRuleContext();
 		int ruleIndex = ctx.getRuleIndex();
 		String ruleName = SysYParser.ruleNames[ruleIndex];
 		String realName = ruleName.substring(0, 1).toUpperCase() + ruleName.substring(1);
-		
+
 		msgToPrint.add(ident2String(depth) + realName + "\n");
-		
+
 		depth++;
 		Void ret = super.visitChildren(node);
 		depth--;
-		
+
 		return ret;
 	}
-	
+
 	private String toDecimalInteger(String tokenText) {
 		if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
 			tokenText = String.valueOf(Integer.parseInt(tokenText.substring(2), 16));
@@ -98,22 +97,22 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		return tokenText;
 	}
-	
+
 	@Override
 	public Void visitTerminal(TerminalNode node) {
 		Token token = node.getSymbol();
 		int ruleNum = token.getType() - 1;
-		
+
 		if (ruleNum >= 0) {
 			String ruleName = SysYLexer.ruleNames[ruleNum];
 			String tokenText = token.getText();
 			String color = getHelight(ruleName);
 			Symbol symbol = currentScope.resolve(tokenText);
-			
+
 			if (ruleName.equals("INTEGR_CONST")) {
 				tokenText = toDecimalInteger(tokenText);
 			}
-			
+
 			if (ruleName.equals("IDENT")) {
 				int lineNO = token.getLine();
 				int columnNO = token.getCharPositionInLine();
@@ -121,7 +120,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					symbol.addUsage(lineNO, columnNO);
 				}
 			}
-			
+
 			if (!color.equals("no color")) {
 				msgToPrint.add(ident2String(depth));
 				if (symbol == null) {
@@ -132,30 +131,30 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				msgToPrint.add(" " + ruleName + "[" + color + "]" + "\n");
 			}
 		}
-		
+
 		return super.visitTerminal(node);
 	}
-	
+
 	@Override
 	public Void visit(ParseTree tree) {
 		return super.visit(tree);
 	}
-	
+
 	@Override
 	public Void visitProgram(SysYParser.ProgramContext ctx) {
 		globalScope = new GlobalScope(null);
 		currentScope = globalScope;
 		Void ret = super.visitProgram(ctx);
 		currentScope = currentScope.getEnclosingScope();
-		
+
 		return ret;
 	}
-	
+
 	@Override
 	public Void visitFuncDef(SysYParser.FuncDefContext ctx) {
 		String retTypeName = ctx.funcType().getText();
 		globalScope.resolve(retTypeName);
-		
+
 		String funcName = ctx.IDENT().getText();
 		if (currentScope.definedSymbol(funcName)) {
 			int lineNo = getLineNo(ctx.IDENT());
@@ -163,22 +162,22 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			findError();
 			return null;
 		}
-		
+
 		Type retType = (Type) globalScope.resolve(retTypeName);
 		ArrayList<Type> paramsType = new ArrayList<>();
 		FunctionType functionType = new FunctionType(retType, paramsType);
-		
+
 		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope, functionType);
 		currentScope.define(fun);
 		currentScope = fun;
-		
+
 		Void ret = super.visitFuncDef(ctx);
-		
+
 		currentScope = currentScope.getEnclosingScope();
-		
+
 		return ret;
 	}
-	
+
 	@Override
 	public Void visitBlock(SysYParser.BlockContext ctx) {
 		LocalScope localScope = new LocalScope(currentScope);
@@ -186,17 +185,17 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		localScope.setName(localScopeName);
 		localScopeCounter++;
 		currentScope = localScope;
-		
+
 		Void ret = super.visitBlock(ctx);
 		currentScope = currentScope.getEnclosingScope();
-		
+
 		return ret;
 	}
-	
+
 	@Override
 	public Void visitVarDecl(SysYParser.VarDeclContext ctx) {
 		String typeName = ctx.bType().getText();
-		
+
 		for (SysYParser.VarDefContext varDefContext : ctx.varDef()) {
 			Type varType = (Type) globalScope.resolve(typeName);
 			String varName = varDefContext.IDENT().getText();
@@ -206,12 +205,12 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				findError();
 				continue;
 			}
-			
+
 			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
 				int elementCount = Integer.parseInt(toDecimalInteger(constExpContext.getText()));
 				varType = new ArrayType(elementCount, varType);
 			}
-			
+
 			if (varDefContext.ASSIGN() != null) {
 				SysYParser.ExpContext expContext = varDefContext.initVal().exp();
 				if (expContext != null) {
@@ -224,18 +223,18 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					}
 				}
 			}
-			
+
 			VariableSymbol varSymbol = new VariableSymbol(varName, varType);
 			currentScope.define(varSymbol);
 		}
-		
+
 		return super.visitVarDecl(ctx);
 	}
-	
+
 	@Override
 	public Void visitConstDecl(SysYParser.ConstDeclContext ctx) {
 		String typeName = ctx.bType().getText();
-		
+
 		for (SysYParser.ConstDefContext varDefContext : ctx.constDef()) {
 			Type constType = (Type) globalScope.resolve(typeName);
 			String constName = varDefContext.IDENT().getText();
@@ -245,12 +244,12 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				findError();
 				continue;
 			}
-			
+
 			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
 				int elementCount = Integer.parseInt(toDecimalInteger(constExpContext.getText()));
 				constType = new ArrayType(elementCount, constType);
 			}
-			
+
 			// TODO: Type 5
 			SysYParser.ConstExpContext expContext = varDefContext.constInitVal().constExp();
 			if (expContext != null) {
@@ -262,25 +261,25 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					findError();
 				}
 			}
-			
+
 			VariableSymbol constSymbol = new VariableSymbol(constName, constType);
 			currentScope.define(constSymbol);
 		}
-		
+
 		return super.visitConstDecl(ctx);
 	}
-	
+
 	@Override
 	public Void visitFuncFParam(SysYParser.FuncFParamContext ctx) {
 		String varTypeName = ctx.bType().getText();
 		Type varType = (Type) globalScope.resolve(varTypeName);
 		for (TerminalNode node : ctx.L_BRACKT()) {
-//			TODO: number 0 is trick
+			// TODO: number 0 is trick
 			varType = new ArrayType(0, varType);
 		}
 		String varName = ctx.IDENT().getText();
 		VariableSymbol varSymbol = new VariableSymbol(varName, varType);
-		
+
 		if (currentScope.definedSymbol(varName)) {
 			int lineNo = getLineNo(ctx.IDENT());
 			System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + varName + ".");
@@ -291,7 +290,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		return super.visitFuncFParam(ctx);
 	}
-	
+
 	private Type getLValType(SysYParser.LValContext ctx) {
 		String varName = ctx.IDENT().getText();
 		Symbol symbol = currentScope.resolve(varName);
@@ -308,11 +307,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		return varType;
 	}
-	
+
 	private int getLineNo(TerminalNode node) {
 		return node.getSymbol().getLine();
 	}
-	
+
 	@Override
 	public Void visitLVal(SysYParser.LValContext ctx) {
 		String varName = ctx.IDENT().getText();
@@ -338,10 +337,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 			}
 		}
-		
+
 		return super.visitLVal(ctx);
 	}
-	
+
 	@Override
 	public Void visitStmt(SysYParser.StmtContext ctx) {
 		if (ctx.ASSIGN() != null) {
@@ -349,7 +348,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			Type rValType = getExpType(ctx.exp());
 			if (lValType instanceof FunctionType) {
 				int lineNo = getLineNo(ctx.ASSIGN());
-				System.err.println("Error type 11 at Line " + lineNo + ": The left-hand side of an assignment must be a variable.");
+				System.err.println("Error type 11 at Line " + lineNo
+						+ ": The left-hand side of an assignment must be a variable.");
 				findError();
 			} else if (lValType.toString().equals("noType") || rValType.toString().equals("noType")) {
 			} else if (!lValType.toString().equals(rValType.toString())) {
@@ -362,14 +362,14 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			if (ctx.exp() != null) {
 				retType = getExpType(ctx.exp());
 			}
-			
+
 			Scope tmpScope = currentScope;
 			while (!(tmpScope instanceof FunctionSymbol)) {
 				tmpScope = tmpScope.getEnclosingScope();
 			}
 			Type expectedType = ((FunctionSymbol) tmpScope).getType().getRetType();
 			if (retType.toString().equals("noType") || expectedType.toString().equals("noType")) {
-				
+
 			} else if (!retType.toString().equals(expectedType.toString())) {
 				int lineNo = getLineNo(ctx.RETURN());
 				System.err.println("Error type 7 at Line " + lineNo + ": Type mismatched for return.");
@@ -378,7 +378,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		return super.visitStmt(ctx);
 	}
-	
+
 	private Type getExpType(SysYParser.ExpContext ctx) {
 		if (ctx.IDENT() != null) { // IDENT L_PAREN funcRParams? R_PAREN
 			String funcName = ctx.IDENT().getText();
@@ -406,7 +406,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			return getLValType(ctx.lVal());
 		} else if (ctx.number() != null) { // number
 			return new BasicTypeSymbol("int");
-		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null || ctx.MINUS() != null) {
+		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null
+				|| ctx.MINUS() != null) {
 			Type op1Type = getExpType(ctx.exp(0));
 			Type op2Type = getExpType(ctx.exp(1));
 			if (op1Type.toString().equals("int") && op2Type.toString().equals("int")) {
@@ -415,27 +416,27 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		return new BasicTypeSymbol("noType");
 	}
-	
+
 	private boolean checkArgsTyps(ArrayList<Type> paramsType, ArrayList<Type> argsType) {
 		int len1 = paramsType.size();
 		int len2 = argsType.size();
-		
+
 		for (Type type : paramsType) {
 			if (type.toString().equals("noType")) {
 				return true;
 			}
 		}
-		
+
 		for (Type type : argsType) {
 			if (type.toString().equals("noType")) {
 				return true;
 			}
 		}
-		
+
 		if (len1 != len2) {
 			return false;
 		}
-		
+
 		for (int i = 0; i < len1; ++i) {
 			Type paramType = paramsType.get(i);
 			Type argType = argsType.get(i);
@@ -443,10 +444,10 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				return false;
 			}
 		}
-		
+
 		return true;
 	}
-	
+
 	@Override
 	public Void visitExp(SysYParser.ExpContext ctx) {
 		if (ctx.IDENT() != null) { // IDENT L_PAREN funcRParams? R_PAREN
@@ -471,7 +472,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 				if (!checkArgsTyps(paramsType, argsType)) {
 					int lineNo = getLineNo(ctx.IDENT());
-					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
+					System.err
+							.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
 					findError();
 				}
 			}
@@ -491,7 +493,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
 				findError();
 			}
-		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null || ctx.MINUS() != null) {
+		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null
+				|| ctx.MINUS() != null) {
 			Type op1Type = getExpType(ctx.exp(0));
 			Type op2Type = getExpType(ctx.exp(1));
 			if (op1Type.toString().equals("noType") || op2Type.toString().equals("noType")) {
@@ -516,12 +519,12 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		return super.visitExp(ctx);
 	}
-	
+
 	private Type getCondType(SysYParser.CondContext ctx) {
 		if (ctx.exp() != null) {
 			return getExpType(ctx.exp());
 		}
-		
+
 		Type cond1 = getCondType(ctx.cond(0));
 		Type cond2 = getCondType(ctx.cond(1));
 		if (cond1.toString().equals("int") && cond2.toString().equals("int")) {
@@ -529,7 +532,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		return new BasicTypeSymbol("noType");
 	}
-	
+
 	@Override
 	public Void visitCond(SysYParser.CondContext ctx) {
 		if (ctx.exp() == null && !getCondType(ctx).toString().equals("int")) {
