@@ -177,7 +177,9 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		
 		ArrayList<Type> paramsType = new ArrayList<>();
+		System.out.println("visitfuncDef: " + funcName);
 		if (ctx.funcFParams() != null) {
+			System.out.println("visitfuncDef: " + funcName);
 			for (SysYParser.FuncFParamContext funcFParamContext : ctx.funcFParams().funcFParam()) {
 				String fParamTypeName = funcFParamContext.bType().getText();
 				BasicTypeSymbol fParamType = (BasicTypeSymbol) currentScope.resolve(fParamTypeName);
