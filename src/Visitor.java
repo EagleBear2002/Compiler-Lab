@@ -334,7 +334,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				} else {
 					TerminalNode node = ctx.L_BRACKT(i);
 					int lineNo = getLineNo(node);
-					System.err.println("Error type 9 at Line " + lineNo + ": Not an array: " + varName + ".");
+//					System.err.println("Error type 9 at Line " + lineNo + ": Not an array: " + varName + ".");
 					findError();
 					break;
 				}
@@ -351,7 +351,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			Type rValType = getExpType(ctx.exp());
 			if (lValType instanceof FunctionType) {
 				int lineNo = getLineNo(ctx.ASSIGN());
-				System.err.println("Error type 11 at Line " + lineNo + ": The left-hand side of an assignment must be a variable.");
+//				System.err.println("Error type 11 at Line " + lineNo + ": The left-hand side of an assignment must be a variable.");
 				findError();
 			} else if (lValType.toString().equals("noType") || rValType.toString().equals("noType")) {
 			} else if (!lValType.toString().equals(rValType.toString())) {
@@ -464,7 +464,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				findError();
 			} else if (!(symbol.getType() instanceof FunctionType)) {
 				int lineNo = getLineNo(ctx.IDENT());
-				System.err.println("Error type 10 at Line " + lineNo + ": Not a function: " + funcName);
+//				System.err.println("Error type 10 at Line " + lineNo + ": Not a function: " + funcName);
 				findError();
 			} else {
 				FunctionType functionType = (FunctionType) symbol.getType();
@@ -477,7 +477,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				}
 				if (!checkArgsTyps(paramsType, argsType)) {
 					int lineNo = getLineNo(ctx.IDENT());
-					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
+//					System.err.println("Error type 8 at Line " + lineNo + ": Function is not applicable for arguments.");
 					findError();
 				}
 			}
@@ -494,7 +494,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					operator = unaryOpContext.NOT();
 				}
 				int lineNo = getLineNo(operator);
-//				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
+				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
 				findError();
 			}
 		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null
@@ -517,7 +517,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					operator = ctx.MINUS();
 				}
 				int lineNo = getLineNo(operator);
-//				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
+				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
 				findError();
 			}
 		}
@@ -561,7 +561,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				operator = ctx.OR();
 			}
 			int lineNo = getLineNo(operator);
-//			System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
+			System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
 			findError();
 		}
 		return super.visitCond(ctx);
