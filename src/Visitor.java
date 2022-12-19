@@ -169,12 +169,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		Type retType = (Type) globalScope.resolve(retTypeName);
 		ArrayList<Type> paramsType = new ArrayList<>();
-//		if (ctx.funcFParams() != null) {
-//			for (SysYParser.FuncFParamContext funcFParamContext : ctx.funcFParams().funcFParam()) {
-//				Type fParamType = getFuncFParamType(funcFParamContext);
-//				paramsType.add(fParamType);
-//			}
-//		}
 		FunctionType functionType = new FunctionType(retType, paramsType);
 		
 		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope, functionType);
@@ -213,20 +207,21 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				int lineNo = getLineNo(varDefContext.IDENT());
 				System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + varName + ".");
 				findError();
-			} else {
-				for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
-					int elementCount = Integer.parseInt(toDecimalInteger(constExpContext.getText()));
-					varType = new ArrayType(elementCount, varType);
-				}
-				
-				if (varDefContext.ASSIGN() != null) {
-					SysYParser.ExpContext expContext = varDefContext.initVal().exp();
-					if (expContext != null) {
-						Type initValType = getExpType(expContext);
-						if (varType instanceof FunctionType) {
-						} else if (varType.toString().equals("noType") || initValType.toString().equals("noType")) {
-						} else if (!varType.toString().equals(initValType.toString())) {
-						}
+				continue;
+			}
+			
+			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
+				int elementCount = Integer.parseInt(toDecimalInteger(constExpContext.getText()));
+				varType = new ArrayType(elementCount, varType);
+			}
+			
+			if (varDefContext.ASSIGN() != null) {
+				SysYParser.ExpContext expContext = varDefContext.initVal().exp();
+				if (expContext != null) {
+					Type initValType = getExpType(expContext);
+					if (varType instanceof FunctionType) {
+					} else if (varType.toString().equals("noType") || initValType.toString().equals("noType")) {
+					} else if (!varType.toString().equals(initValType.toString())) {
 					}
 				}
 			}
@@ -249,6 +244,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				int lineNo = getLineNo(varDefContext.IDENT());
 				System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + constName + ".");
 				findError();
+				continue;
 			}
 			
 			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
@@ -267,22 +263,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		
 		return super.visitConstDecl(ctx);
 	}
-
-//	private Type getFuncFParamType(SysYParser.FuncFParamContext ctx) {
-//		String typeNae = ctx.bType().getText();
-//		Type paramType = (Type) globalScope.resolve(typeNae);
-//		String paramName = ctx.IDENT().getText();
-//		if (currentScope.definedSymbol(paramName)) {
-//			return new BasicTypeSymbol("noType");
-//		}
-//
-//		for (TerminalNode node : ctx.L_BRACKT()) {
-////			TODO: number 0 is trick
-//			paramType = new ArrayType(0, paramType);
-//		}
-//		
-//		return paramType;
-//	}
 	
 	@Override
 	public Void visitFuncFParam(SysYParser.FuncFParamContext ctx) {
