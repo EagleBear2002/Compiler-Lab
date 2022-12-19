@@ -10,9 +10,9 @@ public class ArrayType implements Type{
 	@Override
 	public String toString() {
 		StringBuilder typeStr = new StringBuilder();
-		if (elementCount == 0) {
-			return typeStr.append(elementType).toString();
-		}
+//		if (elementCount == 0) {
+//			return typeStr.append(elementType).toString();
+//		}
 		return typeStr.append("array(")
 				.append(elementCount)
 				.append(",")
