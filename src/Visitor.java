@@ -177,6 +177,23 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		}
 		
 		ArrayList<Type> paramsType = new ArrayList<>();
+//		System.out.println("visitfuncDef: " + funcName);
+//		if (ctx.funcFParams() != null) {
+//			for (SysYParser.FuncFParamContext funcFParamContext : ctx.funcFParams().funcFParam()) {
+//				String fParamTypeName = funcFParamContext.bType().getText();
+//				BasicTypeSymbol fParamType = (BasicTypeSymbol) currentScope.resolve(fParamTypeName);
+//				System.out.println("add paramType: " + fParamType.getName());
+//				paramsType.add(fParamType);
+//			}
+//		}
+		
+		FunctionType functionType = new FunctionType(retType, paramsType);
+		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope, functionType);
+		currentScope.define(fun);
+		currentScope = fun;
+		
+		Void ret = super.visitFuncDef(ctx);
+		
 		System.out.println("visitfuncDef: " + funcName);
 		if (ctx.funcFParams() != null) {
 			for (SysYParser.FuncFParamContext funcFParamContext : ctx.funcFParams().funcFParam()) {
@@ -186,13 +203,6 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 				paramsType.add(fParamType);
 			}
 		}
-		
-		FunctionType functionType = new FunctionType(retType, paramsType);
-		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope, functionType);
-		currentScope.define(fun);
-		currentScope = fun;
-		
-		Void ret = super.visitFuncDef(ctx);
 		
 		currentScope = currentScope.getEnclosingScope();
 		
