@@ -162,7 +162,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		boolean isError = false;
 		if (currentScope.definedSymbol(funcName)) {
 			int lineNo = getLineNo(ctx.IDENT());
-//			System.err.println("Error type 4 at Line " + lineNo + ": Redefined function: " + funcName + ".");
+			System.err.println("Error type 4 at Line " + lineNo + ": Redefined function: " + funcName + ".");
 			findError();
 			isError = true;
 		}
@@ -212,7 +212,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String varName = varDefContext.IDENT().getText();
 			if (currentScope.definedSymbol(varName)) {
 				int lineNo = getLineNo(varDefContext.IDENT());
-//				System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + varName + ".");
+				System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + varName + ".");
 				findError();
 			} else {
 				for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
@@ -248,7 +248,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			String constName = varDefContext.IDENT().getText();
 			if (currentScope.definedSymbol(constName)) {
 				int lineNo = getLineNo(varDefContext.IDENT());
-//				System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + constName + ".");
+				System.err.println("Error type 3 at Line " + lineNo + ": Redefined variable: " + constName + ".");
 				findError();
 			}
 			
@@ -310,7 +310,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 		Symbol symbol = currentScope.resolve(varName);
 		if (symbol == null) {
 			int lineNo = getLineNo(ctx.IDENT());
-//			System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable: " + varName + ".");
+			System.err.println("Error type 1 at Line " + lineNo + ": Undefined variable: " + varName + ".");
 			findError();
 		} else {
 			Type varType = symbol.getType();
@@ -345,7 +345,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			} else if (lValType.toString().equals("noType") || rValType.toString().equals("noType")) {
 			} else if (!lValType.toString().equals(rValType.toString())) {
 				int lineNo = getLineNo(ctx.ASSIGN());
-//				System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
+				System.err.println("Error type 5 at Line " + lineNo + ": Type mismatched for assignment.");
 				findError();
 			}
 		} else if (ctx.RETURN() != null) {
@@ -433,7 +433,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 			Symbol symbol = currentScope.resolve(funcName);
 			if (symbol == null) {
 				int lineNo = getLineNo(ctx.IDENT());
-//				System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
+				System.err.println("Error type 2 at Line " + lineNo + ": Undefined function: " + funcName + ".");
 				findError();
 			} else if (!(symbol.getType() instanceof FunctionType)) {
 				int lineNo = getLineNo(ctx.IDENT());
@@ -467,7 +467,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					operator = unaryOpContext.NOT();
 				}
 				int lineNo = getLineNo(operator);
-				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
+//				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
 				findError();
 			}
 		} else if (ctx.MUL() != null || ctx.DIV() != null || ctx.MOD() != null || ctx.PLUS() != null
@@ -490,7 +490,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 					operator = ctx.MINUS();
 				}
 				int lineNo = getLineNo(operator);
-				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
+//				System.err.println("Error type 6 at Line " + lineNo + ": Type mismatched for operands.");
 				findError();
 			}
 		}
