@@ -40,14 +40,14 @@ public class BaseScope implements Scope {
 	@Override
 	public void define(Symbol symbol) {
 		symbols.put(symbol.getName(), symbol);
-		System.out.println("+(" + symbol.getName() + ", " + symbol.getType() + ")");
+//		System.out.println("+(" + symbol.getName() + ", " + symbol.getType() + ")");
 	}
 	
 	@Override
 	public Symbol resolve(String name) {
 		Symbol symbol = symbols.get(name);
 		if (symbol != null) {
-			System.out.println("*" + name);
+//			System.out.println("*" + name);
 			return symbol;
 		}
 		
