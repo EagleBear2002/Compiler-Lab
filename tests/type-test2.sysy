@@ -17,8 +17,8 @@ int intFunc1() {
     return 1;
 }
 
-int intFunc1(int param) {
-	return intFunc1(); // valid?
+int intFunc1(int param) { // type 4
+	return intFunc1(); // valid
 }
 
 int intFunc2(int param1) {
@@ -33,7 +33,7 @@ int voidFunc1() { // type 4
 
 }
 
-int test(int i, int i){
+int test(int i, int i){ // type 3
     return test(i + 1); // valid
 }
 
@@ -56,7 +56,7 @@ int main(){
     c = 6; // type 5
     voidFunc1 = 6; // type 11
     
-    if (1 || globalArray || 2 || d) { // type 6
+    if (1 || globalArray || 2 || d) { // type 6 for 3 times
         
     }
     
