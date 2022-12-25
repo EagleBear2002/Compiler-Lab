@@ -46,6 +46,14 @@ rename-test: compile
 	$(call git_commit, "rename-test")
 	java -classpath ./classes:$(ANTLRPATH) Main tests/rename-test.sysy 8 4 d
 
+llvm-ir-test1: compile
+	$(call git_commit, "llvm-ir-test1")
+	java -classpath ./classes:$(ANTLRPATH) Main tests/llvm-ir-test1.sysy
+
+llvm-ir-test2: compile
+	$(call git_commit, "llvm-ir-test2")
+	java -classpath ./classes:$(ANTLRPATH) Main tests/llvm-ir-test2.sysy
+
 antlr: $(LFILE) $(PFILE) 
 	$(ANTLR) $(PFILE) $(LFILE)
 
