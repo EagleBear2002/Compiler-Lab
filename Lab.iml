@@ -12,5 +12,33 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="antlr-4.9.1-complete" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:llvm-platform:13.0.1-1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp-platform:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:android-arm:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:android-arm64:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:android-x86:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:android-x86_64:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:ios-arm64:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:ios-x86_64:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:linux-armhf:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:linux-arm64:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:linux-ppc64le:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:linux-x86:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:linux-x86_64:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:macosx-arm64:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:macosx-x86_64:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:windows-x86:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:javacpp:windows-x86_64:1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:llvm:13.0.1-1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:llvm:linux-x86:13.0.1-1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:llvm:linux-x86_64:13.0.1-1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:llvm:linux-armhf:13.0.1-1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:llvm:linux-arm64:13.0.1-1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:llvm:linux-ppc64le:13.0.1-1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:llvm:macosx-arm64:13.0.1-1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:llvm:macosx-x86_64:13.0.1-1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:llvm:windows-x86:13.0.1-1.5.7" level="project" />
+    <orderEntry type="library" name="Maven: org.bytedeco:llvm:windows-x86_64:13.0.1-1.5.7" level="project" />
   </component>
 </module>
