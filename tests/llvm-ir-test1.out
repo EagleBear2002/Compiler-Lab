@@ -1,0 +1,6 @@
+; ModuleID = 'moudle'
+source_filename = "moudle"
+
+define i32 @main(i32 %0, i32 %1) {
+block1:
+}
