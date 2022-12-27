@@ -8,3 +8,5 @@
 /target
 .DS_Store
 /out
+/pom.xml
+/tests
