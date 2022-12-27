@@ -3,5 +3,5 @@ source_filename = "moudle"
 
 define i32 @main() {
 mainEntry:
-  ret void
+  ret i32 -2
 }
