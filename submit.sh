@@ -55,7 +55,7 @@ URL=http://47.122.3.40:28300
 
 # extract token
 RAW=$(curl "$URL/auth/login" \
-  -H 'Content-Type.Type: application/json' \
+  -H 'Content-Type: application/json' \
   --data-raw $DATARAW )
 TOKEN=$(echo $RAW | sed 's/,/\n/g' | grep "token" | sed 's/:/\n/g' | sed '1d' | sed 's/}//g' | sed 's/\"//g')
 
