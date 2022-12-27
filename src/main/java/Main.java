@@ -1,9 +1,10 @@
+import antlr.SysYLexer;
+import antlr.SysYParser;
 import org.antlr.v4.runtime.CharStream;
 import org.antlr.v4.runtime.CharStreams;
 import org.antlr.v4.runtime.CommonTokenStream;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.bytedeco.javacpp.BytePointer;
-import org.bytedeco.llvm.LLVM.*;
 
 import static org.bytedeco.llvm.global.LLVM.*;
 
