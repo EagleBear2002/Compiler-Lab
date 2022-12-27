@@ -11,17 +11,11 @@ import org.bytedeco.llvm.LLVM.*;
 import static org.bytedeco.llvm.global.LLVM.*;
 
 public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
-	// 创建 module
 	private final LLVMModuleRef module = LLVMModuleCreateWithName("moudle");
-	
-	// 初始化 IRBuilder，后续将使用这个 builder 去生成 LLVM IR
 	private final LLVMBuilderRef builder = LLVMCreateBuilder();
-	
-	// 考虑到我们的语言中仅存在 int 一个基本类型，可以通过下面的语句为 LLVM 的 int 型重命名方便以后使用
 	private final LLVMTypeRef i32Type = LLVMInt32Type();
 	
 	public LLVMIRVisitor() {
-		// 初始化 LLVM
 		LLVMInitializeCore(LLVMGetGlobalPassRegistry());
 		LLVMLinkInMCJIT();
 		LLVMInitializeNativeAsmPrinter();
@@ -32,16 +26,6 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	public LLVMModuleRef getModule() {
 		return module;
 	}
-
-//	@Override
-//	public LLVMValueRef visitChildren(RuleNode node) {
-//		RuleContext ctx = node.getRuleContext();
-//		int ruleIndex = ctx.getRuleIndex();
-//		String ruleName = SysYParser.ruleNames[ruleIndex];
-//		String realName = ruleName.substring(0, 1).toUpperCase() + ruleName.substring(1);
-//		
-//		return super.visitChildren(node);
-//	}
 	
 	private String toDecimalInteger(String tokenText) {
 		if (tokenText.startsWith("0x") || tokenText.startsWith("0X")) {
@@ -81,19 +65,17 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	@Override
 	public LLVMValueRef visitUnaryExp(SysYParser.UnaryExpContext ctx) {
 		String op = ctx.unaryOp().getText();
-		
 		LLVMValueRef expValue = visit(ctx.exp());
-		
 		switch (op) {
 			case "+": {
 				return expValue;
 			}
 			case "-": {
-				return LLVMBuildNeg(builder, expValue, "tmp_");
+				return LLVMBuildNeg(builder, expValue, "neg_");
 			}
 			case "!": {
-				long value = LLVMConstIntGetZExtValue(expValue);
-				if (value == 0) {
+				long numValue = LLVMConstIntGetZExtValue(expValue);
+				if (numValue == 0) {
 					return LLVMConstInt(i32Type, 1, 1);
 				} else {
 					return LLVMConstInt(i32Type, 0, 1);
@@ -104,6 +86,52 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		}
 		
 		return null;
+	}
+	
+	@Override
+	public LLVMValueRef visitParenExp(SysYParser.ParenExpContext ctx) {
+		return this.visit(ctx.exp());
+	}
+	
+	
+	@Override
+	public LLVMValueRef visitAddExp(SysYParser.AddExpContext ctx) {
+		if (ctx.PLUS() != null) {
+			return binaryOperation("+", visit(ctx.exp(0)), visit(ctx.exp(1)));
+		} else {
+			return binaryOperation("-", visit(ctx.exp(0)), visit(ctx.exp(1)));
+		}
+	}
+	
+	@Override
+	public LLVMValueRef visitMulExp(SysYParser.MulExpContext ctx) {
+		if (ctx.MUL() != null) {
+			return binaryOperation("*", visit(ctx.exp(0)), visit(ctx.exp(1)));
+		} else if (ctx.DIV() != null) {
+			return binaryOperation("/", visit(ctx.exp(0)), visit(ctx.exp(1)));
+		} else {
+			return binaryOperation("%", visit(ctx.exp(0)), visit(ctx.exp(1)));
+		}
+	}
+	
+	private LLVMValueRef binaryOperation(String op, LLVMValueRef lhs, LLVMValueRef rhs) {
+		long numValue1 = LLVMConstIntGetZExtValue(lhs);
+		long numValue2 = LLVMConstIntGetZExtValue(rhs);
+		
+		switch (op) {
+			case "+":
+				return LLVMConstInt(i32Type, numValue1 + numValue2, 1);
+			case "-":
+				return LLVMConstInt(i32Type, numValue1 - numValue2, 1);
+			case "*":
+				return LLVMConstInt(i32Type, numValue1 * numValue2, 1);
+			case "/":
+				return LLVMConstInt(i32Type, numValue1 / numValue2, 1);
+			case "%":
+				return LLVMConstInt(i32Type, numValue1 % numValue2, 1);
+			default:
+				return null;
+		}
 	}
 	
 	@Override
