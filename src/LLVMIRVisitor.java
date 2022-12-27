@@ -32,7 +32,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	public LLVMModuleRef getModule() {
 		return module;
 	}
-	
+
 //	@Override
 //	public LLVMValueRef visitChildren(RuleNode node) {
 //		RuleContext ctx = node.getRuleContext();
@@ -56,7 +56,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	public LLVMValueRef visitTerminal(TerminalNode node) {
 		Token symbol = node.getSymbol();
 		int symbolType = symbol.getType();
-
+		
 		if (symbolType == SysYParser.INTEGR_CONST) {
 			int number = Integer.parseInt(toDecimalInteger(node.getText()));
 			return LLVMConstInt(i32Type, number, 1);
@@ -77,21 +77,21 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		
 		return funtion;
 	}
-
+	
 	@Override
 	public LLVMValueRef visitUnaryExp(SysYParser.UnaryExpContext ctx) {
 		String op = ctx.unaryOp().getText();
-
+		
 		LLVMValueRef expValue = visit(ctx.exp());
-
+		
 		switch (op) {
-			case "+" -> {
+			case "+": {
 				return expValue;
 			}
-			case "-" -> {
+			case "-": {
 				return LLVMBuildNeg(builder, expValue, "tmp_");
 			}
-			case "!" -> {
+			case "!": {
 				long value = LLVMConstIntGetZExtValue(expValue);
 				if (value == 0) {
 					return LLVMConstInt(i32Type, 1, 1);
@@ -99,10 +99,10 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 					return LLVMConstInt(i32Type, 0, 1);
 				}
 			}
-			default -> {
+			default: {
 			}
 		}
-
+		
 		return null;
 	}
 	
