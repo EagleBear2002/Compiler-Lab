@@ -1,3 +1,9 @@
+import Scope.Scope;
+import Symbol.Symbol;
+import Type.Type;
+import antlr.SysYLexer;
+import antlr.SysYParser;
+import antlr.SysYParserBaseVisitor;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
@@ -7,6 +13,10 @@ import org.antlr.v4.runtime.tree.TerminalNode;
 import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.llvm.LLVM.*;
+
+import Symbol.*;
+import Scope.*;
+import Type.*;
 
 import static org.bytedeco.llvm.global.LLVM.*;
 

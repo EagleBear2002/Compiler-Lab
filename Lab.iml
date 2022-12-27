@@ -42,6 +42,6 @@
     <orderEntry type="library" name="Maven: org.bytedeco:llvm:macosx-x86_64:13.0.1-1.5.7" level="project" />
     <orderEntry type="library" name="Maven: org.bytedeco:llvm:windows-x86:13.0.1-1.5.7" level="project" />
     <orderEntry type="library" name="Maven: org.bytedeco:llvm:windows-x86_64:13.0.1-1.5.7" level="project" />
-    <orderEntry type="library" name="antlr-4.9.3-complete" level="project" />
+    <orderEntry type="library" name="antlr-4.9.1-complete" level="project" />
   </component>
 </module>
