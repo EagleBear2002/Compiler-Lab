@@ -54,33 +54,33 @@ block : L_BRACE (blockItem)* R_BRACE;
 blockItem : decl | stmt;
 
 // 语句
-stmt : lVal ASSIGN exp SEMICOLON // # assignment
-    | (exp)? SEMICOLON // # possibleExp
-    | block // # blockStmt
-    | IF L_PAREN cond R_PAREN stmt (ELSE stmt)? // # ifStmt
-    | WHILE L_PAREN cond R_PAREN stmt // # whileStmt
-    | BREAK SEMICOLON // # breakStmt
-    | CONTINUE SEMICOLON // # continueStmt
-    | RETURN (exp)? SEMICOLON // # returnStmt
+stmt : lVal ASSIGN exp SEMICOLON # assignment
+    | (exp)? SEMICOLON # possibleExp
+    | block # blockStmt
+    | IF L_PAREN cond R_PAREN stmt (ELSE stmt)? # ifStmt
+    | WHILE L_PAREN cond R_PAREN stmt # whileStmt
+    | BREAK SEMICOLON # breakStmt
+    | CONTINUE SEMICOLON # continueStmt
+    | RETURN (exp)? SEMICOLON # returnStmt
     ;
 
 // 表达式
-exp: L_PAREN exp R_PAREN // # parenExp
-	| lVal // # lValExp
-	| number // # numExp
-	| IDENT L_PAREN funcRParams? R_PAREN // # funcCallExp
-	| unaryOp exp // # unaryExp
-	| exp (MUL | DIV | MOD) exp // # mulExp
-	| exp (PLUS | MINUS) exp // # addExp
+exp: L_PAREN exp R_PAREN # parenExp
+	| lVal # lValExp
+	| number # numExp
+	| IDENT L_PAREN funcRParams? R_PAREN # funcCallExp
+	| unaryOp exp # unaryExp
+	| exp (MUL | DIV | MOD) exp # mulExp
+	| exp (PLUS | MINUS) exp # addExp
 	;
 
 
 // 条件表达式
-cond: exp // # condExp
-	| cond (LT | GT | LE | GE) cond // # compareExp
-	| cond (EQ | NEQ) cond // # relationExp
-	| cond AND cond // # andExp
-	| cond OR cond // # orExp
+cond: exp # condExp
+	| cond (LT | GT | LE | GE) cond # compareExp
+	| cond (EQ | NEQ) cond # relationExp
+	| cond AND cond # andExp
+	| cond OR cond # orExp
 	;
 
 
