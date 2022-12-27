@@ -1,9 +1,6 @@
 import Scope.Scope;
 import Symbol.Symbol;
 import Type.Type;
-import antlr.SysYLexer;
-import antlr.SysYParser;
-import antlr.SysYParserBaseVisitor;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
 import org.antlr.v4.runtime.Token;
