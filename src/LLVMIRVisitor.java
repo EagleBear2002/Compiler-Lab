@@ -54,7 +54,6 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMTypeRef functionType = LLVMFunctionType(i32Type, LLVMVoidType(), 0, 0);
 		String funtionName = ctx.IDENT().getText();
 		LLVMValueRef funtion = LLVMAddFunction(module, funtionName, functionType);
-		
 		LLVMBasicBlockRef mainEntry = LLVMAppendBasicBlock(funtion, "mainEntry");
 		LLVMPositionBuilderAtEnd(builder, mainEntry);
 		super.visitFuncDef(ctx);
@@ -71,7 +70,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				return expValue;
 			}
 			case "-": {
-				return LLVMBuildNeg(builder, expValue, "neg_");
+				return LLVMBuildNeg(builder, expValue, "tmp_");
 			}
 			case "!": {
 				long numValue = LLVMConstIntGetZExtValue(expValue);
@@ -85,7 +84,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			}
 		}
 		
-		return null;
+		return super.visitUnaryExp(ctx);
 	}
 	
 	@Override
