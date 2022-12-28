@@ -121,9 +121,11 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 //				return LLVMBuildMul(builder, valueRef1, valueRef2, "tmp_");
 				return LLVMConstInt(i32Type, numValue1 * numValue2, 1);
 			case "/":
-				return LLVMBuildSDiv(builder, valueRef1, valueRef2, "tmp_");
+//				return LLVMBuildSDiv(builder, valueRef1, valueRef2, "tmp_");
+				return LLVMConstInt(i32Type, numValue1 / numValue2, 1);
 			case "%":
-				return LLVMBuildSRem(builder, valueRef1, valueRef2, "tmp_");
+//				return LLVMBuildSRem(builder, valueRef1, valueRef2, "tmp_");
+				return LLVMConstInt(i32Type, numValue1 % numValue2, 1);
 			default:
 				return null;
 		}
