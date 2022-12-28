@@ -36,7 +36,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		int symbolType = symbol.getType();
 		
 		if (symbolType == SysYParser.INTEGR_CONST) {
-			int number = Integer.parseInt(toDecimalInteger(node.getText()));
+			int number = (int) Long.parseLong(toDecimalInteger(node.getText()));
 			return LLVMConstInt(i32Type, number, 1);
 		}
 		
@@ -89,45 +89,25 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	
 	@Override
 	public LLVMValueRef visitAddExp(SysYParser.AddExpContext ctx) {
+		LLVMValueRef valueRef1 = visit(ctx.exp(0));
+		LLVMValueRef valueRef2 = visit(ctx.exp(1));
 		if (ctx.PLUS() != null) {
-			return binaryOperation("+", visit(ctx.exp(0)), visit(ctx.exp(1)));
+			return LLVMBuildAdd(builder, valueRef1, valueRef2, "tmp_");
 		} else {
-			return binaryOperation("-", visit(ctx.exp(0)), visit(ctx.exp(1)));
+			return LLVMBuildSub(builder, valueRef1, valueRef2, "tmp_");
 		}
 	}
 	
 	@Override
 	public LLVMValueRef visitMulExp(SysYParser.MulExpContext ctx) {
+		LLVMValueRef valueRef1 = visit(ctx.exp(0));
+		LLVMValueRef valueRef2 = visit(ctx.exp(1));
 		if (ctx.MUL() != null) {
-			return binaryOperation("*", visit(ctx.exp(0)), visit(ctx.exp(1)));
+			return LLVMBuildMul(builder, valueRef1, valueRef2, "tmp_");
 		} else if (ctx.DIV() != null) {
-			return binaryOperation("/", visit(ctx.exp(0)), visit(ctx.exp(1)));
+			return LLVMBuildSDiv(builder, valueRef1, valueRef2, "tmp_");
 		} else {
-			return binaryOperation("%", visit(ctx.exp(0)), visit(ctx.exp(1)));
-		}
-	}
-	
-	private LLVMValueRef binaryOperation(String operator, LLVMValueRef valueRef1, LLVMValueRef valueRef2) {
-		long numValue1 = LLVMConstIntGetZExtValue(valueRef1);
-		long numValue2 = LLVMConstIntGetZExtValue(valueRef2);
-		switch (operator) {
-			case "+":
-//				return LLVMBuildAdd(builder, valueRef1, valueRef2, "tmp_");
-				return LLVMConstInt(i32Type, numValue1 + numValue2, 1);
-			case "-":
-//				return LLVMBuildSub(builder, valueRef1, valueRef2, "tmp_");
-				return LLVMConstInt(i32Type, numValue1 - numValue2, 1);
-			case "*":
-//				return LLVMBuildMul(builder, valueRef1, valueRef2, "tmp_");
-				return LLVMConstInt(i32Type, numValue1 * numValue2, 1);
-			case "/":
-				return LLVMBuildSDiv(builder, valueRef1, valueRef2, "tmp_");
-//				return LLVMConstInt(i32Type, numValue1 / numValue2, 1);
-			case "%":
-//				return LLVMBuildSRem(builder, valueRef1, valueRef2, "tmp_");
-				return LLVMConstInt(i32Type, numValue1 % numValue2, 1);
-			default:
-				return null;
+			return LLVMBuildSRem(builder, valueRef1, valueRef2, "tmp_");
 		}
 	}
 	
