@@ -21,7 +21,7 @@ public class Main {
 	}
 	
 	public static void main(String[] args) throws IOException {
-		if (args.length < 1) {
+		if (args.length < 2) {
 			System.err.println("input path is required");
 			return;
 		}
@@ -30,7 +30,6 @@ public class Main {
 		String destPath = args[1];
 		SysYLexer sysYLexer = lexer(srcPath);
 		SysYParser sysYParser = parser(sysYLexer);
-		
 		ParseTree tree = sysYParser.program();
 		
 		LLVMIRVisitor llvmirVisitor = new LLVMIRVisitor();
