@@ -5,7 +5,7 @@ import org.bytedeco.llvm.LLVM.*;
 import static org.bytedeco.llvm.global.LLVM.*;
 
 public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
-	private final LLVMModuleRef module = LLVMModuleCreateWithName("moudle");
+	private final LLVMModuleRef module = LLVMModuleCreateWithName("module");
 	private final LLVMBuilderRef builder = LLVMCreateBuilder();
 	private final LLVMTypeRef i32Type = LLVMInt32Type();
 	
