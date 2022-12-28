@@ -107,18 +107,21 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		}
 	}
 	
-	private LLVMValueRef binaryOperation(String op, LLVMValueRef valueRef, LLVMValueRef valueRef2) {
-		switch (op) {
+	private LLVMValueRef binaryOperation(String operator, LLVMValueRef valueRef1, LLVMValueRef valueRef2) {
+		long numValue1 = LLVMConstIntGetZExtValue(valueRef1);
+		long numValue2 = LLVMConstIntGetZExtValue(valueRef2);
+		switch (operator) {
 			case "+":
-				return LLVMBuildAdd(builder, valueRef, valueRef2, "tmp_");
+//				return LLVMBuildAdd(builder, valueRef1, valueRef2, "tmp_");
+				return LLVMConstInt(i32Type, numValue1 + numValue2, 1);
 			case "-":
-				return LLVMBuildSub(builder, valueRef, valueRef2, "tmp_");
+				return LLVMBuildSub(builder, valueRef1, valueRef2, "tmp_");
 			case "*":
-				return LLVMBuildMul(builder, valueRef, valueRef2, "tmp_");
+				return LLVMBuildMul(builder, valueRef1, valueRef2, "tmp_");
 			case "/":
-				return LLVMBuildSDiv(builder, valueRef, valueRef2, "tmp_");
+				return LLVMBuildSDiv(builder, valueRef1, valueRef2, "tmp_");
 			case "%":
-				return LLVMBuildSRem(builder, valueRef, valueRef2, "tmp_");
+				return LLVMBuildSRem(builder, valueRef1, valueRef2, "tmp_");
 			default:
 				return null;
 		}
