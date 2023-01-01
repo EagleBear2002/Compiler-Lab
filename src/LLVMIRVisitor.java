@@ -48,10 +48,9 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMTypeRef functionType = LLVMFunctionType(i32Type, LLVMVoidType(), 0, 0);
 		String functionName = ctx.IDENT().getText();
 		LLVMValueRef function = LLVMAddFunction(module, functionName, functionType);
-		LLVMBasicBlockRef mainEntry = LLVMAppendBasicBlock(function, "mainEntry");
+		LLVMBasicBlockRef mainEntry = LLVMAppendBasicBlock(function, functionName + "Entry");
 		LLVMPositionBuilderAtEnd(builder, mainEntry);
 		super.visitFuncDef(ctx);
-		
 		return function;
 	}
 	
