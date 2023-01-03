@@ -1,18 +1,17 @@
 package Symbol;//import com.google.common.base.MoreObjects;
 
 import org.antlr.v4.runtime.misc.Pair;
-
-import Type.*;
+import org.bytedeco.llvm.LLVM.LLVMTypeRef;
+import org.bytedeco.llvm.LLVM.LLVMValueRef;
 
 import java.util.ArrayList;
 import java.util.List;
-
 public class BaseSymbol implements Symbol {
 	final String name;
-	final Type type;
+	final LLVMTypeRef type;
 	public List<Pair<Integer, Integer>> usagePosition;
 	
-	public BaseSymbol(String name, Type type) {
+	public BaseSymbol(String name, LLVMTypeRef type) {
 		this.name = name;
 		this.type = type;
 		this.usagePosition = new ArrayList<>();
@@ -22,7 +21,7 @@ public class BaseSymbol implements Symbol {
 		return name;
 	}
 	
-	public Type getType() {
+	public LLVMTypeRef getType() {
 		return type;
 	}
 	

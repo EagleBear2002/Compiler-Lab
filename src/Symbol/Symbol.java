@@ -1,10 +1,11 @@
 package Symbol;
 
 import org.antlr.v4.runtime.misc.Pair;
+import org.bytedeco.llvm.LLVM.LLVMTypeRef;
+import org.bytedeco.llvm.LLVM.LLVMValueRef;
 
 import java.util.ArrayList;
 import java.util.List;
-import Type.*;
 
 public interface Symbol {
 	
@@ -14,5 +15,5 @@ public interface Symbol {
 	
 	boolean findUsage(int lineNo, int columnNo);
 	
-	Type getType();
+	LLVMTypeRef getType();
 }

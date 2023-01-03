@@ -4,7 +4,6 @@ import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.llvm.LLVM.*;
 import Scope.*;
-import Type.*;
 import Symbol.*;
 
 import java.util.ArrayList;
@@ -24,69 +23,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	private final LLVMBuilderRef builder = LLVMCreateBuilder();
 	private final LLVMTypeRef i32Type = LLVMInt32Type();
 	private final LLVMTypeRef voidType = LLVMVoidType();
-
-//	public List<Object> getMsgToPrint() {
-//		return msgToPrint;
-//	}
-
-//	public boolean getErrorFound() {
-//		return errorFound;
-//	}
-
-//	private int getLineNo(ParserRuleContext ctx) {
-//		return ctx.getStart().getLine();
-//	}
-
-//	private void reportError(int typeNo, int lineNo, String msg) {
-//		System.err.println("Error type " + typeNo + " at Line " + lineNo + ": " + msg + ".");
-//		errorFound = true;
-//	}
-
-//	private String ident2String(int depth) {
-//		return "  ".repeat(Math.max(0, depth));
-//	}
 	
-	//	private String getHelight(String ruleName) {
-//		switch (ruleName) {
-//			case "CONST":
-//			case "INT":
-//			case "VOID":
-//			case "IF":
-//			case "ELSE":
-//			case "WHILE":
-//			case "BREAK":
-//			case "CONTINUE":
-//			case "RETURN": {
-//				return "orange";
-//			}
-//			case "PLUS":
-//			case "MINUS":
-//			case "MUL":
-//			case "DIV":
-//			case "MOD":
-//			case "ASSIGN":
-//			case "EQ":
-//			case "NEQ":
-//			case "LT":
-//			case "GT":
-//			case "LE":
-//			case "GE":
-//			case "NOT":
-//			case "AND":
-//			case "OR": {
-//				return "blue";
-//			}
-//			case "IDENT": {
-//				return "red";
-//			}
-//			case "INTEGR_CONST": {
-//				return "green";
-//			}
-//			default: {
-//				return "no color";
-//			}
-//		}
-//	}
 	public LLVMIRVisitor() {
 		LLVMInitializeCore(LLVMGetGlobalPassRegistry());
 		LLVMLinkInMCJIT();
@@ -129,16 +66,16 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		return ret;
 	}
 	
+	private LLVMTypeRef getTypeRef(String typeName) {
+		if (typeName.equals("int")) {
+			return i32Type;
+		} else {
+			return voidType;
+		}
+	}
+	
 	@Override
 	public LLVMValueRef visitFuncDef(SysYParser.FuncDefContext ctx) {
-		String retTypeName = ctx.funcType().getText();
-		LLVMTypeRef retType;
-		if (retTypeName.equals("int")) {
-			retType = i32Type;
-		} else {
-			retType = voidType;
-		}
-		
 		int paramsCount = 0;
 		if (ctx.funcFParams() != null) {
 			paramsCount = ctx.funcFParams().funcFParam().size();
@@ -148,19 +85,27 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		for (int i = 0; i < paramsCount; ++i) {
 			SysYParser.FuncFParamContext funcFParamContext = ctx.funcFParams().funcFParam(i);
 			String paramTypeName = funcFParamContext.bType().getText();
-			if (paramTypeName.equals("int")) {
-				paramsTypes.put(i, i32Type);
-			} else {
-				paramsTypes.put(i, voidType);
-			}
+			LLVMTypeRef paramType = getTypeRef(paramTypeName);
+			String varName = ctx.IDENT().getText();
+			paramsTypes.put(i, paramType);
+			VariableSymbol varSymbol = new VariableSymbol(varName, paramType);
+			currentScope.define(varSymbol);
 		}
+		
+		String retTypeName = ctx.funcType().getText();
+		LLVMTypeRef retType = getTypeRef(retTypeName);
 		LLVMTypeRef functionType = LLVMFunctionType(retType, paramsTypes, paramsCount, 0);
 		
 		String functionName = ctx.IDENT().getText();
 		LLVMValueRef function = LLVMAddFunction(module, functionName, functionType);
 		LLVMBasicBlockRef mainEntry = LLVMAppendBasicBlock(function, functionName + "Entry");
 		LLVMPositionBuilderAtEnd(builder, mainEntry);
+		
+		FunctionSymbol functionSymbol = new FunctionSymbol(functionName, currentScope, functionType);
+		currentScope.define(functionSymbol);
+		currentScope = functionSymbol;
 		super.visitFuncDef(ctx);
+		currentScope = currentScope.getEnclosingScope();
 		
 		return function;
 	}
