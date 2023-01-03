@@ -105,38 +105,38 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 
 	@Override
 	public Void visitTerminal(TerminalNode node) {
-		Token token = node.getSymbol();
-		int ruleNum = token.getType() - 1;
-
-		if (ruleNum < 0) {
-			return super.visitTerminal(node);
-		}
-
-		String ruleName = SysYLexer.ruleNames[ruleNum];
-		String tokenText = token.getText();
-		String color = getHelight(ruleName);
-		Symbol symbol = currentScope.resolve(tokenText);
-
-		if (ruleName.equals("INTEGR_CONST")) {
-			tokenText = toDecimalInteger(tokenText);
-		} else if (ruleName.equals("IDENT")) {
-			int lineNO = token.getLine();
-			int columnNO = token.getCharPositionInLine();
-			if (symbol != null) {
-				symbol.addUsage(lineNO, columnNO);
-			}
-		}
-
-		if (!color.equals("no color")) {
-			msgToPrint.add(ident2String(depth));
-			if (symbol == null) {
-				msgToPrint.add(tokenText);
-			} else {
-				msgToPrint.add(symbol);
-			}
-			msgToPrint.add(" " + ruleName + "[" + color + "]" + "\n");
-		}
-
+//		Token token = node.getSymbol();
+//		int ruleNum = token.getType() - 1;
+//
+//		if (ruleNum < 0) {
+//			return super.visitTerminal(node);
+//		}
+//
+//		String ruleName = SysYLexer.ruleNames[ruleNum];
+//		String tokenText = token.getText();
+//		String color = getHelight(ruleName);
+//		Symbol symbol = currentScope.resolve(tokenText);
+//
+//		if (ruleName.equals("INTEGR_CONST")) {
+//			tokenText = toDecimalInteger(tokenText);
+//		} else if (ruleName.equals("IDENT")) {
+//			int lineNO = token.getLine();
+//			int columnNO = token.getCharPositionInLine();
+//			if (symbol != null) {
+//				symbol.addUsage(lineNO, columnNO);
+//			}
+//		}
+//
+//		if (!color.equals("no color")) {
+//			msgToPrint.add(ident2String(depth));
+//			if (symbol == null) {
+//				msgToPrint.add(tokenText);
+//			} else {
+//				msgToPrint.add(symbol);
+//			}
+//			msgToPrint.add(" " + ruleName + "[" + color + "]" + "\n");
+//		}
+//
 		return super.visitTerminal(node);
 	}
 
@@ -166,7 +166,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 //		Type retType = (Type) globalScope.resolve(retTypeName);
 //		ArrayList<Type> paramsType = new ArrayList<>();
 //		FunctionType functionType = new FunctionType(retType, paramsType);
-//		FunctionSymbol fun = new FunctionSymbol(funcName, currentScope, functionType);
+//		FunctionScope fun = new FunctionScope(funcName, currentScope, functionType);
 //		currentScope.define(fun);
 //		currentScope = fun;
 		Void ret = super.visitFuncDef(ctx);
@@ -270,7 +270,7 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 //			reportError(3, getLineNo(ctx), "Redefined variable: " + varName);
 //		} else {
 //			currentScope.define(varSymbol);
-//			((FunctionSymbol) currentScope).getType().getParamsType().add(varType);
+//			((FunctionScope) currentScope).getType().getParamsType().add(varType);
 //		}
 		return super.visitFuncFParam(ctx);
 	}
@@ -336,11 +336,11 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 //			}
 //
 //			Scope tmpScope = currentScope;
-//			while (!(tmpScope instanceof FunctionSymbol)) {
+//			while (!(tmpScope instanceof FunctionScope)) {
 //				tmpScope = tmpScope.getEnclosingScope();
 //			}
 //
-//			Type expectedType = ((FunctionSymbol) tmpScope).getType().getRetType();
+//			Type expectedType = ((FunctionScope) tmpScope).getType().getRetType();
 //			if (!retType.toString().equals("noType") && !expectedType.toString().equals("noType") && !retType.toString().equals(expectedType.toString())) {
 //				reportError(7, getLineNo(ctx), "Type mismatched for return");
 //			}

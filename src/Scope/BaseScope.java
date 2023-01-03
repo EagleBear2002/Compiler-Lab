@@ -1,13 +1,13 @@
 package Scope;//import com.google.common.base.MoreObjects;
 
+import org.bytedeco.llvm.LLVM.LLVMValueRef;
+
 import java.util.LinkedHashMap;
 import java.util.Map;
 
-import Symbol.*;
-
 public class BaseScope implements Scope {
 	private final Scope enclosingScope;
-	private final Map<String, Symbol> symbols = new LinkedHashMap<>();
+	private final Map<String, LLVMValueRef> valueRefs = new LinkedHashMap<>();
 	private String name;
 	
 	public BaseScope(String name, Scope enclosingScope) {
@@ -17,7 +17,7 @@ public class BaseScope implements Scope {
 	
 	@Override
 	public boolean definedSymbol(String name) {
-		return symbols.containsKey(name);
+		return valueRefs.containsKey(name);
 	}
 	
 	@Override
@@ -35,19 +35,19 @@ public class BaseScope implements Scope {
 		return this.enclosingScope;
 	}
 	
-	public Map<String, Symbol> getSymbols() {
-		return this.symbols;
+	public Map<String, LLVMValueRef> getValueRef() {
+		return this.valueRefs;
 	}
 	
 	@Override
-	public void define(Symbol symbol) {
-		symbols.put(symbol.getName(), symbol);
-//		System.out.println("+(" + symbol.getName() + ", " + symbol.getType() + ")");
+	public void define(String name, LLVMValueRef llvmValueRef) {
+		valueRefs.put(name, llvmValueRef);
+//		System.err.println("+(" + name + ", " + llvmValueRef + ")");
 	}
 	
 	@Override
-	public Symbol resolve(String name) {
-		Symbol symbol = symbols.get(name);
+	public LLVMValueRef resolve(String name) {
+		LLVMValueRef symbol = valueRefs.get(name);
 		if (symbol != null) {
 			return symbol;
 		}
@@ -56,6 +56,7 @@ public class BaseScope implements Scope {
 			return enclosingScope.resolve(name);
 		}
 		
+//		System.err.println("can not resolve: " + name);
 		return null;
 	}
 }

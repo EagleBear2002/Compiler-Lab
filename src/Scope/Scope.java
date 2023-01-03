@@ -2,7 +2,7 @@ package Scope;
 
 import java.util.Map;
 
-import Symbol.*;
+import org.bytedeco.llvm.LLVM.LLVMValueRef;
 
 public interface Scope {
 	String getName();
@@ -11,11 +11,11 @@ public interface Scope {
 	
 	Scope getEnclosingScope();
 	
-	Map<String, Symbol> getSymbols();
+	Map<String, LLVMValueRef> getValueRef();
 	
-	void define(Symbol symbol);
+	void define(String name, LLVMValueRef llvmValueRef);
 	
-	Symbol resolve(String name);
+	LLVMValueRef resolve(String name);
 	
 	boolean definedSymbol(String name);
 }
