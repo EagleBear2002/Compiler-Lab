@@ -111,6 +111,47 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	}
 	
 	@Override
+	public LLVMValueRef visitBlock(SysYParser.BlockContext ctx) {
+		LocalScope localScope = new LocalScope(currentScope);
+		String localScopeName = localScope.getName() + (localScopeCounter++);
+		localScope.setName(localScopeName);
+		currentScope = localScope;
+		LLVMValueRef ret = super.visitBlock(ctx);
+		currentScope = currentScope.getEnclosingScope();
+		return ret;
+	}
+	
+	@Override
+	public LLVMValueRef visitVarDecl(SysYParser.VarDeclContext ctx) {
+		String typeName = ctx.bType().getText();
+
+		for (SysYParser.VarDefContext varDefContext : ctx.varDef()) {
+			LLVMTypeRef varType = getTypeRef(typeName);
+			String varName = varDefContext.IDENT().getText();
+
+//			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
+//				int elementCount = Integer.parseInt(toDecimalInteger(constExpContext.getText()));
+//				varType = new ArrayType(elementCount, varType);
+//			}
+			
+			LLVMValueRef pointer = LLVMBuildAlloca(builder, varType, varName);
+			
+			if (varDefContext.ASSIGN() != null) {
+				SysYParser.ExpContext expContext = varDefContext.initVal().exp();
+				if (expContext != null) {
+					LLVMValueRef initValue = visit(varDefContext.initVal().exp());
+					LLVMBuildStore(builder, initValue, pointer);
+				}
+			}
+
+			VariableSymbol varSymbol = new VariableSymbol(varName, varType);
+			currentScope.define(varSymbol);
+		}
+		
+		return super.visitVarDecl(ctx);
+	}
+	
+	@Override
 	public LLVMValueRef visitUnaryExp(SysYParser.UnaryExpContext ctx) {
 		String operator = ctx.unaryOp().getText();
 		LLVMValueRef expValue = visit(ctx.exp());
