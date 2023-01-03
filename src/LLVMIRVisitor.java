@@ -4,7 +4,6 @@ import org.bytedeco.javacpp.Pointer;
 import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.llvm.LLVM.*;
 import Scope.*;
-import Symbol.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -86,10 +85,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			SysYParser.FuncFParamContext funcFParamContext = ctx.funcFParams().funcFParam(i);
 			String paramTypeName = funcFParamContext.bType().getText();
 			LLVMTypeRef paramType = getTypeRef(paramTypeName);
-			String varName = ctx.IDENT().getText();
 			paramsTypes.put(i, paramType);
-			VariableSymbol varSymbol = new VariableSymbol(varName, paramType);
-			currentScope.define(varSymbol);
 		}
 		
 		String retTypeName = ctx.funcType().getText();
@@ -98,12 +94,22 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		
 		String functionName = ctx.IDENT().getText();
 		LLVMValueRef function = LLVMAddFunction(module, functionName, functionType);
-		LLVMBasicBlockRef mainEntry = LLVMAppendBasicBlock(function, functionName + "Entry");
-		LLVMPositionBuilderAtEnd(builder, mainEntry);
+		LLVMBasicBlockRef entry = LLVMAppendBasicBlock(function, functionName + "Entry");
+		LLVMPositionBuilderAtEnd(builder, entry);
 		
-		FunctionSymbol functionSymbol = new FunctionSymbol(functionName, currentScope, functionType);
-		currentScope.define(functionSymbol);
-		currentScope = functionSymbol;
+		for (int i = 0; i < paramsCount; ++i) {
+			SysYParser.FuncFParamContext funcFParamContext = ctx.funcFParams().funcFParam(i);
+			String paramTypeName = funcFParamContext.bType().getText();
+			LLVMTypeRef paramType = getTypeRef(paramTypeName);
+			String varName = ctx.funcFParams().funcFParam(i).IDENT().getText();
+			LLVMValueRef var = LLVMBuildAlloca(builder, paramType, varName);
+			currentScope.define(varName, var);
+			LLVMValueRef argValue = LLVMGetParam(function, i);
+			LLVMBuildStore(builder, argValue, var);
+		}
+		
+		currentScope.define(functionName, function);
+		currentScope = new LocalScope(currentScope);
 		super.visitFuncDef(ctx);
 		currentScope = currentScope.getEnclosingScope();
 		
@@ -134,18 +140,17 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 //				varType = new ArrayType(elementCount, varType);
 //			}
 			
-			LLVMValueRef pointer = LLVMBuildAlloca(builder, varType, varName);
+			LLVMValueRef var = LLVMBuildAlloca(builder, varType, varName);
 			
 			if (varDefContext.ASSIGN() != null) {
 				SysYParser.ExpContext expContext = varDefContext.initVal().exp();
 				if (expContext != null) {
 					LLVMValueRef initValue = visit(varDefContext.initVal().exp());
-					LLVMBuildStore(builder, initValue, pointer);
+					LLVMBuildStore(builder, initValue, var);
 				}
 			}
-
-			VariableSymbol varSymbol = new VariableSymbol(varName, varType);
-			currentScope.define(varSymbol);
+			
+			currentScope.define(varName, var);
 		}
 		
 		return super.visitVarDecl(ctx);
@@ -181,8 +186,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	public LLVMValueRef visitParenExp(SysYParser.ParenExpContext ctx) {
 		return this.visit(ctx.exp());
 	}
-	
-	
+		
 	@Override
 	public LLVMValueRef visitAddExp(SysYParser.AddExpContext ctx) {
 		LLVMValueRef valueRef1 = visit(ctx.exp(0));
@@ -205,6 +209,17 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		} else {
 			return LLVMBuildSRem(builder, valueRef1, valueRef2, "tmp_");
 		}
+	}
+	
+	@Override
+	public LLVMValueRef visitLValExp(SysYParser.LValExpContext ctx) {
+		return this.visitLVal(ctx.lVal());
+	}
+	
+	@Override
+	public LLVMValueRef visitLVal(SysYParser.LValContext ctx) {
+		LLVMValueRef value = currentScope.resolve(ctx.getText());
+		return value;
 	}
 	
 	@Override
