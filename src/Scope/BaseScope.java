@@ -2,6 +2,7 @@ package Scope;//import com.google.common.base.MoreObjects;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
+
 import Symbol.*;
 
 public class BaseScope implements Scope {

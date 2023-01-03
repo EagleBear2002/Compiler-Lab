@@ -1,6 +1,7 @@
 package Scope;
 
 import java.util.Map;
+
 import Symbol.*;
 
 public interface Scope {
