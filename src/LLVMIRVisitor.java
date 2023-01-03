@@ -130,7 +130,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	@Override
 	public LLVMValueRef visitVarDecl(SysYParser.VarDeclContext ctx) {
 		String typeName = ctx.bType().getText();
-
+		
 		for (SysYParser.VarDefContext varDefContext : ctx.varDef()) {
 			LLVMTypeRef varType = getTypeRef(typeName);
 			String varName = varDefContext.IDENT().getText();
@@ -186,7 +186,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	public LLVMValueRef visitParenExp(SysYParser.ParenExpContext ctx) {
 		return this.visit(ctx.exp());
 	}
-		
+	
 	@Override
 	public LLVMValueRef visitAddExp(SysYParser.AddExpContext ctx) {
 		LLVMValueRef valueRef1 = visit(ctx.exp(0));
@@ -220,6 +220,35 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	public LLVMValueRef visitLVal(SysYParser.LValContext ctx) {
 		LLVMValueRef value = currentScope.resolve(ctx.getText());
 		return value;
+	}
+	
+	@Override
+	public LLVMValueRef visitNumExp(SysYParser.NumExpContext ctx) {
+		return this.visit(ctx.number());
+	}
+	
+	@Override
+	public LLVMValueRef visitNumber(SysYParser.NumberContext ctx) {
+		return this.visit(ctx.INTEGR_CONST());
+	}
+	
+	@Override
+	public LLVMValueRef visitFuncCallExp(SysYParser.FuncCallExpContext ctx) {
+		String functionName = ctx.IDENT().getText();
+		LLVMValueRef function = currentScope.resolve(functionName);
+		PointerPointer<Pointer> args = null;
+		int argsCount = 0;
+//		System.err.println("argsCount = " + argsCount);
+		if (ctx.funcRParams() != null) {
+			argsCount = ctx.funcRParams().param().size();
+			args = new PointerPointer<>(argsCount);
+			for (int i = 0; i < argsCount; ++i) {
+				SysYParser.ParamContext paramContext = ctx.funcRParams().param(i);
+				SysYParser.ExpContext expContext = paramContext.exp();
+				args.put(i, this.visit(expContext));
+			}
+		}
+		return LLVMBuildCall(builder, function, args, argsCount, "functionCall" + functionName);
 	}
 	
 	@Override
