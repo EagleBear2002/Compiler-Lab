@@ -94,7 +94,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		
 		String functionName = ctx.IDENT().getText();
 		LLVMValueRef function = LLVMAddFunction(module, functionName, functionType);
-		LLVMBasicBlockRef entry = LLVMAppendBasicBlock(function, functionName + "Entry");
+		LLVMBasicBlockRef entry = LLVMAppendBasicBlock(function, functionName + "_entry");
 		LLVMPositionBuilderAtEnd(builder, entry);
 		
 		for (int i = 0; i < paramsCount; ++i) {
@@ -134,19 +134,34 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		for (SysYParser.VarDefContext varDefContext : ctx.varDef()) {
 			LLVMTypeRef varType = getTypeRef(typeName);
 			String varName = varDefContext.IDENT().getText();
-
-//			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
-//				int elementCount = Integer.parseInt(toDecimalInteger(constExpContext.getText()));
-//				varType = new ArrayType(elementCount, varType);
-//			}
+			int elementCount = 0;
+			
+			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
+				elementCount = Integer.parseInt(toDecimalInteger(constExpContext.getText()));
+				varType = LLVMVectorType(varType, elementCount);
+				System.err.println("elementCount = " + elementCount);
+			}
 			
 			LLVMValueRef var = LLVMBuildAlloca(builder, varType, varName);
 			
 			if (varDefContext.ASSIGN() != null) {
 				SysYParser.ExpContext expContext = varDefContext.initVal().exp();
 				if (expContext != null) {
-					LLVMValueRef initValue = visit(varDefContext.initVal().exp());
-					LLVMBuildStore(builder, initValue, var);
+					LLVMValueRef initVal = visit(varDefContext.initVal().exp());
+					LLVMBuildStore(builder, initVal, var);
+				} else {
+					int initValCount = varDefContext.initVal().initVal().size();
+					for (int i = 0; i < elementCount; ++i) {
+						LLVMValueRef initVal;
+						if (i < initValCount) {
+							initVal = this.visit(varDefContext.initVal().initVal(i).exp());
+						} else {
+							initVal = LLVMConstInt(i32Type, 0, 1);
+						}
+						PointerPointer valuePointer = new PointerPointer(new LLVMValueRef[]{initVal});
+						LLVMValueRef element = LLVMBuildGEP(builder, var, valuePointer, i, "GEP");
+						LLVMBuildStore(builder, initVal, element);
+					}
 				}
 			}
 			
@@ -165,7 +180,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				return expValue;
 			}
 			case "-": {
-				return LLVMBuildNeg(builder, expValue, "tmp_");
+				return LLVMBuildNeg(builder, expValue, "neg_");
 			}
 			case "!": {
 				long numValue = LLVMConstIntGetZExtValue(expValue);
@@ -192,9 +207,9 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMValueRef valueRef1 = visit(ctx.exp(0));
 		LLVMValueRef valueRef2 = visit(ctx.exp(1));
 		if (ctx.PLUS() != null) {
-			return LLVMBuildAdd(builder, valueRef1, valueRef2, "tmp_");
+			return LLVMBuildAdd(builder, valueRef1, valueRef2, "add_");
 		} else {
-			return LLVMBuildSub(builder, valueRef1, valueRef2, "tmp_");
+			return LLVMBuildSub(builder, valueRef1, valueRef2, "sub_");
 		}
 	}
 	
@@ -203,11 +218,11 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMValueRef valueRef1 = visit(ctx.exp(0));
 		LLVMValueRef valueRef2 = visit(ctx.exp(1));
 		if (ctx.MUL() != null) {
-			return LLVMBuildMul(builder, valueRef1, valueRef2, "tmp_");
+			return LLVMBuildMul(builder, valueRef1, valueRef2, "mul_");
 		} else if (ctx.DIV() != null) {
-			return LLVMBuildSDiv(builder, valueRef1, valueRef2, "tmp_");
+			return LLVMBuildSDiv(builder, valueRef1, valueRef2, "sdiv_");
 		} else {
-			return LLVMBuildSRem(builder, valueRef1, valueRef2, "tmp_");
+			return LLVMBuildSRem(builder, valueRef1, valueRef2, "srem_");
 		}
 	}
 	
@@ -238,7 +253,6 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMValueRef function = currentScope.resolve(functionName);
 		PointerPointer<Pointer> args = null;
 		int argsCount = 0;
-//		System.err.println("argsCount = " + argsCount);
 		if (ctx.funcRParams() != null) {
 			argsCount = ctx.funcRParams().param().size();
 			args = new PointerPointer<>(argsCount);
@@ -248,7 +262,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				args.put(i, this.visit(expContext));
 			}
 		}
-		return LLVMBuildCall(builder, function, args, argsCount, "functionCall" + functionName);
+		return LLVMBuildCall(builder, function, args, argsCount, "call_" + functionName);
 	}
 	
 	@Override
