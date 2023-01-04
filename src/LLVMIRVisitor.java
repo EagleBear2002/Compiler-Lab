@@ -102,10 +102,10 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			String paramTypeName = funcFParamContext.bType().getText();
 			LLVMTypeRef paramType = getTypeRef(paramTypeName);
 			String varName = ctx.funcFParams().funcFParam(i).IDENT().getText();
-			LLVMValueRef var = LLVMBuildAlloca(builder, paramType, "pointer_" + varName);
-			currentScope.define(varName, var);
+			LLVMValueRef varPointer = LLVMBuildAlloca(builder, paramType, "pointer_" + varName);
+			currentScope.define(varName, varPointer);
 			LLVMValueRef argValue = LLVMGetParam(function, i);
-			LLVMBuildStore(builder, argValue, var);
+			LLVMBuildStore(builder, argValue, varPointer);
 		}
 		
 		currentScope.define(functionName, function);
@@ -142,13 +142,13 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				System.err.println("elementCount = " + elementCount);
 			}
 			
-			LLVMValueRef var = LLVMBuildAlloca(builder, varType, "pointer_" + varName);
+			LLVMValueRef varPointer = LLVMBuildAlloca(builder, varType, "pointer_" + varName);
 			
 			if (varDefContext.ASSIGN() != null) {
 				SysYParser.ExpContext expContext = varDefContext.initVal().exp();
 				if (expContext != null) {
 					LLVMValueRef initVal = visit(varDefContext.initVal().exp());
-					LLVMBuildStore(builder, initVal, var);
+					LLVMBuildStore(builder, initVal, varPointer);
 				} else {
 					int initValCount = varDefContext.initVal().initVal().size();
 					for (int i = 0; i < elementCount; ++i) {
@@ -159,13 +159,13 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 							initVal = LLVMConstInt(i32Type, 0, 1);
 						}
 						PointerPointer valuePointer = new PointerPointer(new LLVMValueRef[]{initVal});
-						LLVMValueRef element = LLVMBuildGEP(builder, var, valuePointer, i, "GEP");
+						LLVMValueRef element = LLVMBuildGEP(builder, varPointer, valuePointer, i, "GEP");
 						LLVMBuildStore(builder, initVal, element);
 					}
 				}
 			}
 			
-			currentScope.define(varName, var);
+			currentScope.define(varName, varPointer);
 		}
 		
 		return super.visitVarDecl(ctx);
@@ -269,7 +269,10 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	
 	@Override
 	public LLVMValueRef visitReturnStmt(SysYParser.ReturnStmtContext ctx) {
-		LLVMValueRef result = visit(ctx.exp());
+		LLVMValueRef result = null; 
+		if (ctx.exp() != null) {
+			result = visit(ctx.exp());
+		}
 		return LLVMBuildRet(builder, result);
 	}
 }
