@@ -102,7 +102,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			String paramTypeName = funcFParamContext.bType().getText();
 			LLVMTypeRef paramType = getTypeRef(paramTypeName);
 			String varName = ctx.funcFParams().funcFParam(i).IDENT().getText();
-			LLVMValueRef var = LLVMBuildAlloca(builder, paramType, varName);
+			LLVMValueRef var = LLVMBuildAlloca(builder, paramType, "pointer_" + varName);
 			currentScope.define(varName, var);
 			LLVMValueRef argValue = LLVMGetParam(function, i);
 			LLVMBuildStore(builder, argValue, var);
@@ -142,7 +142,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				System.err.println("elementCount = " + elementCount);
 			}
 			
-			LLVMValueRef var = LLVMBuildAlloca(builder, varType, varName);
+			LLVMValueRef var = LLVMBuildAlloca(builder, varType, "pointer_" + varName);
 			
 			if (varDefContext.ASSIGN() != null) {
 				SysYParser.ExpContext expContext = varDefContext.initVal().exp();
@@ -233,7 +233,9 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	
 	@Override
 	public LLVMValueRef visitLVal(SysYParser.LValContext ctx) {
-		LLVMValueRef value = currentScope.resolve(ctx.getText());
+		String lValName = ctx.getText();
+		LLVMValueRef valuePointer = currentScope.resolve(lValName);
+		LLVMValueRef value = LLVMBuildLoad(builder, valuePointer, lValName);
 		return value;
 	}
 	
