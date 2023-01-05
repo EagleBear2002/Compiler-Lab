@@ -427,39 +427,45 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	public LLVMValueRef visitCompareExp(SysYParser.CompareExpContext ctx) {
 		LLVMValueRef lVal = this.visit(ctx.cond(0));
 		LLVMValueRef rVal = this.visit(ctx.cond(1));
+		LLVMValueRef cmpResult = null;
 		if (ctx.LT() != null) {
-			return LLVMBuildICmp(builder, LLVMIntSLT, lVal, rVal, "LT");
+			cmpResult = LLVMBuildICmp(builder, LLVMIntSLT, lVal, rVal, "LT");
 		} else if (ctx.GT() != null) {
-			return LLVMBuildICmp(builder, LLVMIntSGT, lVal, rVal, "GT");
+			cmpResult = LLVMBuildICmp(builder, LLVMIntSGT, lVal, rVal, "GT");
 		} else if (ctx.LE() != null) {
-			return LLVMBuildICmp(builder, LLVMIntSLE, lVal, rVal, "LE");
+			cmpResult = LLVMBuildICmp(builder, LLVMIntSLE, lVal, rVal, "LE");
 		} else {
-			return LLVMBuildICmp(builder, LLVMIntSGE, lVal, rVal, "GE");
+			cmpResult = LLVMBuildICmp(builder, LLVMIntSGE, lVal, rVal, "GE");
 		}
+		return LLVMBuildZExt(builder, cmpResult, i32Type, "ext");
 	}
 	
 	@Override
 	public LLVMValueRef visitRelationExp(SysYParser.RelationExpContext ctx) {
 		LLVMValueRef lVal = this.visit(ctx.cond(0));
 		LLVMValueRef rVal = this.visit(ctx.cond(1));
+		LLVMValueRef cmpResult = null;
 		if (ctx.NEQ() != null) {
-			return LLVMBuildICmp(builder, LLVMIntNE, lVal, rVal, "NEQ");
+			cmpResult = LLVMBuildICmp(builder, LLVMIntNE, lVal, rVal, "NEQ");
 		} else {
-			return LLVMBuildICmp(builder, LLVMIntEQ, lVal, rVal, "EQ");
+			cmpResult = LLVMBuildICmp(builder, LLVMIntEQ, lVal, rVal, "EQ");
 		}
+		return LLVMBuildZExt(builder, cmpResult, i32Type, "ext");
 	}
 	
 	@Override
 	public LLVMValueRef visitAndExp(SysYParser.AndExpContext ctx) {
 		LLVMValueRef lVal = this.visit(ctx.cond(0));
 		LLVMValueRef rVal = this.visit(ctx.cond(1));
-		return LLVMBuildICmp(builder, LLVMAnd, lVal, rVal, "AND");
+		LLVMValueRef cmpResult = LLVMBuildICmp(builder, LLVMAnd, lVal, rVal, "AND");
+		return LLVMBuildZExt(builder, cmpResult, i32Type, "ext");
 	}
 	
 	@Override
 	public LLVMValueRef visitOrExp(SysYParser.OrExpContext ctx) {
 		LLVMValueRef lVal = this.visit(ctx.cond(0));
 		LLVMValueRef rVal = this.visit(ctx.cond(1));
-		return LLVMBuildICmp(builder, LLVMOr, lVal, rVal, "OR");
+		LLVMValueRef cmpResult = LLVMBuildICmp(builder, LLVMOr, lVal, rVal, "OR");
+		return LLVMBuildZExt(builder, cmpResult, i32Type, "ext");
 	}
 }
