@@ -289,19 +289,14 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			lValName += "[" + ctx.exp(0).getText() + "]";
 			arrayPointer[1] = index;
 			PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
-			LLVMValueRef elementPtr = LLVMBuildGEP(builder, varPointer, indexPointer, 2, "pointer_" + lValName);
-			return elementPtr;
+			return LLVMBuildGEP(builder, varPointer, indexPointer, 2, "pointer_" + lValName);
 		}
 	}
 	
 	@Override
 	public LLVMValueRef visitAssignment(SysYParser.AssignmentContext ctx) {
-		String lValName = ctx.lVal().getText();
-//		System.out.println("Tag 0");
 		LLVMValueRef lValPointer = this.visitLVal(ctx.lVal());
-//		System.out.println("Tag 1");
 		LLVMValueRef exp = this.visit(ctx.exp());
-//		System.out.println("Tag 2");
 		return LLVMBuildStore(builder, exp, lValPointer); 
 	}
 	
@@ -335,7 +330,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				args.put(i, this.visit(expContext));
 			}
 		}
-		return LLVMBuildCall(builder, function, args, argsCount, "");
+		return LLVMBuildCall(builder, function, args, argsCount, "call" + functionName);
 	}
 	
 	@Override
