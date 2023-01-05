@@ -108,6 +108,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		super.visitFuncDef(ctx);
 		currentScope = currentScope.getEnclosingScope();
 		
+		LLVMBuildRet(builder, null);
 		return function;
 	}
 	
@@ -283,10 +284,10 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		if (ctx.exp().size() == 0) {
 			return varPointer;
 		} else {
+			lValName += "[" + ctx.exp(0).getText() + "]";
 			LLVMValueRef[] arrayPointer = new LLVMValueRef[2];
 			arrayPointer[0] = zero;
 			LLVMValueRef index = this.visit(ctx.exp(0));
-			lValName += "[" + ctx.exp(0).getText() + "]";
 			arrayPointer[1] = index;
 			PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
 			return LLVMBuildGEP(builder, varPointer, indexPointer, 2, "pointer_" + lValName);
