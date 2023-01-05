@@ -5,6 +5,8 @@ import org.bytedeco.javacpp.PointerPointer;
 import org.bytedeco.llvm.LLVM.*;
 import Scope.*;
 
+import java.util.Stack;
+
 import static org.bytedeco.llvm.global.LLVM.*;
 import static org.bytedeco.llvm.global.LLVM.LLVMBuildGEP;
 
@@ -19,6 +21,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	private final LLVMTypeRef voidType = LLVMVoidType();
 	private final LLVMValueRef zero = LLVMConstInt(i32Type, 0, 0);
 	private boolean isReturned = false;
+	private final Stack<LLVMBasicBlockRef> blockStack = new Stack<>();
 	
 	public LLVMIRVisitor() {
 		LLVMInitializeCore(LLVMGetGlobalPassRegistry());
@@ -92,7 +95,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		String functionName = ctx.IDENT().getText();
 		LLVMValueRef function = LLVMAddFunction(module, functionName, functionType);
 		LLVMBasicBlockRef entry = LLVMAppendBasicBlock(function, functionName + "_entry");
-		LLVMPositionBuilderAtEnd(builder, entry);
+		LLVMPositionBuilderAtEnd(builder, blockStack.push(entry));
 		
 		for (int i = 0; i < paramsCount; ++i) {
 			SysYParser.FuncFParamContext funcFParamContext = ctx.funcFParams().funcFParam(i);
@@ -115,6 +118,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			LLVMBuildRet(builder, null);
 		}
 		isReturned = false;
+		blockStack.pop();
 		return function;
 	}
 	
@@ -140,7 +144,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			
 			for (SysYParser.ConstExpContext constExpContext : varDefContext.constExp()) {
 				elementCount = Integer.parseInt(toDecimalInteger(constExpContext.getText()));
-				varType = LLVMVectorType(varType, elementCount);
+				varType = LLVMArrayType(varType, elementCount);
 			}
 			
 			LLVMValueRef varPointer = null;
@@ -215,7 +219,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			
 			for (SysYParser.ConstExpContext constExpContext : constDefContext.constExp()) {
 				elementCount = Integer.parseInt(toDecimalInteger(constExpContext.getText()));
-				varType = LLVMVectorType(varType, elementCount);
+				varType = LLVMArrayType(varType, elementCount);
 			}
 			
 			LLVMValueRef varPointer = null;
@@ -392,5 +396,10 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		}
 		isReturned = true;
 		return LLVMBuildRet(builder, result);
+	}
+	
+	@Override
+	public LLVMValueRef visitIfStmt(SysYParser.IfStmtContext ctx) {
+		return super.visitIfStmt(ctx);
 	}
 }
