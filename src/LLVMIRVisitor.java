@@ -22,6 +22,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	private final LLVMValueRef zero = LLVMConstInt(i32Type, 0, 0);
 	private boolean isReturned = false;
 	private final Stack<LLVMBasicBlockRef> blockStack = new Stack<>();
+	private LLVMValueRef currentFunction = null;
 	
 	public LLVMIRVisitor() {
 		LLVMInitializeCore(LLVMGetGlobalPassRegistry());
@@ -93,8 +94,8 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMTypeRef functionType = LLVMFunctionType(retType, paramsTypes, paramsCount, 0);
 		
 		String functionName = ctx.IDENT().getText();
-		LLVMValueRef function = LLVMAddFunction(module, functionName, functionType);
-		LLVMBasicBlockRef entry = LLVMAppendBasicBlock(function, functionName + "_entry");
+		currentFunction = LLVMAddFunction(module, functionName, functionType);
+		LLVMBasicBlockRef entry = LLVMAppendBasicBlock(currentFunction, functionName + "_entry");
 		LLVMPositionBuilderAtEnd(builder, blockStack.push(entry));
 		
 		for (int i = 0; i < paramsCount; ++i) {
@@ -104,11 +105,11 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			String varName = ctx.funcFParams().funcFParam(i).IDENT().getText();
 			LLVMValueRef varPointer = LLVMBuildAlloca(builder, paramType, "pointer_" + varName);
 			currentScope.define(varName, varPointer);
-			LLVMValueRef argValue = LLVMGetParam(function, i);
+			LLVMValueRef argValue = LLVMGetParam(currentFunction, i);
 			LLVMBuildStore(builder, argValue, varPointer);
 		}
 		
-		currentScope.define(functionName, function);
+		currentScope.define(functionName, currentFunction);
 		currentScope = new LocalScope(currentScope);
 		isReturned = false;
 		super.visitFuncDef(ctx);
@@ -119,7 +120,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		}
 		isReturned = false;
 		blockStack.pop();
-		return function;
+		return currentFunction;
 	}
 	
 	@Override
@@ -400,7 +401,25 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	
 	@Override
 	public LLVMValueRef visitIfStmt(SysYParser.IfStmtContext ctx) {
+		LLVMValueRef condVal = this.visit(ctx.cond());
+		LLVMValueRef cmpResult = LLVMBuildICmp(builder, LLVMIntNE, zero, condVal, "cmp_result");
+		LLVMBasicBlockRef trueBlock = LLVMAppendBasicBlock(currentFunction, "trueBlock");
+		LLVMBasicBlockRef falseBlock = LLVMAppendBasicBlock(currentFunction, "falseBlock");
+		LLVMBasicBlockRef afterBlock = LLVMAppendBasicBlock(currentFunction, "afterBlock");
 		
-		return super.visitIfStmt(ctx);
+		LLVMBuildCondBr(builder, cmpResult, trueBlock, falseBlock);
+		
+		LLVMPositionBuilderAtEnd(builder, trueBlock);
+		this.visit(ctx.stmt(0));
+		LLVMBuildBr(builder, afterBlock);
+		
+		LLVMPositionBuilderAtEnd(builder, falseBlock);
+		if (ctx.ELSE() != null) {
+			this.visit(ctx.stmt(1));
+		}
+		LLVMBuildBr(builder, afterBlock);
+		
+		LLVMPositionBuilderAtEnd(builder, afterBlock);
+		return null;
 	}
 }
