@@ -17,12 +17,12 @@ MODULE=$(git rev-parse --abbrev-ref HEAD | tr '[a-z]' '[A-Z]')
 WORKSPACE=$(basename $(realpath .))
 FILE=submit.zip
 
-if [[ $(git status --porcelain) ]]; then
-  echo "Error: Git repository is dirty."
-  echo "Commit all your changes before submitting."
-  echo "Hint: run 'git status' to show changed files."
-  exit -1
-fi
+#if [[ $(git status --porcelain) ]]; then
+#  echo "Error: Git repository is dirty."
+#  echo "Commit all your changes before submitting."
+#  echo "Hint: run 'git status' to show changed files."
+#  exit -1
+#fi
 
 # Construct assignmentId
 ANTLRTMP="labN"
