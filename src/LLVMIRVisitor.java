@@ -154,21 +154,25 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 						}
 					}
 					
-					LLVMValueRef[] arrayPointer = new LLVMValueRef[2];
-					arrayPointer[0] = zero;
-					for (int i = 0; i < elementCount; i++) {
-						arrayPointer[1] = LLVMConstInt(i32Type, i, 0);
-						PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
-						LLVMValueRef elementPtr = LLVMBuildGEP(builder, varPointer, indexPointer, 2, "GEP_" + i);
-						LLVMBuildStore(builder, initArray[i], elementPtr);
-					}
+					buildGEP(elementCount, varPointer, initArray);
 				}
 			}
 			
 			currentScope.define(varName, varPointer);
 		}
 		
-		return super.visitVarDecl(ctx);
+		return null;
+	}
+	
+	private void buildGEP(int elementCount, LLVMValueRef varPointer, LLVMValueRef[] initArray) {
+		LLVMValueRef[] arrayPointer = new LLVMValueRef[2];
+		arrayPointer[0] = zero;
+		for (int i = 0; i < elementCount; i++) {
+			arrayPointer[1] = LLVMConstInt(i32Type, i, 0);
+			PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
+			LLVMValueRef elementPtr = LLVMBuildGEP(builder, varPointer, indexPointer, 2, "GEP_" + i);
+			LLVMBuildStore(builder, initArray[i], elementPtr);
+		}
 	}
 	
 	@Override
@@ -202,20 +206,13 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 					}
 				}
 				
-				LLVMValueRef[] arrayPointer = new LLVMValueRef[2];
-				arrayPointer[0] = zero;
-				for (int i = 0; i < elementCount; i++) {
-					arrayPointer[1] = LLVMConstInt(i32Type, i, 0);
-					PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
-					LLVMValueRef elementPtr = LLVMBuildGEP(builder, varPointer, indexPointer, 2, "GEP_" + i);
-					LLVMBuildStore(builder, initArray[i], elementPtr);
-				}
+				buildGEP(elementCount, varPointer, initArray);
 			}
 			
 			currentScope.define(varName, varPointer);
 		}
 		
-		return super.visitConstDecl(ctx);
+		return null;
 	}
 	
 	@Override
@@ -241,7 +238,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			}
 		}
 		
-		return super.visitUnaryExp(ctx);
+		return null;
 	}
 	
 	@Override
@@ -280,12 +277,10 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	
 	@Override
 	public LLVMValueRef visitLVal(SysYParser.LValContext ctx) {
-//		System.out.println("visitLVal:" + ctx.getText());
 		String lValName = ctx.IDENT().getText();
 		LLVMValueRef varPointer = currentScope.resolve(lValName);
 		if (ctx.exp().size() == 0) {
-			LLVMValueRef value = LLVMBuildLoad(builder, varPointer, lValName);
-			return value;
+			return varPointer;
 		} else {
 			LLVMValueRef[] arrayPointer = new LLVMValueRef[2];
 			arrayPointer[0] = zero;
@@ -294,9 +289,19 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			arrayPointer[1] = index;
 			PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
 			LLVMValueRef elementPtr = LLVMBuildGEP(builder, varPointer, indexPointer, 2, "pointer_" + lValName);
-			LLVMValueRef value = LLVMBuildLoad(builder, elementPtr, lValName);
-			return value;
+			return elementPtr;
 		}
+	}
+	
+	@Override
+	public LLVMValueRef visitAssignment(SysYParser.AssignmentContext ctx) {
+		String lValName = ctx.lVal().getText();
+//		System.out.println("Tag 0");
+		LLVMValueRef lValPointer = this.visitLVal(ctx.lVal());
+//		System.out.println("Tag 1");
+		LLVMValueRef exp = this.visit(ctx.exp());
+//		System.out.println("Tag 2");
+		return LLVMBuildStore(builder, exp, lValPointer); 
 	}
 	
 	@Override
