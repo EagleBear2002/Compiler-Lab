@@ -272,7 +272,8 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	
 	@Override
 	public LLVMValueRef visitLValExp(SysYParser.LValExpContext ctx) {
-		return this.visitLVal(ctx.lVal());
+		LLVMValueRef lValPointer = this.visitLVal(ctx.lVal());
+		return LLVMBuildLoad(builder, lValPointer, ctx.lVal().getText());
 	}
 	
 	@Override
