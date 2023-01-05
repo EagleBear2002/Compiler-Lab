@@ -400,6 +400,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	
 	@Override
 	public LLVMValueRef visitIfStmt(SysYParser.IfStmtContext ctx) {
+		
 		return super.visitIfStmt(ctx);
 	}
 }
