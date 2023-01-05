@@ -17,6 +17,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	private final LLVMTypeRef i32Type = LLVMInt32Type();
 	private final LLVMTypeRef voidType = LLVMVoidType();
 	private final LLVMValueRef zero = LLVMConstInt(i32Type, 0, 0);
+	private boolean isReturned = false;
 	
 	public LLVMIRVisitor() {
 		LLVMInitializeCore(LLVMGetGlobalPassRegistry());
@@ -105,10 +106,14 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		
 		currentScope.define(functionName, function);
 		currentScope = new LocalScope(currentScope);
+		isReturned = false;
 		super.visitFuncDef(ctx);
 		currentScope = currentScope.getEnclosingScope();
 		
-		LLVMBuildRet(builder, null);
+		if (!isReturned) {
+			LLVMBuildRet(builder, null);
+		}
+		isReturned = false;
 		return function;
 	}
 	
@@ -340,6 +345,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		if (ctx.exp() != null) {
 			result = visit(ctx.exp());
 		}
+		isReturned = true;
 		return LLVMBuildRet(builder, result);
 	}
 }
