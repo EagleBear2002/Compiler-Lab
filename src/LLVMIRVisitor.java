@@ -113,7 +113,6 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	
 	@Override
 	public LLVMValueRef visitBlock(SysYParser.BlockContext ctx) {
-		System.err.println("visitBlock");
 		LocalScope localScope = new LocalScope(currentScope);
 		String localScopeName = localScope.getName() + (localScopeCounter++);
 		localScope.setName(localScopeName);
@@ -157,7 +156,6 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 					
 					LLVMValueRef[] arrayPointer = new LLVMValueRef[2];
 					arrayPointer[0] = zero;
-					arrayPointer[1] = zero;
 					for (int i = 0; i < elementCount; i++) {
 						arrayPointer[1] = LLVMConstInt(i32Type, i, 0);
 						PointerPointer<LLVMValueRef> valuePointer = new PointerPointer<>(arrayPointer);
