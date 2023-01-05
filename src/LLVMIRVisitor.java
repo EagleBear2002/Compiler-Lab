@@ -422,4 +422,44 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMPositionBuilderAtEnd(builder, afterBlock);
 		return null;
 	}
+	
+	@Override
+	public LLVMValueRef visitCompareExp(SysYParser.CompareExpContext ctx) {
+		LLVMValueRef lVal = this.visit(ctx.cond(0));
+		LLVMValueRef rVal = this.visit(ctx.cond(1));
+		if (ctx.LT() != null) {
+			return LLVMBuildICmp(builder, LLVMIntSLT, lVal, rVal, "LT");
+		} else if (ctx.GT() != null) {
+			return LLVMBuildICmp(builder, LLVMIntSGT, lVal, rVal, "GT");
+		} else if (ctx.LE() != null) {
+			return LLVMBuildICmp(builder, LLVMIntSLE, lVal, rVal, "LE");
+		} else {
+			return LLVMBuildICmp(builder, LLVMIntSGE, lVal, rVal, "GE");
+		}
+	}
+	
+	@Override
+	public LLVMValueRef visitRelationExp(SysYParser.RelationExpContext ctx) {
+		LLVMValueRef lVal = this.visit(ctx.cond(0));
+		LLVMValueRef rVal = this.visit(ctx.cond(1));
+		if (ctx.NEQ() != null) {
+			return LLVMBuildICmp(builder, LLVMIntNE, lVal, rVal, "NEQ");
+		} else {
+			return LLVMBuildICmp(builder, LLVMIntEQ, lVal, rVal, "EQ");
+		}
+	}
+	
+	@Override
+	public LLVMValueRef visitAndExp(SysYParser.AndExpContext ctx) {
+		LLVMValueRef lVal = this.visit(ctx.cond(0));
+		LLVMValueRef rVal = this.visit(ctx.cond(1));
+		return LLVMBuildICmp(builder, LLVMAnd, lVal, rVal, "AND");
+	}
+	
+	@Override
+	public LLVMValueRef visitOrExp(SysYParser.OrExpContext ctx) {
+		LLVMValueRef lVal = this.visit(ctx.cond(0));
+		LLVMValueRef rVal = this.visit(ctx.cond(1));
+		return LLVMBuildICmp(builder, LLVMOr, lVal, rVal, "OR");
+	}
 }
