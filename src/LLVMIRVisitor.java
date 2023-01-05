@@ -236,7 +236,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		String lValName = ctx.IDENT().getText();
 		LLVMValueRef valuePointer = currentScope.resolve(lValName);
 		LLVMValueRef value = LLVMBuildLoad(builder, valuePointer, lValName);
-		System.err.println("valuePointer: " + valuePointer);
+//		System.err.println("valuePointer: " + valuePointer);
 		for (SysYParser.ExpContext expContext : ctx.exp()) {
 			LLVMValueRef index = this.visit(expContext);
 		}
