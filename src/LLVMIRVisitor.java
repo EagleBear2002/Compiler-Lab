@@ -340,8 +340,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			lValName += "[" + ctx.exp(0).getText() + "]";
 			LLVMValueRef[] arrayPointer = new LLVMValueRef[2];
 			arrayPointer[0] = zero;
-			LLVMValueRef index = this.visit(ctx.exp(0));
-			arrayPointer[1] = index;
+			arrayPointer[1] = this.visit(ctx.exp(0));
 			PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
 			return LLVMBuildGEP(builder, varPointer, indexPointer, 2, "pointer_" + lValName);
 		}
