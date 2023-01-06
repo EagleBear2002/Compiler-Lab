@@ -200,7 +200,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	
 	private void buildGEP(int elementCount, LLVMValueRef varPointer, LLVMValueRef[] initArray) {
 		LLVMValueRef[] arrayPointer = new LLVMValueRef[2];
-//		arrayPointer[0] = zero;
+		arrayPointer[0] = zero;
 		for (int i = 0; i < elementCount; i++) {
 			arrayPointer[1] = LLVMConstInt(i32Type, i, 0);
 			PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
