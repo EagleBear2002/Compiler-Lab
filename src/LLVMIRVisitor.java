@@ -1,14 +1,12 @@
 import org.antlr.v4.runtime.*;
 import org.antlr.v4.runtime.tree.TerminalNode;
-import org.bytedeco.javacpp.Pointer;
-import org.bytedeco.javacpp.PointerPointer;
+import org.bytedeco.javacpp.*;
 import org.bytedeco.llvm.LLVM.*;
 import Scope.*;
 
 import java.util.Stack;
 
 import static org.bytedeco.llvm.global.LLVM.*;
-import static org.bytedeco.llvm.global.LLVM.LLVMBuildGEP;
 
 public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	private GlobalScope globalScope = null;
@@ -151,7 +149,16 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			LLVMValueRef varPointer = null;
 			if (currentScope == globalScope) {
 				varPointer = LLVMAddGlobal(module, varType, "pointer_" + varName);
-				LLVMSetInitializer(varPointer, zero);
+				if (elementCount == 0) {
+					LLVMSetInitializer(varPointer, zero);
+				} else {
+					PointerPointer<Pointer> pointerPointer = new PointerPointer<>(elementCount);
+					for (int i = 0; i < elementCount; ++i) {
+						pointerPointer.put(i, zero);
+					}
+					LLVMValueRef initArray = LLVMConstArray(varType, pointerPointer, elementCount);
+					LLVMSetInitializer(varPointer, initArray);
+				}
 			} else {
 				varPointer = LLVMBuildAlloca(builder, varType, "pointer_" + varName);
 			}
