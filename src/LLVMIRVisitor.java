@@ -19,7 +19,6 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	private final LLVMTypeRef voidType = LLVMVoidType();
 	private final LLVMValueRef zero = LLVMConstInt(i32Type, 0, 0);
 	private boolean isReturned = false;
-	private final Stack<LLVMBasicBlockRef> blockStack = new Stack<>();
 	private LLVMValueRef currentFunction = null;
 	
 	public LLVMIRVisitor() {
@@ -94,7 +93,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		String functionName = ctx.IDENT().getText();
 		currentFunction = LLVMAddFunction(module, functionName, functionType);
 		LLVMBasicBlockRef entry = LLVMAppendBasicBlock(currentFunction, functionName + "_entry");
-		LLVMPositionBuilderAtEnd(builder, blockStack.push(entry));
+		LLVMPositionBuilderAtEnd(builder, entry);
 		
 		for (int i = 0; i < paramsCount; ++i) {
 			SysYParser.FuncFParamContext funcFParamContext = ctx.funcFParams().funcFParam(i);
@@ -117,7 +116,6 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			LLVMBuildRet(builder, null);
 		}
 		isReturned = false;
-		blockStack.pop();
 		return currentFunction;
 	}
 	
