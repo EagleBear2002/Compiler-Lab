@@ -168,7 +168,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				} else {
 					int initValCount = varDefContext.initVal().initVal().size();
 					if (currentScope == globalScope) {
-						PointerPointer pointerPointer = new PointerPointer<>(elementCount);
+						PointerPointer<Pointer> pointerPointer = new PointerPointer<>(elementCount);
 						for (int i = 0; i < elementCount; ++i) {
 							if (i < initValCount) {
 								pointerPointer.put(i, this.visit(varDefContext.initVal().initVal(i).exp()));
@@ -200,7 +200,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	
 	private void buildGEP(int elementCount, LLVMValueRef varPointer, LLVMValueRef[] initArray) {
 		LLVMValueRef[] arrayPointer = new LLVMValueRef[2];
-		arrayPointer[0] = zero;
+//		arrayPointer[0] = zero;
 		for (int i = 0; i < elementCount; i++) {
 			arrayPointer[1] = LLVMConstInt(i32Type, i, 0);
 			PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
