@@ -4,8 +4,6 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.llvm.LLVM.*;
 import Scope.*;
 
-import java.util.Stack;
-
 import static org.bytedeco.llvm.global.LLVM.*;
 
 public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
@@ -288,12 +286,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				return LLVMBuildNeg(builder, expValue, "neg_");
 			}
 			case "!": {
-				long numValue = LLVMConstIntGetZExtValue(expValue);
-				if (numValue == 0) {
-					return LLVMConstInt(i32Type, 1, 0);
-				} else {
-					return LLVMConstInt(i32Type, 0, 0);
-				}
+				return LLVMBuildNot(builder, expValue, "not_");
 			}
 			default: {
 			}
