@@ -93,6 +93,9 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMBasicBlockRef entry = LLVMAppendBasicBlock(currentFunction, functionName + "_entry");
 		LLVMPositionBuilderAtEnd(builder, entry);
 		
+		currentScope.define(functionName, currentFunction);
+		currentScope = new LocalScope(currentScope);
+		
 		for (int i = 0; i < paramsCount; ++i) {
 			SysYParser.FuncFParamContext funcFParamContext = ctx.funcFParams().funcFParam(i);
 			String paramTypeName = funcFParamContext.bType().getText();
@@ -104,8 +107,6 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			LLVMBuildStore(builder, argValue, varPointer);
 		}
 		
-		currentScope.define(functionName, currentFunction);
-		currentScope = new LocalScope(currentScope);
 		isReturned = false;
 		super.visitFuncDef(ctx);
 		currentScope = currentScope.getEnclosingScope();
@@ -144,7 +145,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			
 			LLVMValueRef varPointer = null;
 			if (currentScope == globalScope) {
-				varPointer = LLVMAddGlobal(module, varType, "pointer_" + varName);
+				varPointer = LLVMAddGlobal(module, varType, "global_" + varName);
 				if (elementCount == 0) {
 					LLVMSetInitializer(varPointer, zero);
 				} else {
@@ -228,7 +229,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			
 			LLVMValueRef varPointer = null;
 			if (currentScope == globalScope) {
-				varPointer = LLVMAddGlobal(module, varType, "pointer_" + varName);
+				varPointer = LLVMAddGlobal(module, varType, "global_" + varName);
 				LLVMSetInitializer(varPointer, zero);
 			} else {
 				varPointer = LLVMBuildAlloca(builder, varType, "pointer_" + varName);
