@@ -18,6 +18,8 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	private final LLVMValueRef zero = LLVMConstInt(i32Type, 0, 0);
 	private boolean isReturned = false;
 	private LLVMValueRef currentFunction = null;
+	private LLVMBasicBlockRef currentWhileCondtion = null;
+	private LLVMBasicBlockRef currentAfterWhile = null;
 	
 	public LLVMIRVisitor() {
 		LLVMInitializeCore(LLVMGetGlobalPassRegistry());
@@ -403,21 +405,21 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMValueRef cmpResult = LLVMBuildICmp(builder, LLVMIntNE, zero, condVal, "cmp_result");
 		LLVMBasicBlockRef trueBlock = LLVMAppendBasicBlock(currentFunction, "trueBlock");
 		LLVMBasicBlockRef falseBlock = LLVMAppendBasicBlock(currentFunction, "falseBlock");
-		LLVMBasicBlockRef afterBlock = LLVMAppendBasicBlock(currentFunction, "afterBlock");
+		LLVMBasicBlockRef afterIf = LLVMAppendBasicBlock(currentFunction, "afterIf");
 		
 		LLVMBuildCondBr(builder, cmpResult, trueBlock, falseBlock);
 		
 		LLVMPositionBuilderAtEnd(builder, trueBlock);
 		this.visit(ctx.stmt(0));
-		LLVMBuildBr(builder, afterBlock);
+		LLVMBuildBr(builder, afterIf);
 		
 		LLVMPositionBuilderAtEnd(builder, falseBlock);
 		if (ctx.ELSE() != null) {
 			this.visit(ctx.stmt(1));
 		}
-		LLVMBuildBr(builder, afterBlock);
+		LLVMBuildBr(builder, afterIf);
 		
-		LLVMPositionBuilderAtEnd(builder, afterBlock);
+		LLVMPositionBuilderAtEnd(builder, afterIf);
 		return null;
 	}
 	
@@ -471,20 +473,32 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	public LLVMValueRef visitWhileStmt(SysYParser.WhileStmtContext ctx) {
 		LLVMBasicBlockRef whileCondition = LLVMAppendBasicBlock(currentFunction, "whileCondition");
 		LLVMBasicBlockRef whileBody = LLVMAppendBasicBlock(currentFunction, "whileBody");
-		LLVMBasicBlockRef afterBlock = LLVMAppendBasicBlock(currentFunction, "afterBlock");
+		LLVMBasicBlockRef afterWhile = LLVMAppendBasicBlock(currentFunction, "afterWhile");
+		currentWhileCondtion = whileCondition;
+		currentAfterWhile = afterWhile;
 		
 		LLVMBuildBr(builder, whileCondition);
 		
 		LLVMPositionBuilderAtEnd(builder, whileCondition);
 		LLVMValueRef condVal = this.visit(ctx.cond());
 		LLVMValueRef cmpResult = LLVMBuildICmp(builder, LLVMIntNE, zero, condVal, "cmp_result");
-		LLVMBuildCondBr(builder, cmpResult, whileBody, afterBlock);
+		LLVMBuildCondBr(builder, cmpResult, whileBody, afterWhile);
 		
 		LLVMPositionBuilderAtEnd(builder, whileBody);
 		this.visit(ctx.stmt());
-		LLVMBuildBr(builder, afterBlock);
+		LLVMBuildBr(builder, afterWhile);
 		
-		LLVMPositionBuilderAtEnd(builder, afterBlock);
+		LLVMPositionBuilderAtEnd(builder, afterWhile);
 		return null;
+	}
+	
+	@Override
+	public LLVMValueRef visitBreakStmt(SysYParser.BreakStmtContext ctx) {
+		return LLVMBuildBr(builder, currentAfterWhile);
+	}
+	
+	@Override
+	public LLVMValueRef visitContinueStmt(SysYParser.ContinueStmtContext ctx) {
+		return LLVMBuildBr(builder, currentWhileCondtion);
 	}
 }
