@@ -474,6 +474,9 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMBasicBlockRef whileCondition = LLVMAppendBasicBlock(currentFunction, "whileCondition");
 		LLVMBasicBlockRef whileBody = LLVMAppendBasicBlock(currentFunction, "whileBody");
 		LLVMBasicBlockRef afterWhile = LLVMAppendBasicBlock(currentFunction, "afterWhile");
+		
+		LLVMBasicBlockRef previousWhileCondition = currentWhileCondtion;
+		LLVMBasicBlockRef previousAfterWhile = currentAfterWhile;
 		currentWhileCondtion = whileCondition;
 		currentAfterWhile = afterWhile;
 		
@@ -489,6 +492,9 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMBuildBr(builder, afterWhile);
 		
 		LLVMPositionBuilderAtEnd(builder, afterWhile);
+		
+		currentWhileCondtion = previousWhileCondition;
+		currentAfterWhile = previousAfterWhile;
 		return null;
 	}
 	
