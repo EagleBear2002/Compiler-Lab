@@ -459,7 +459,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	public LLVMValueRef visitAndExp(SysYParser.AndExpContext ctx) {
 		LLVMValueRef lVal = this.visit(ctx.cond(0));
 		LLVMValueRef rVal = this.visit(ctx.cond(1));
-		LLVMValueRef cmpResult = LLVMBuildICmp(builder, LLVMAnd, lVal, rVal, "AND");
+		LLVMValueRef cmpResult = LLVMBuildAnd(builder, lVal, rVal, "AND");
 		return LLVMBuildZExt(builder, cmpResult, i32Type, "ext");
 	}
 	
@@ -467,7 +467,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	public LLVMValueRef visitOrExp(SysYParser.OrExpContext ctx) {
 		LLVMValueRef lVal = this.visit(ctx.cond(0));
 		LLVMValueRef rVal = this.visit(ctx.cond(1));
-		LLVMValueRef cmpResult = LLVMBuildICmp(builder, LLVMOr, lVal, rVal, "OR");
+		LLVMValueRef cmpResult = LLVMBuildOr(builder, lVal, rVal, "OR");
 		return LLVMBuildZExt(builder, cmpResult, i32Type, "ext");
 	}
 	
