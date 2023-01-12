@@ -4,6 +4,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.llvm.LLVM.*;
 import Scope.*;
 
+import java.util.LinkedHashMap;
+import java.util.Map;
 import java.util.Stack;
 
 import static org.bytedeco.llvm.global.LLVM.*;
@@ -12,7 +14,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	private GlobalScope globalScope = null;
 	private Scope currentScope = null;
 	private int localScopeCounter = 0;
-	
+	private Map<String, String> retTypeMap = new LinkedHashMap<>();
 	private final LLVMModuleRef module = LLVMModuleCreateWithName("module");
 	private final LLVMBuilderRef builder = LLVMCreateBuilder();
 	private final LLVMTypeRef i32Type = LLVMInt32Type();
@@ -93,6 +95,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMTypeRef functionType = LLVMFunctionType(retType, paramsTypes, paramsCount, 0);
 		
 		String functionName = ctx.IDENT().getText();
+		retTypeMap.put(functionName, retTypeName);
 		currentFunction = LLVMAddFunction(module, functionName, functionType);
 		LLVMBasicBlockRef entry = LLVMAppendBasicBlock(currentFunction, functionName + "_entry");
 		LLVMPositionBuilderAtEnd(builder, entry);
@@ -388,7 +391,10 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				args.put(i, this.visit(expContext));
 			}
 		}
-		return LLVMBuildCall(builder, function, args, argsCount, "functionName");
+		if (retTypeMap.get(functionName).equals("void")) {
+			functionName = "";
+		}
+		return LLVMBuildCall(builder, function, args, argsCount, functionName);
 	}
 	
 	@Override
