@@ -4,6 +4,8 @@ import org.bytedeco.javacpp.*;
 import org.bytedeco.llvm.LLVM.*;
 import Scope.*;
 
+import java.util.Stack;
+
 import static org.bytedeco.llvm.global.LLVM.*;
 
 public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
@@ -18,8 +20,8 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	private final LLVMValueRef zero = LLVMConstInt(i32Type, 0, 0);
 	private boolean isReturned = false;
 	private LLVMValueRef currentFunction = null;
-	private LLVMBasicBlockRef currentWhileCondtion = null;
-	private LLVMBasicBlockRef currentAfterWhile = null;
+	private final Stack<LLVMBasicBlockRef> whileConditionStack = new Stack<>();
+	private final Stack<LLVMBasicBlockRef> afterWhileStack = new Stack<>();
 	
 	public LLVMIRVisitor() {
 		LLVMInitializeCore(LLVMGetGlobalPassRegistry());
@@ -475,11 +477,6 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMBasicBlockRef whileBody = LLVMAppendBasicBlock(currentFunction, "whileBody");
 		LLVMBasicBlockRef afterWhile = LLVMAppendBasicBlock(currentFunction, "afterWhile");
 		
-		LLVMBasicBlockRef previousWhileCondition = currentWhileCondtion;
-		LLVMBasicBlockRef previousAfterWhile = currentAfterWhile;
-		currentWhileCondtion = whileCondition;
-		currentAfterWhile = afterWhile;
-		
 		LLVMBuildBr(builder, whileCondition);
 		
 		LLVMPositionBuilderAtEnd(builder, whileCondition);
@@ -488,23 +485,25 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMBuildCondBr(builder, cmpResult, whileBody, afterWhile);
 		
 		LLVMPositionBuilderAtEnd(builder, whileBody);
+		whileConditionStack.push(whileCondition);
+		afterWhileStack.push(afterWhile);
 		this.visit(ctx.stmt());
+		LLVMBuildBr(builder, whileCondition);
+		whileConditionStack.pop();
+		afterWhileStack.pop();
 		LLVMBuildBr(builder, afterWhile);
 		
 		LLVMPositionBuilderAtEnd(builder, afterWhile);
-		
-		currentWhileCondtion = previousWhileCondition;
-		currentAfterWhile = previousAfterWhile;
 		return null;
 	}
 	
 	@Override
 	public LLVMValueRef visitBreakStmt(SysYParser.BreakStmtContext ctx) {
-		return LLVMBuildBr(builder, currentAfterWhile);
+		return LLVMBuildBr(builder, afterWhileStack.peek());
 	}
 	
 	@Override
 	public LLVMValueRef visitContinueStmt(SysYParser.ContinueStmtContext ctx) {
-		return LLVMBuildBr(builder, currentWhileCondtion);
+		return LLVMBuildBr(builder, whileConditionStack.peek());
 	}
 }
