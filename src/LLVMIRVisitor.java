@@ -466,4 +466,23 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMValueRef cmpResult = LLVMBuildICmp(builder, LLVMOr, lVal, rVal, "OR");
 		return LLVMBuildZExt(builder, cmpResult, i32Type, "ext");
 	}
+	
+	@Override
+	public LLVMValueRef visitWhileStmt(SysYParser.WhileStmtContext ctx) {
+		LLVMBasicBlockRef whileCondition = LLVMAppendBasicBlock(currentFunction, "whileCondition");
+		LLVMBasicBlockRef whileBody = LLVMAppendBasicBlock(currentFunction, "whileBody");
+		LLVMBasicBlockRef afterBlock = LLVMAppendBasicBlock(currentFunction, "afterBlock");
+		
+		LLVMPositionBuilderAtEnd(builder, whileCondition);
+		LLVMValueRef condVal = this.visit(ctx.cond());
+		LLVMValueRef cmpResult = LLVMBuildICmp(builder, LLVMIntNE, zero, condVal, "cmp_result");
+		LLVMBuildCondBr(builder, cmpResult, whileBody, afterBlock);
+		
+		LLVMPositionBuilderAtEnd(builder, whileBody);
+		this.visit(ctx.stmt());
+		LLVMBuildBr(builder, afterBlock);
+		
+		LLVMPositionBuilderAtEnd(builder, afterBlock);
+		return null;
+	}
 }
