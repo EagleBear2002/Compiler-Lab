@@ -473,6 +473,8 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMBasicBlockRef whileBody = LLVMAppendBasicBlock(currentFunction, "whileBody");
 		LLVMBasicBlockRef afterBlock = LLVMAppendBasicBlock(currentFunction, "afterBlock");
 		
+		LLVMBuildBr(builder, whileCondition);
+		
 		LLVMPositionBuilderAtEnd(builder, whileCondition);
 		LLVMValueRef condVal = this.visit(ctx.cond());
 		LLVMValueRef cmpResult = LLVMBuildICmp(builder, LLVMIntNE, zero, condVal, "cmp_result");
