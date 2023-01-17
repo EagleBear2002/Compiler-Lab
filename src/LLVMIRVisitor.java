@@ -127,7 +127,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		
 		if (retType.equals(voidType)) {
 			LLVMBuildRet(builder, null);
-		} else if (!isReturned) {
+		} else {
 			LLVMBuildRet(builder, zero);
 		}
 		
