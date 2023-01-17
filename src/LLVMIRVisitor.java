@@ -14,11 +14,12 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	private GlobalScope globalScope = null;
 	private Scope currentScope = null;
 	private int localScopeCounter = 0;
-	private Map<String, String> retTypeMap = new LinkedHashMap<>();
+	private final Map<String, String> retTypeMap = new LinkedHashMap<>();
 	private final LLVMModuleRef module = LLVMModuleCreateWithName("module");
 	private final LLVMBuilderRef builder = LLVMCreateBuilder();
 	private final LLVMTypeRef i32Type = LLVMInt32Type();
 	private final LLVMTypeRef voidType = LLVMVoidType();
+	private final LLVMTypeRef intPointerType = LLVMPointerType(i32Type, 0);
 	private final LLVMValueRef zero = LLVMConstInt(i32Type, 0, 0);
 	private boolean isReturned = false;
 	private LLVMValueRef currentFunction = null;
@@ -87,6 +88,9 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 			SysYParser.FuncFParamContext funcFParamContext = ctx.funcFParams().funcFParam(i);
 			String paramTypeName = funcFParamContext.bType().getText();
 			LLVMTypeRef paramType = getTypeRef(paramTypeName);
+			if (funcFParamContext.L_BRACKT().size() > 0) {
+				paramType = LLVMPointerType(paramType, 0);
+			}
 			paramsTypes.put(i, paramType);
 		}
 		
@@ -100,16 +104,19 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMBasicBlockRef entry = LLVMAppendBasicBlock(currentFunction, functionName + "_entry");
 		LLVMPositionBuilderAtEnd(builder, entry);
 		
-		currentScope.define(functionName, currentFunction);
+		currentScope.define(functionName, currentFunction, functionType);
 		currentScope = new LocalScope(currentScope);
 		
 		for (int i = 0; i < paramsCount; ++i) {
 			SysYParser.FuncFParamContext funcFParamContext = ctx.funcFParams().funcFParam(i);
 			String paramTypeName = funcFParamContext.bType().getText();
 			LLVMTypeRef paramType = getTypeRef(paramTypeName);
-			String varName = ctx.funcFParams().funcFParam(i).IDENT().getText();
-			LLVMValueRef varPointer = LLVMBuildAlloca(builder, paramType, "pointer_" + varName);
-			currentScope.define(varName, varPointer);
+			if (funcFParamContext.L_BRACKT().size() > 0) {
+				paramType = LLVMPointerType(paramType, 0);
+			}
+			String paramName = ctx.funcFParams().funcFParam(i).IDENT().getText();
+			LLVMValueRef varPointer = LLVMBuildAlloca(builder, paramType, "pointer_" + paramName);
+			currentScope.define(paramName, varPointer, paramType);
 			LLVMValueRef argValue = LLVMGetParam(currentFunction, i);
 			LLVMBuildStore(builder, argValue, varPointer);
 		}
@@ -128,8 +135,8 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	@Override
 	public LLVMValueRef visitBlock(SysYParser.BlockContext ctx) {
 		LocalScope localScope = new LocalScope(currentScope);
-		String localScopeName = localScope.getName() + (localScopeCounter++);
-		localScope.setName(localScopeName);
+		String localScopeName = localScope.getScopeName() + (localScopeCounter++);
+		localScope.setScopeName(localScopeName);
 		currentScope = localScope;
 		LLVMValueRef ret = super.visitBlock(ctx);
 		currentScope = currentScope.getEnclosingScope();
@@ -203,7 +210,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				}
 			}
 			
-			currentScope.define(varName, varPointer);
+			currentScope.define(varName, varPointer, varType);
 		}
 		
 		return null;
@@ -276,7 +283,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				}
 			}
 			
-			currentScope.define(varName, varPointer);
+			currentScope.define(varName, varPointer, varType);
 		}
 		
 		return null;
@@ -342,8 +349,15 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	public LLVMValueRef visitLVal(SysYParser.LValContext ctx) {
 		String lValName = ctx.IDENT().getText();
 		LLVMValueRef varPointer = currentScope.resolve(lValName);
-		if (ctx.exp().size() == 0) {
+		LLVMTypeRef varType = currentScope.getType(lValName);
+		if (varType.equals(i32Type)) {
 			return varPointer;
+		} else if (varType.equals(intPointerType)) {
+			lValName += "[" + ctx.exp(0).getText() + "]";
+			LLVMValueRef[] arrayPointer = new LLVMValueRef[1];
+			arrayPointer[0] = this.visit(ctx.exp(0));
+			PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
+			return LLVMBuildGEP(builder, varPointer, indexPointer, 1, "pointer_" + lValName);
 		} else {
 			lValName += "[" + ctx.exp(0).getText() + "]";
 			LLVMValueRef[] arrayPointer = new LLVMValueRef[2];

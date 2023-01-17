@@ -10,3 +10,4 @@
 /out
 /pom.xml
 /tests
+*.log

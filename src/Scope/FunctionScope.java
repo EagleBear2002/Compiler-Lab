@@ -23,6 +23,11 @@ public class FunctionScope extends BaseScope implements Symbol {
 		this.type = type;
 	}
 	
+	@Override
+	public String getName() {
+		return null;
+	}
+	
 	public void addUsage(int lineNo, int columnNo) {
 		usagePosition.add(new Pair<>(lineNo, columnNo));
 	}
