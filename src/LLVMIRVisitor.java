@@ -353,18 +353,26 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		if (varType.equals(i32Type)) {
 			return varPointer;
 		} else if (varType.equals(intPointerType)) {
+			if (ctx.exp().size() > 0) {
 			lValName += "[" + ctx.exp(0).getText() + "]";
-			LLVMValueRef[] arrayPointer = new LLVMValueRef[1];
-			arrayPointer[0] = this.visit(ctx.exp(0));
-			PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
-			return LLVMBuildGEP(builder, varPointer, indexPointer, 1, "pointer_" + lValName);
+				LLVMValueRef[] arrayPointer = new LLVMValueRef[1];
+				arrayPointer[0] = this.visit(ctx.exp(0));
+				PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
+				return LLVMBuildGEP(builder, varPointer, indexPointer, 1, "pointer_" + lValName);
+			} else {
+				return varPointer;
+			}
 		} else {
-			lValName += "[" + ctx.exp(0).getText() + "]";
-			LLVMValueRef[] arrayPointer = new LLVMValueRef[2];
-			arrayPointer[0] = zero;
-			arrayPointer[1] = this.visit(ctx.exp(0));
-			PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
-			return LLVMBuildGEP(builder, varPointer, indexPointer, 2, "pointer_" + lValName);
+			if (ctx.exp().size() > 0) {
+				lValName += "[" + ctx.exp(0).getText() + "]";
+				LLVMValueRef[] arrayPointer = new LLVMValueRef[2];
+				arrayPointer[0] = zero;
+				arrayPointer[1] = this.visit(ctx.exp(0));
+				PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
+				return LLVMBuildGEP(builder, varPointer, indexPointer, 2, "pointer_" + lValName);
+			} else {
+				return varPointer;
+			}
 		}
 	}
 	
