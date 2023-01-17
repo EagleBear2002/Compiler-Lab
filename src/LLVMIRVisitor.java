@@ -101,7 +101,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		String functionName = ctx.IDENT().getText();
 		retTypeMap.put(functionName, retTypeName);
 		currentFunction = LLVMAddFunction(module, functionName, functionType);
-		LLVMBasicBlockRef entry = LLVMAppendBasicBlock(currentFunction, functionName + "Entry");
+		LLVMBasicBlockRef entry = LLVMAppendBasicBlock(currentFunction, functionName + "_entry");
 		LLVMPositionBuilderAtEnd(builder, entry);
 		
 		currentScope.define(functionName, currentFunction, functionType);
@@ -115,7 +115,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				paramType = LLVMPointerType(paramType, 0);
 			}
 			String paramName = ctx.funcFParams().funcFParam(i).IDENT().getText();
-			LLVMValueRef varPointer = LLVMBuildAlloca(builder, paramType, paramName);
+			LLVMValueRef varPointer = LLVMBuildAlloca(builder, paramType, "&" + paramName);
 			currentScope.define(paramName, varPointer, paramType);
 			LLVMValueRef argValue = LLVMGetParam(currentFunction, i);
 			LLVMBuildStore(builder, argValue, varPointer);
@@ -125,13 +125,12 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		super.visitFuncDef(ctx);
 		currentScope = currentScope.getEnclosingScope();
 		
-//		if (!isReturned) {
-			if (retType.equals(voidType)) {
-				LLVMBuildRet(builder, null);
-			} else {
-				LLVMBuildRet(builder, zero);
-			}
-//		}
+		if (retType.equals(voidType)) {
+			LLVMBuildRet(builder, null);
+		} else if (!isReturned) {
+			LLVMBuildRet(builder, zero);
+		}
+		
 		isReturned = false;
 		return currentFunction;
 	}
@@ -226,7 +225,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		for (int i = 0; i < elementCount; i++) {
 			arrayPointer[1] = LLVMConstInt(i32Type, i, 0);
 			PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
-			LLVMValueRef elementPtr = LLVMBuildGEP(builder, varPointer, indexPointer, 2, "GEP_" + i);
+			LLVMValueRef elementPtr = LLVMBuildGEP(builder, varPointer, indexPointer, 2, "&" + i);
 			LLVMBuildStore(builder, initArray[i], elementPtr);
 		}
 	}
@@ -250,7 +249,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				varPointer = LLVMAddGlobal(module, varType, "global_" + varName);
 				LLVMSetInitializer(varPointer, zero);
 			} else {
-				varPointer = LLVMBuildAlloca(builder, varType, "pointer_" + varName);
+				varPointer = LLVMBuildAlloca(builder, varType, "&" + varName);
 			}
 			
 			SysYParser.ConstExpContext constExpContext = constDefContext.constInitVal().constExp();
@@ -344,6 +343,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	}
 	
 	private boolean arrayAddr = false;
+	
 	@Override
 	public LLVMValueRef visitLValExp(SysYParser.LValExpContext ctx) {
 		LLVMValueRef lValPointer = this.visitLVal(ctx.lVal());
@@ -367,7 +367,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				arrayPointer[0] = this.visit(ctx.exp(0));
 				PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
 				LLVMValueRef pointer = LLVMBuildLoad(builder, varPointer, lValName);
-				return LLVMBuildGEP(builder, pointer, indexPointer, 1, "res");
+				return LLVMBuildGEP(builder, pointer, indexPointer, 1, "&" + lValName);
 			} else {
 				return varPointer;
 			}
@@ -381,7 +381,7 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 				arrayPointer[1] = zero;
 			}
 			PointerPointer<LLVMValueRef> indexPointer = new PointerPointer<>(arrayPointer);
-			return LLVMBuildGEP(builder, varPointer, indexPointer, 2, "res");
+			return LLVMBuildGEP(builder, varPointer, indexPointer, 2, "&" + lValName);
 		}
 	}
 	
@@ -442,10 +442,10 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 	@Override
 	public LLVMValueRef visitIfStmt(SysYParser.IfStmtContext ctx) {
 		LLVMValueRef condVal = this.visit(ctx.cond());
-		LLVMValueRef cmpResult = LLVMBuildICmp(builder, LLVMIntNE, zero, condVal, "tmp_");
-		LLVMBasicBlockRef trueBlock = LLVMAppendBasicBlock(currentFunction, "true");
-		LLVMBasicBlockRef falseBlock = LLVMAppendBasicBlock(currentFunction, "false");
-		LLVMBasicBlockRef afterIf = LLVMAppendBasicBlock(currentFunction, "entry");
+		LLVMValueRef cmpResult = LLVMBuildICmp(builder, LLVMIntNE, zero, condVal, "icmp_");
+		LLVMBasicBlockRef trueBlock = LLVMAppendBasicBlock(currentFunction, "true_block");
+		LLVMBasicBlockRef falseBlock = LLVMAppendBasicBlock(currentFunction, "false_block");
+		LLVMBasicBlockRef afterIf = LLVMAppendBasicBlock(currentFunction, "after_if_block");
 		
 		LLVMBuildCondBr(builder, cmpResult, trueBlock, falseBlock);
 		
@@ -469,15 +469,15 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMValueRef rVal = this.visit(ctx.cond(1));
 		LLVMValueRef cmpResult = null;
 		if (ctx.LT() != null) {
-			cmpResult = LLVMBuildICmp(builder, LLVMIntSLT, lVal, rVal, "tmp_");
+			cmpResult = LLVMBuildICmp(builder, LLVMIntSLT, lVal, rVal, "slt_");
 		} else if (ctx.GT() != null) {
-			cmpResult = LLVMBuildICmp(builder, LLVMIntSGT, lVal, rVal, "tmp_");
+			cmpResult = LLVMBuildICmp(builder, LLVMIntSGT, lVal, rVal, "sgt_");
 		} else if (ctx.LE() != null) {
-			cmpResult = LLVMBuildICmp(builder, LLVMIntSLE, lVal, rVal, "tmp_");
+			cmpResult = LLVMBuildICmp(builder, LLVMIntSLE, lVal, rVal, "sle_");
 		} else {
-			cmpResult = LLVMBuildICmp(builder, LLVMIntSGE, lVal, rVal, "tmp_");
+			cmpResult = LLVMBuildICmp(builder, LLVMIntSGE, lVal, rVal, "sge_");
 		}
-		return LLVMBuildZExt(builder, cmpResult, i32Type, "tmp_");
+		return LLVMBuildZExt(builder, cmpResult, i32Type, "zext_");
 	}
 	
 	@Override
@@ -486,40 +486,40 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		LLVMValueRef rVal = this.visit(ctx.cond(1));
 		LLVMValueRef cmpResult = null;
 		if (ctx.NEQ() != null) {
-			cmpResult = LLVMBuildICmp(builder, LLVMIntNE, lVal, rVal, "tmp_");
+			cmpResult = LLVMBuildICmp(builder, LLVMIntNE, lVal, rVal, "ne_");
 		} else {
-			cmpResult = LLVMBuildICmp(builder, LLVMIntEQ, lVal, rVal, "tmp_");
+			cmpResult = LLVMBuildICmp(builder, LLVMIntEQ, lVal, rVal, "eq_");
 		}
-		return LLVMBuildZExt(builder, cmpResult, i32Type, "tmp_");
+		return LLVMBuildZExt(builder, cmpResult, i32Type, "zext_");
 	}
 	
 	@Override
 	public LLVMValueRef visitAndExp(SysYParser.AndExpContext ctx) {
 		LLVMValueRef lVal = this.visit(ctx.cond(0));
 		LLVMValueRef rVal = this.visit(ctx.cond(1));
-		LLVMValueRef cmpResult = LLVMBuildAnd(builder, lVal, rVal, "tmp_");
-		return LLVMBuildZExt(builder, cmpResult, i32Type, "tmp_");
+		LLVMValueRef cmpResult = LLVMBuildAnd(builder, lVal, rVal, "and_");
+		return LLVMBuildZExt(builder, cmpResult, i32Type, "zext_");
 	}
 	
 	@Override
 	public LLVMValueRef visitOrExp(SysYParser.OrExpContext ctx) {
 		LLVMValueRef lVal = this.visit(ctx.cond(0));
 		LLVMValueRef rVal = this.visit(ctx.cond(1));
-		LLVMValueRef cmpResult = LLVMBuildOr(builder, lVal, rVal, "tmp_");
-		return LLVMBuildZExt(builder, cmpResult, i32Type, "tmp_");
+		LLVMValueRef cmpResult = LLVMBuildOr(builder, lVal, rVal, "or_");
+		return LLVMBuildZExt(builder, cmpResult, i32Type, "zext_");
 	}
 	
 	@Override
 	public LLVMValueRef visitWhileStmt(SysYParser.WhileStmtContext ctx) {
-		LLVMBasicBlockRef whileCondition = LLVMAppendBasicBlock(currentFunction, "whileCondition");
-		LLVMBasicBlockRef whileBody = LLVMAppendBasicBlock(currentFunction, "whileBody");
-		LLVMBasicBlockRef afterWhile = LLVMAppendBasicBlock(currentFunction, "entry");
+		LLVMBasicBlockRef whileCondition = LLVMAppendBasicBlock(currentFunction, "while_condition");
+		LLVMBasicBlockRef whileBody = LLVMAppendBasicBlock(currentFunction, "while_body");
+		LLVMBasicBlockRef afterWhile = LLVMAppendBasicBlock(currentFunction, "after_while_block");
 		
 		LLVMBuildBr(builder, whileCondition);
 		
 		LLVMPositionBuilderAtEnd(builder, whileCondition);
 		LLVMValueRef condVal = this.visit(ctx.cond());
-		LLVMValueRef cmpResult = LLVMBuildICmp(builder, LLVMIntNE, zero, condVal, "tmp_");
+		LLVMValueRef cmpResult = LLVMBuildICmp(builder, LLVMIntNE, zero, condVal, "icmp_");
 		LLVMBuildCondBr(builder, cmpResult, whileBody, afterWhile);
 		
 		LLVMPositionBuilderAtEnd(builder, whileBody);
