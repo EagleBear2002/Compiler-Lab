@@ -125,13 +125,13 @@ public class LLVMIRVisitor extends SysYParserBaseVisitor<LLVMValueRef> {
 		super.visitFuncDef(ctx);
 		currentScope = currentScope.getEnclosingScope();
 		
-		if (!isReturned) {
+//		if (!isReturned) {
 			if (retType.equals(voidType)) {
 				LLVMBuildRet(builder, null);
 			} else {
 				LLVMBuildRet(builder, zero);
 			}
-		}
+//		}
 		isReturned = false;
 		return currentFunction;
 	}
