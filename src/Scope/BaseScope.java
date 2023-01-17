@@ -40,7 +40,7 @@ public class BaseScope implements Scope {
 	public void define(String name, LLVMValueRef llvmValueRef, LLVMTypeRef llvmTypeRef) {
 		valueRefs.put(name, llvmValueRef);
 		valueTypes.put(name, llvmTypeRef);
-//		System.out.println(this.name + "+(" + name + ", " + llvmValueRef + ")");
+//		System.out.println(this.scopeName + "+(" + name + ", " + llvmValueRef + "," + llvmTypeRef + ")");
 	}
 	
 	@Override
