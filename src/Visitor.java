@@ -3,7 +3,6 @@ import Symbol.*;
 import Type.*;
 import org.antlr.v4.runtime.ParserRuleContext;
 import org.antlr.v4.runtime.RuleContext;
-import org.antlr.v4.runtime.Token;
 import org.antlr.v4.runtime.tree.ParseTree;
 import org.antlr.v4.runtime.tree.RuleNode;
 import org.antlr.v4.runtime.tree.TerminalNode;
@@ -177,8 +176,8 @@ public class Visitor extends SysYParserBaseVisitor<Void> {
 	@Override
 	public Void visitBlock(SysYParser.BlockContext ctx) {
 		LocalScope localScope = new LocalScope(currentScope);
-		String localScopeName = localScope.getName() + localScopeCounter;
-		localScope.setName(localScopeName);
+		String localScopeName = localScope.getScopeName() + localScopeCounter;
+		localScope.setScopeName(localScopeName);
 		localScopeCounter++;
 		currentScope = localScope;
 		Void ret = super.visitBlock(ctx);
