@@ -1,0 +1,57 @@
+; ModuleID = 'moudle'
+source_filename = "moudle"
+
+@global_arr = global [20 x i32] [i32 1, i32 2, i32 3, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0, i32 0]
+@global_const_global_arr = global [5 x i32] zeroinitializer
+
+define void @g(i32* %0) {
+g_entry:
+  %"&a" = alloca i32*, align 8
+  store i32* %0, i32** %"&a", align 8
+  ret void
+}
+
+define i32 @f(i32* %0) {
+f_entry:
+  %"&a" = alloca i32*, align 8
+  store i32* %0, i32** %"&a", align 8
+  %a = load i32*, i32** %"&a", align 8
+  %"&a1" = getelementptr i32, i32* %a, i32 0
+  %"a[0]" = load i32, i32* %"&a1", align 4
+  %eq_ = icmp eq i32 %"a[0]", 0
+  %zext_ = zext i1 %eq_ to i32
+  %icmp_ = icmp ne i32 0, %zext_
+  br i1 %icmp_, label %true_block, label %false_block
+
+true_block:                                       ; preds = %f_entry
+  ret i32 1
+  br label %after_if_block
+
+false_block:                                      ; preds = %f_entry
+  ret i32 2
+  br label %after_if_block
+
+after_if_block:                                   ; preds = %false_block, %true_block
+  ret i32 0
+}
+
+define i32 @main() {
+main_entry:
+  %local_arr = alloca [5 x i32], align 4
+  %f = call i32 @f(i32* getelementptr inbounds ([20 x i32], [20 x i32]* @global_arr, i32 0, i32 0))
+  %f1 = call i32 @f(i32* getelementptr inbounds ([5 x i32], [5 x i32]* @global_const_global_arr, i32 0, i32 0))
+  %"&0" = getelementptr [5 x i32], [5 x i32]* %local_arr, i32 0, i32 0
+  store i32 %f, i32* %"&0", align 4
+  %"&1" = getelementptr [5 x i32], [5 x i32]* %local_arr, i32 0, i32 1
+  store i32 %f1, i32* %"&1", align 4
+  %"&2" = getelementptr [5 x i32], [5 x i32]* %local_arr, i32 0, i32 2
+  store i32 0, i32* %"&2", align 4
+  %"&3" = getelementptr [5 x i32], [5 x i32]* %local_arr, i32 0, i32 3
+  store i32 0, i32* %"&3", align 4
+  %"&4" = getelementptr [5 x i32], [5 x i32]* %local_arr, i32 0, i32 4
+  store i32 0, i32* %"&4", align 4
+  %"&local_arr" = getelementptr [5 x i32], [5 x i32]* %local_arr, i32 0, i32 0
+  %f2 = call i32 @f(i32* %"&local_arr")
+  ret i32 %f2
+  ret i32 0
+}
