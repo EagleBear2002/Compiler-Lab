@@ -1,0 +1,67 @@
+int globalVar;
+int globalArray[2];
+
+void voidFunc1() {
+    return;
+}
+
+void voidFunc2(int param1) {
+    return 1; // type 7
+}
+
+void voidFunc3(int param1, int param2[]) {
+    return param1; // type 7
+}
+
+int intFunc1() {
+    return 1;
+}
+
+int intFunc1(int param) { // type 4
+	return intFunc1(); // valid
+}
+
+int intFunc2(int param1) {
+    return intFunc2(param1); // valid
+}
+
+int intFunc3(int param1, int param2[]) {
+    return param2; // type 7
+}
+
+int voidFunc1() { // type 4
+
+}
+
+int test(int i, int i){ // type 3
+    return test(i + 1); // valid
+}
+
+int main(){
+    a = 3; // type 1
+    int b = func(); // type 2
+    int b; // type 3
+
+    int c[3][3][3];
+    int d[2][2];
+    c[1] = d; // valid
+    c[1][1] = d; // type 5
+    c[1][1] = d; // type 5
+    int f = voidFunc1() + intFunc1(); // type 6
+    int g = intFunc3(b); // type 8
+    int h = intFunc3(b, globalArray); // valid
+
+    int i = b[5]; // type 9
+    int j = c(); // type 10
+    c = 6; // type 5
+    voidFunc1 = 6; // type 11
+    
+    if (1 || globalArray || 2 || d) { // type 6 for 3 times
+        
+    }
+    
+    int k = voidFunc1(); // type 5
+    int l = voidFunc(); // type 2
+    int m = k;
+    return z(); // type 2
+}

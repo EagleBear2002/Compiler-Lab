@@ -1,0 +1,20 @@
+int f(int i){
+    return i;
+}
+
+void g() {
+	int j = 1 + 5;
+	return;
+}
+
+void func() {
+}
+
+int main(){
+    int a = 1;
+    int array[5] = {1, 2, 3};
+    array[3] = a;
+    array[4] = a + 5;
+    g();
+    return f(a * array[4]);
+}

@@ -1,0 +1,18 @@
+int global_arr[20] = {1, 2, 3};
+const int const_global_arr[5] = {0};
+
+void g(int a[]) {
+}
+
+int f(int a[]) {
+	if (a[0] == 0) {
+		return 1;
+	} else {
+		return 2;
+	}
+}
+
+int main() {
+	int local_arr[5] = {f(global_arr), f(const_global_arr)};
+    return f(local_arr);
+}

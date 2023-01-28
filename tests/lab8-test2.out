@@ -1,0 +1,184 @@
+; ModuleID = 'moudle'
+source_filename = "moudle"
+
+@sort_arr = global [5 x i32] zeroinitializer
+
+define i32 @combine(i32* %0, i32 %1, i32* %2, i32 %3) {
+combine_entry:
+  %"&arr1" = alloca i32*, align 8
+  store i32* %0, i32** %"&arr1", align 8
+  %"&arr1_length" = alloca i32, align 4
+  store i32 %1, i32* %"&arr1_length", align 4
+  %"&arr2" = alloca i32*, align 8
+  store i32* %2, i32** %"&arr2", align 8
+  %"&arr2_length" = alloca i32, align 4
+  store i32 %3, i32* %"&arr2_length", align 4
+  %i = alloca i32, align 4
+  store i32 0, i32* %i, align 4
+  %j = alloca i32, align 4
+  store i32 0, i32* %j, align 4
+  %k = alloca i32, align 4
+  store i32 0, i32* %k, align 4
+  br label %while_condition
+
+while_condition:                                  ; preds = %after_if_block, %combine_entry
+  %i1 = load i32, i32* %i, align 4
+  %arr1_length = load i32, i32* %"&arr1_length", align 4
+  %slt_ = icmp slt i32 %i1, %arr1_length
+  %zext_ = zext i1 %slt_ to i32
+  %j2 = load i32, i32* %j, align 4
+  %arr2_length = load i32, i32* %"&arr2_length", align 4
+  %slt_3 = icmp slt i32 %j2, %arr2_length
+  %zext_4 = zext i1 %slt_3 to i32
+  %and_ = and i32 %zext_, %zext_4
+  %icmp_ = icmp ne i32 0, %and_
+  br i1 %icmp_, label %while_body, label %after_while_block
+
+while_body:                                       ; preds = %while_condition
+  %i5 = load i32, i32* %i, align 4
+  %arr1 = load i32*, i32** %"&arr1", align 8
+  %"&arr16" = getelementptr i32, i32* %arr1, i32 %i5
+  %"arr1[i]" = load i32, i32* %"&arr16", align 4
+  %j7 = load i32, i32* %j, align 4
+  %arr2 = load i32*, i32** %"&arr2", align 8
+  %"&arr28" = getelementptr i32, i32* %arr2, i32 %j7
+  %"arr2[j]" = load i32, i32* %"&arr28", align 4
+  %slt_9 = icmp slt i32 %"arr1[i]", %"arr2[j]"
+  %zext_10 = zext i1 %slt_9 to i32
+  %icmp_11 = icmp ne i32 0, %zext_10
+  br i1 %icmp_11, label %true_block, label %false_block
+
+after_while_block:                                ; preds = %after_if_block, %while_condition
+  %i28 = load i32, i32* %i, align 4
+  %arr1_length29 = load i32, i32* %"&arr1_length", align 4
+  %eq_ = icmp eq i32 %i28, %arr1_length29
+  %zext_30 = zext i1 %eq_ to i32
+  %icmp_31 = icmp ne i32 0, %zext_30
+  br i1 %icmp_31, label %true_block32, label %false_block33
+
+true_block:                                       ; preds = %while_body
+  %i12 = load i32, i32* %i, align 4
+  %arr113 = load i32*, i32** %"&arr1", align 8
+  %"&arr114" = getelementptr i32, i32* %arr113, i32 %i12
+  %"arr1[i]15" = load i32, i32* %"&arr114", align 4
+  %k16 = load i32, i32* %k, align 4
+  %"&sort_arr" = getelementptr [5 x i32], [5 x i32]* @sort_arr, i32 0, i32 %k16
+  store i32 %"arr1[i]15", i32* %"&sort_arr", align 4
+  %i17 = load i32, i32* %i, align 4
+  %add_ = add i32 %i17, 1
+  store i32 %add_, i32* %i, align 4
+  br label %after_if_block
+
+false_block:                                      ; preds = %while_body
+  %j18 = load i32, i32* %j, align 4
+  %arr219 = load i32*, i32** %"&arr2", align 8
+  %"&arr220" = getelementptr i32, i32* %arr219, i32 %j18
+  %"arr2[j]21" = load i32, i32* %"&arr220", align 4
+  %k22 = load i32, i32* %k, align 4
+  %"&sort_arr23" = getelementptr [5 x i32], [5 x i32]* @sort_arr, i32 0, i32 %k22
+  store i32 %"arr2[j]21", i32* %"&sort_arr23", align 4
+  %j24 = load i32, i32* %j, align 4
+  %add_25 = add i32 %j24, 1
+  store i32 %add_25, i32* %j, align 4
+  br label %after_if_block
+
+after_if_block:                                   ; preds = %false_block, %true_block
+  %k26 = load i32, i32* %k, align 4
+  %add_27 = add i32 %k26, 1
+  store i32 %add_27, i32* %k, align 4
+  br label %while_condition
+  br label %after_while_block
+
+true_block32:                                     ; preds = %after_while_block
+  br label %while_condition35
+
+false_block33:                                    ; preds = %after_while_block
+  br label %while_condition53
+
+after_if_block34:                                 ; preds = %after_while_block55, %after_while_block37
+  %arr1_length70 = load i32, i32* %"&arr1_length", align 4
+  %arr2_length71 = load i32, i32* %"&arr2_length", align 4
+  %add_72 = add i32 %arr1_length70, %arr2_length71
+  %sub_ = sub i32 %add_72, 1
+  %"&sort_arr73" = getelementptr [5 x i32], [5 x i32]* @sort_arr, i32 0, i32 %sub_
+  %"sort_arr[arr1_length+arr2_length-1]" = load i32, i32* %"&sort_arr73", align 4
+  ret i32 %"sort_arr[arr1_length+arr2_length-1]"
+  ret i32 0
+
+while_condition35:                                ; preds = %while_body36, %true_block32
+  %j38 = load i32, i32* %j, align 4
+  %arr2_length39 = load i32, i32* %"&arr2_length", align 4
+  %slt_40 = icmp slt i32 %j38, %arr2_length39
+  %zext_41 = zext i1 %slt_40 to i32
+  %icmp_42 = icmp ne i32 0, %zext_41
+  br i1 %icmp_42, label %while_body36, label %after_while_block37
+
+while_body36:                                     ; preds = %while_condition35
+  %j43 = load i32, i32* %j, align 4
+  %arr244 = load i32*, i32** %"&arr2", align 8
+  %"&arr245" = getelementptr i32, i32* %arr244, i32 %j43
+  %"arr2[j]46" = load i32, i32* %"&arr245", align 4
+  %k47 = load i32, i32* %k, align 4
+  %"&sort_arr48" = getelementptr [5 x i32], [5 x i32]* @sort_arr, i32 0, i32 %k47
+  store i32 %"arr2[j]46", i32* %"&sort_arr48", align 4
+  %k49 = load i32, i32* %k, align 4
+  %add_50 = add i32 %k49, 1
+  store i32 %add_50, i32* %k, align 4
+  %j51 = load i32, i32* %j, align 4
+  %add_52 = add i32 %j51, 1
+  store i32 %add_52, i32* %j, align 4
+  br label %while_condition35
+  br label %after_while_block37
+
+after_while_block37:                              ; preds = %while_body36, %while_condition35
+  br label %after_if_block34
+
+while_condition53:                                ; preds = %while_body54, %false_block33
+  %i56 = load i32, i32* %i, align 4
+  %arr1_length57 = load i32, i32* %"&arr1_length", align 4
+  %slt_58 = icmp slt i32 %i56, %arr1_length57
+  %zext_59 = zext i1 %slt_58 to i32
+  %icmp_60 = icmp ne i32 0, %zext_59
+  br i1 %icmp_60, label %while_body54, label %after_while_block55
+
+while_body54:                                     ; preds = %while_condition53
+  %i61 = load i32, i32* %i, align 4
+  %arr262 = load i32*, i32** %"&arr2", align 8
+  %"&arr263" = getelementptr i32, i32* %arr262, i32 %i61
+  %"arr2[i]" = load i32, i32* %"&arr263", align 4
+  %k64 = load i32, i32* %k, align 4
+  %"&sort_arr65" = getelementptr [5 x i32], [5 x i32]* @sort_arr, i32 0, i32 %k64
+  store i32 %"arr2[i]", i32* %"&sort_arr65", align 4
+  %k66 = load i32, i32* %k, align 4
+  %add_67 = add i32 %k66, 1
+  store i32 %add_67, i32* %k, align 4
+  %i68 = load i32, i32* %i, align 4
+  %add_69 = add i32 %i68, 1
+  store i32 %add_69, i32* %i, align 4
+  br label %while_condition53
+  br label %after_while_block55
+
+after_while_block55:                              ; preds = %while_body54, %while_condition53
+  br label %after_if_block34
+}
+
+define i32 @main() {
+main_entry:
+  %a = alloca [2 x i32], align 4
+  %"&0" = getelementptr [2 x i32], [2 x i32]* %a, i32 0, i32 0
+  store i32 1, i32* %"&0", align 4
+  %"&1" = getelementptr [2 x i32], [2 x i32]* %a, i32 0, i32 1
+  store i32 5, i32* %"&1", align 4
+  %b = alloca [3 x i32], align 4
+  %"&01" = getelementptr [3 x i32], [3 x i32]* %b, i32 0, i32 0
+  store i32 1, i32* %"&01", align 4
+  %"&12" = getelementptr [3 x i32], [3 x i32]* %b, i32 0, i32 1
+  store i32 4, i32* %"&12", align 4
+  %"&2" = getelementptr [3 x i32], [3 x i32]* %b, i32 0, i32 2
+  store i32 14, i32* %"&2", align 4
+  %"&a" = getelementptr [2 x i32], [2 x i32]* %a, i32 0, i32 0
+  %"&b" = getelementptr [3 x i32], [3 x i32]* %b, i32 0, i32 0
+  %combine = call i32 @combine(i32* %"&a", i32 2, i32* %"&b", i32 3)
+  ret i32 %combine
+  ret i32 0
+}
